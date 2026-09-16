@@ -1,3 +1,9 @@
+/*
+  An inventory, ruled like a ledger. Each group is a row: its name in the
+  label column, its lines beside it. A line may carry its own small label,
+  which says what the items on it share.
+*/
+
 .groups {
   max-width: var(--measure-wide);
   margin-top: var(--space-6);
@@ -6,12 +12,12 @@
 
 .group {
   display: grid;
-  gap: var(--space-1);
-  padding-block: var(--space-3);
+  gap: var(--space-2);
+  padding-block: var(--space-4);
   border-bottom: var(--hair) solid var(--rule-soft);
 }
 
-@media (min-width: 36rem) {
+@media (min-width: 40rem) {
   .group {
     grid-template-columns: 11rem minmax(0, 1fr);
     gap: var(--space-4);
@@ -19,8 +25,110 @@
   }
 }
 
-.values {
-  font-size: var(--step--1);
+.lines {
+  display: grid;
+  gap: var(--space-2);
+}
+
+/* Label above items on a phone, beside them once there is room. */
+.line {
+  display: grid;
+  gap: 0;
+}
+
+@media (min-width: 30rem) {
+  .line {
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: var(--space-3);
+    align-items: baseline;
+  }
+
+  /* A line without a label takes the whole width, not an empty column. */
+  .bare {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.lineLabel {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: var(--tracking-wide);
+  color: var(--ink-faint);
+}
+
+.items {
+  font-size: var(--step-0);
   line-height: var(--leading-body);
   color: var(--ink);
+  text-wrap: pretty;
+}
+
+.item {
+  display: inline;
+}
+
+.name {
+  white-space: nowrap;
+}
+
+/* The separator is ink, not content: screen readers get the list itself. */
+.sep {
+  padding-inline: 0.15em;
+  color: var(--ink-ghost);
+}
+
+/*
+  Exploring: the same ledger, pencilled rather than inked. A dashed rule and a
+  lighter hand, so nothing here reads as a claim of expertise.
+*/
+.exploring {
+  max-width: var(--measure-wide);
+  margin-top: var(--space-7);
+  padding-top: var(--space-5);
+  border-top: var(--hair) dashed var(--ink-ghost);
+}
+
+.exploringHead {
+  display: grid;
+  gap: var(--space-1);
+  margin-bottom: var(--space-4);
+}
+
+@media (min-width: 40rem) {
+  .exploringHead {
+    grid-template-columns: 11rem minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: baseline;
+  }
+}
+
+.exploringTitle {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.exploringNote {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  line-height: var(--leading-title);
+  color: var(--ink-soft);
+}
+
+.exploringLines {
+  display: grid;
+  gap: var(--space-2);
+}
+
+@media (min-width: 40rem) {
+  .exploringLines {
+    margin-left: calc(11rem + var(--space-4));
+  }
+}
+
+.exploringLines .items {
+  color: var(--ink-soft);
 }

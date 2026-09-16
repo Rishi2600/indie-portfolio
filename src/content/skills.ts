@@ -1,24 +1,97 @@
-export type SkillGroup = {
-  title: string;
-  skills: readonly string[];
+/**
+ * The inventory.
+ *
+ * Grouped by how each thing gets used rather than by where it is usually
+ * filed: Next.js appears under services and under interfaces because it is
+ * used on both sides, and Anchor sits with Solana because that is what it is
+ * for. A line's label says what the items on it have in common.
+ *
+ * Every item here was supplied by Rishi. Names are normalised to their
+ * official spelling (Go, NestJS); nothing has been added.
+ */
+
+export type SkillLine = {
+  /** What the items on this line share. Omitted when the group says it. */
+  label?: string;
+  items: readonly string[];
 };
 
-/**
- * The categories are structure; the contents are not written yet.
- *
- * A skill list assembled by reading someone's job title back to them is a
- * guess, and a guess is worse than a gap, so every group is empty until the
- * real list exists.
- */
+export type SkillGroup = {
+  title: string;
+  lines: readonly SkillLine[];
+};
+
 export const skillGroups: readonly SkillGroup[] = [
-  { title: "Languages", skills: [] },
-  { title: "Backend", skills: [] },
-  { title: "Frontend", skills: [] },
-  { title: "Web3 and Solana", skills: [] },
-  { title: "Databases", skills: [] },
-  { title: "Infrastructure", skills: [] },
-  { title: "Tools", skills: [] },
+  {
+    title: "Languages",
+    lines: [{ items: ["Rust", "TypeScript", "Go", "Python"] }],
+  },
+  {
+    title: "Services and APIs",
+    lines: [
+      { label: "Node", items: ["Express", "NestJS"] },
+      { label: "Python", items: ["FastAPI", "Django"] },
+      { label: "Full stack", items: ["Next.js"] },
+    ],
+  },
+  {
+    title: "Solana",
+    lines: [
+      { items: ["Solana development"] },
+      { label: "Programs", items: ["Anchor"] },
+    ],
+  },
+  {
+    title: "Interfaces",
+    lines: [
+      { items: ["React", "Next.js"] },
+      { label: "Styling", items: ["Tailwind CSS", "shadcn/ui"] },
+      { label: "Motion, 3D", items: ["Framer Motion", "Three.js"] },
+    ],
+  },
+  {
+    title: "Data",
+    lines: [
+      { label: "SQL", items: ["PostgreSQL"] },
+      { label: "NoSQL", items: ["MongoDB"] },
+      { label: "Practice", items: ["Database optimization"] },
+    ],
+  },
+  {
+    title: "Infrastructure",
+    lines: [
+      {
+        label: "Tools",
+        items: ["Docker", "Kubernetes", "Nginx", "AWS EC2", "Jenkins"],
+      },
+      {
+        label: "Practice",
+        items: [
+          "Reverse proxies",
+          "Virtual machines",
+          "Container orchestration",
+          "Operations at scale",
+        ],
+      },
+    ],
+  },
 ];
 
 export const skillsNote =
-  "Empty on purpose. It stays that way until the list is accurate rather than plausible.";
+  "Grouped by how each thing gets used, not by where it is usually filed.";
+
+/**
+ * Not expertise. These are the things Rishi wants to get into next, and the
+ * section sets them apart — lighter ink, a pencilled rule — so they are never
+ * read as claims.
+ */
+export const exploring = {
+  title: "Exploring",
+  note: "Pencilled in, not inked: things I want to get into, not things I claim.",
+  lines: [
+    { label: "Real-time", items: ["Real-time systems", "WebRTC", "WebSockets"] },
+    { label: "Tools", items: ["Browser-based IDEs", "Terminal UIs"] },
+    { label: "AI", items: ["AI agents", "LLM internals", "Core ML"] },
+    { label: "Physical", items: ["Robotics", "Hardware"] },
+  ],
+} as const satisfies { title: string; note: string; lines: readonly SkillLine[] };
