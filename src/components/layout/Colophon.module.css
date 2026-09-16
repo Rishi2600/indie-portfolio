@@ -1,0 +1,112 @@
+/*
+  The closing page. A terminal mark, the identity once more, the two clocks
+  and the visit count as metadata, and a note on how the thing was made — the
+  colophon a printer sets on the last leaf.
+*/
+
+.colophon {
+  padding-bottom: var(--space-8);
+}
+
+.terminal {
+  margin-block: var(--space-8);
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-6);
+}
+
+@media (min-width: 46rem) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+  }
+}
+
+.name {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  line-height: var(--leading-title);
+}
+
+.devanagari {
+  font-family: var(--font-devanagari);
+  font-size: var(--step--1);
+  color: var(--ink-ghost);
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+@media (min-width: 46rem) {
+  .meta {
+    align-items: flex-end;
+  }
+}
+
+.rule {
+  margin-block: var(--space-7);
+}
+
+.foot {
+  display: grid;
+  gap: var(--space-5);
+}
+
+@media (min-width: 46rem) {
+  .foot {
+    grid-template-columns: minmax(0, var(--measure)) auto;
+    justify-content: space-between;
+    align-items: end;
+  }
+}
+
+.note {
+  max-width: var(--measure);
+  font-size: var(--step--1);
+  line-height: var(--leading-body);
+  color: var(--ink-faint);
+  text-wrap: pretty;
+}
+
+.closing {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+@media (min-width: 46rem) {
+  .closing {
+    align-items: flex-end;
+  }
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.link {
+  text-decoration: none;
+  color: var(--ink-soft);
+  transition: color var(--dur-1) var(--ease);
+}
+
+.link:hover {
+  color: var(--rubric);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link {
+    transition: none;
+  }
+}
