@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { around, petal, polar, scallop, spoke } from "./geometry";
+import { C, RINGS, strokeOf } from "./yantra-figure";
 import styles from "./Yantra.module.css";
 
 /**
@@ -15,44 +15,6 @@ import styles from "./Yantra.module.css";
  * its motion: the figure is constructed in front of the reader rather than
  * faded in. `rings` stops the construction early for a quieter figure.
  */
-
-const C = 100;
-
-type Ring = {
-  strokes: string[];
-  circles?: number[];
-  dots?: { x: number; y: number }[];
-};
-
-const RINGS: Ring[] = [
-  // 0 — the padma: the mark itself, scaled.
-  {
-    strokes: around(8).map(
-      (deg) => `${petal(C, C, 0, 32, 7.3)}|${deg}`,
-    ),
-    circles: [13],
-    dots: [{ x: C, y: C }],
-  },
-  // 1 — the circle that holds it.
-  { strokes: [], circles: [38] },
-  // 2 — sixteen petals, set between the eight.
-  {
-    strokes: around(16, 11.25).map(
-      (deg) => `${petal(C, C, 38, 60, 5.4)}|${deg}`,
-    ),
-    circles: [63],
-  },
-  // 3 — a ring of points.
-  { strokes: [], dots: around(32, 5.625).map((deg) => polar(C, C, 67, deg)) },
-  // 4 — fine spokes, like the divisions on a dial.
-  { strokes: around(48).map((deg) => spoke(C, C, 71, 79, deg)) },
-  // 5 — the scalloped border.
-  {
-    strokes: around(24).map((deg) => scallop(C, C, 84, deg, deg + 15)),
-  },
-  // 6 — the double rule.
-  { strokes: [], circles: [92, 95] },
-];
 
 type Props = {
   className?: string;
@@ -99,7 +61,7 @@ export function Yantra({
             <circle key={r} cx={C} cy={C} r={r} pathLength={1} />
           ))}
           {ring.strokes.map((entry) => {
-            const [d, deg] = entry.split("|");
+            const { d, deg } = strokeOf(entry);
             return (
               <path
                 key={entry}
@@ -115,7 +77,7 @@ export function Yantra({
               className={styles.dot}
               cx={dot.x}
               cy={dot.y}
-              r={index === 0 ? 2.6 : 0.9}
+              r={ring.dotRadius ?? 0.9}
               fill="currentColor"
               stroke="none"
             />

@@ -1,38 +1,18 @@
 import { ImageResponse } from "next/og";
+import { yantraSvg } from "@/components/decorative/yantra-figure";
 import { site } from "@/content/site";
 
 export const alt = `${site.name} — ${site.role}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const PETALS = 8;
-const PETAL = "M32 32 C27 24 27 15 32 10 C37 15 37 24 32 32 Z";
-const ANGLES = Array.from({ length: PETALS }, (_, i) => (i * 360) / PETALS);
-
 /**
- * The same rosette as the rest of the site, as a data URI. The renderer's SVG
- * support is partial, so the figure goes in as an image rather than as
- * elements it would have to interpret.
+ * The same yantra that stands behind the opening, as a data URI. The
+ * renderer's SVG support is partial, so the figure goes in as an image
+ * rather than as elements it would have to interpret.
  */
 function mark(): string {
-  const petals = ANGLES.map(
-    (angle) => `<path d="${PETAL}" transform="rotate(${angle} 32 32)"/>`,
-  ).join("");
-
-  const dots = ANGLES.map((angle) => {
-    const radians = ((angle + 180 / PETALS) * Math.PI) / 180;
-    const x = (32 + 24.5 * Math.cos(radians)).toFixed(2);
-    const y = (32 + 24.5 * Math.sin(radians)).toFixed(2);
-    return `<circle cx="${x}" cy="${y}" r="0.9" fill="#22201c"/>`;
-  }).join("");
-
-  const svg =
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="360" height="360">` +
-    `<g fill="none" stroke="#22201c" stroke-width="0.85" stroke-linejoin="round">` +
-    `<circle cx="32" cy="32" r="27"/>${petals}<circle cx="32" cy="32" r="9"/></g>` +
-    `${dots}<circle cx="32" cy="32" r="2.4" fill="#22201c"/></svg>`;
-
-  return `data:image/svg+xml;base64,${btoa(svg)}`;
+  return `data:image/svg+xml;base64,${btoa(yantraSvg("#22201c", 0.55, 400))}`;
 }
 
 /**
@@ -156,7 +136,7 @@ export default async function Image() {
               margin: "36px 0",
             }}
           />
-          <div style={{ fontSize: 34, color: "#4c463c", maxWidth: 560 }}>
+          <div style={{ fontSize: 34, color: "#4c463c", maxWidth: 430 }}>
             {site.role}
           </div>
         </div>
@@ -164,10 +144,10 @@ export default async function Image() {
         <div style={{ display: "flex", alignItems: "center" }}>
           <img
             src={mark()}
-            width={360}
-            height={360}
+            width={400}
+            height={400}
             alt=""
-            style={{ opacity: 0.14 }}
+            style={{ opacity: 0.16 }}
           />
         </div>
       </div>
