@@ -1,4 +1,5 @@
 import { Section } from "@/components/layout/Section";
+import { InlineList } from "@/components/ui/InlineList";
 import {
   exploring,
   skillGroups,
@@ -13,25 +14,7 @@ function Line({ line }: { line: SkillLine }) {
       {line.label ? (
         <span className={styles.lineLabel}>{line.label}</span>
       ) : null}
-      <ul className={styles.items}>
-        {line.items.map((item, i) => (
-          <li key={item} className={styles.item}>
-            {/* The space after the dot is the only place a line may break.
-                Each name is held together, so "AWS EC2" never splits, and the
-                no-break space before the dot keeps it at the end of a line
-                rather than at the start of the next. */}
-            {i > 0 ? (
-              <>
-                {"\u00a0"}
-                <span className={styles.sep} aria-hidden="true">
-                  ·
-                </span>{" "}
-              </>
-            ) : null}
-            <span className={styles.name}>{item}</span>
-          </li>
-        ))}
-      </ul>
+      <InlineList items={line.items} className={styles.items} />
     </div>
   );
 }

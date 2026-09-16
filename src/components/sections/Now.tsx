@@ -1,5 +1,6 @@
 import { Construction } from "@/components/decorative/Construction";
 import { Section } from "@/components/layout/Section";
+import { InlineList } from "@/components/ui/InlineList";
 import { profile } from "@/content/profile";
 import { formatDate } from "@/lib/time/format";
 import styles from "./Now.module.css";
@@ -25,7 +26,13 @@ export function Now() {
         {now.facts.map((fact) => (
           <div key={fact.term} className={styles.fact}>
             <dt className="label">{fact.term}</dt>
-            <dd className={styles.value}>{fact.value}</dd>
+            <dd className={styles.value}>
+              {typeof fact.value === "string" ? (
+                fact.value
+              ) : (
+                <InlineList items={fact.value} />
+              )}
+            </dd>
           </div>
         ))}
       </dl>

@@ -23,7 +23,7 @@ export const profile = {
       { term: "Role", value: "Backend developer" },
       { term: "At", value: "PinnTag" },
       { term: "Also", value: "Full-stack developer, open-source contributor" },
-      { term: "On my mind", value: "Hardware · AI agents · Real-time systems" },
+      { term: "On my mind", value: ["Hardware", "AI agents", "Real-time systems"] },
     ],
     /** The day this section was last revised by hand, not the build date. */
     updated: "2026-09-16",

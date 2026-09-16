@@ -1,0 +1,12 @@
+.item {
+  display: inline;
+}
+
+.name {
+  white-space: nowrap;
+}
+
+.sep {
+  padding-inline: 0.15em;
+  color: var(--ink-ghost);
+}

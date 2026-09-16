@@ -63,20 +63,6 @@
   text-wrap: pretty;
 }
 
-.item {
-  display: inline;
-}
-
-.name {
-  white-space: nowrap;
-}
-
-/* The separator is ink, not content: screen readers get the list itself. */
-.sep {
-  padding-inline: 0.15em;
-  color: var(--ink-ghost);
-}
-
 /*
   Exploring: the same ledger, pencilled rather than inked. A dashed rule and a
   lighter hand, so nothing here reads as a claim of expertise.
