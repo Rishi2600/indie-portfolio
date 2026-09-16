@@ -149,22 +149,51 @@ svg {
   margin-top: var(--space-4);
 }
 
-/* Links inside prose keep their underline at rest — the rule is part of the
-   text — and change ink on hover. */
+/*
+  Links keep a pale rule under them at rest — it is part of the text, and a
+  link must look like one without being hovered — and on hover a red line is
+  inked over it from the left. Two gradients rather than text-decoration,
+  because a decoration cannot be drawn.
+*/
 .link {
   color: inherit;
-  text-decoration: underline;
-  text-decoration-color: var(--rule);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.22em;
+  text-decoration: none;
+  background-image:
+    linear-gradient(var(--rubric), var(--rubric)),
+    linear-gradient(var(--rule), var(--rule));
+  background-position:
+    0 100%,
+    0 100%;
+  background-repeat: no-repeat;
+  background-size:
+    0% 1px,
+    100% 1px;
+  padding-bottom: 0.08em;
   transition:
     color var(--dur-1) var(--ease),
-    text-decoration-color var(--dur-1) var(--ease);
+    background-size var(--dur-3) var(--ease);
 }
 
-.link:hover {
+.link:hover,
+.link:focus-visible {
   color: var(--rubric);
-  text-decoration-color: var(--rubric);
+  background-size:
+    100% 1px,
+    100% 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link {
+    transition: none;
+  }
+}
+
+/* Forced-colours modes drop background images, and with them the rule, so
+   the underline comes back as a real decoration there. */
+@media (forced-colors: active) {
+  .link {
+    text-decoration: underline;
+  }
 }
 
 .visually-hidden {

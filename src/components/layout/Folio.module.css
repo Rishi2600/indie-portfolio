@@ -38,3 +38,54 @@
       100% 0;
   }
 }
+
+/*
+  Finials. Once there is margin enough beside the page for them to sit
+  without crowding the viewport edge, the rules stop short of the top and
+  bottom of the page and each ends in a rosette centred on the double line.
+*/
+.finial {
+  display: none;
+}
+
+@media (min-width: 78rem) {
+  .folio {
+    --finial: 11px;
+    --finial-gap: 30px;
+
+    background-size: 1px calc(100% - 2 * var(--finial-gap));
+    background-position:
+      0 var(--finial-gap),
+      3px var(--finial-gap),
+      calc(100% - 3px) var(--finial-gap),
+      100% var(--finial-gap);
+  }
+
+  .finial {
+    display: block;
+    position: absolute;
+    line-height: 0;
+    color: var(--ink-ghost);
+  }
+
+  .topLeft,
+  .topRight {
+    top: calc(var(--finial-gap) - var(--finial) - 4px);
+  }
+
+  .bottomLeft,
+  .bottomRight {
+    bottom: calc(var(--finial-gap) - var(--finial) - 4px);
+  }
+
+  /* Centred on the double rule, whose two lines sit at 0 and 3px. */
+  .topLeft,
+  .bottomLeft {
+    left: calc(2px - var(--finial) / 2);
+  }
+
+  .topRight,
+  .bottomRight {
+    right: calc(2px - var(--finial) / 2);
+  }
+}
