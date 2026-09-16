@@ -16,7 +16,7 @@ export function Learning() {
       label="Learning"
       title="Currently learning"
     >
-      <p className={`prose ${styles.note}`}>{learningNote}</p>
+      <p className="note">{learningNote}</p>
 
       <ol className={styles.list}>
         {learning.map((entry, i) => (

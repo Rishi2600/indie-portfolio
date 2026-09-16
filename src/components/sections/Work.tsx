@@ -10,7 +10,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
 export function Work() {
   return (
     <Section id="work" index="02" label="Work" title="Selected work">
-      <p className={`prose ${styles.note}`}>{projectsNote}</p>
+      <p className="note">{projectsNote}</p>
 
       {projects.length > 0 ? (
         <ol className={styles.index}>

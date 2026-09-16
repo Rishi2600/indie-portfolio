@@ -5,7 +5,7 @@ import styles from "./Skills.module.css";
 export function Skills() {
   return (
     <Section id="skills" index="04" label="Skills" title="What I work with">
-      <p className={`prose ${styles.note}`}>{skillsNote}</p>
+      <p className="note">{skillsNote}</p>
 
       <dl className={styles.groups}>
         {skillGroups.map((group) => (
