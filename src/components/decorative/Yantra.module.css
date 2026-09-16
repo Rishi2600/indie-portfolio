@@ -48,11 +48,18 @@
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    /* Tied to the scroll: the figure is constructed as it comes into view,
-       each ring starting a little later than the one inside it. */
-    /* One timeline for the whole figure, named on the svg: with view() on
-       each stroke, every petal would be timed to its own position on screen
-       and the figure would wipe from top to bottom instead of growing. */
+    /*
+      Tied to the scroll: the figure is constructed as it comes into view,
+      each ring starting a little later than the one inside it, and finished
+      by the time the figure is nearly in. The timings are variables, with
+      their defaults as fallbacks so a parent can set them: a figure that can
+      never fully enter — the seal at the foot of the page —
+      can compress them into the scroll it actually has.
+
+      One timeline for the whole figure, named on the svg: with view() on
+      each stroke, every petal would be timed to its own position on screen
+      and the figure would wipe from top to bottom instead of growing.
+    */
     .onScroll {
       view-timeline-name: --yantra;
     }
@@ -61,15 +68,17 @@
       stroke-dasharray: 1;
       animation: draw linear both;
       animation-timeline: --yantra;
-      animation-range: entry calc(var(--ring) * 6%)
-        cover calc(30% + var(--ring) * 4%);
+      animation-range:
+        entry calc(var(--ring) * var(--draw-step, 5%))
+        entry calc(var(--draw-span, 55%) + var(--ring) * var(--draw-stretch, 6%));
     }
 
     .onScroll .dot {
       animation: ink linear both;
       animation-timeline: --yantra;
-      animation-range: entry calc(var(--ring) * 6% + 10%)
-        cover calc(34% + var(--ring) * 4%);
+      animation-range:
+        entry calc(var(--ring) * var(--draw-step, 5%) + 5%)
+        entry calc(var(--draw-span, 55%) + var(--ring) * var(--draw-stretch, 6%) + 5%);
     }
   }
 }

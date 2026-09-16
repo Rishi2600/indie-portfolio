@@ -13,7 +13,11 @@
   inset-block: 0;
   inset-inline: calc(-1 * var(--folio-inset, 0px));
   z-index: -1;
-  overflow: hidden;
+  /* clip, not hidden. Both cut the figure off at the edge, but hidden also
+     makes this box a scroll container, and a view timeline measures against
+     its nearest scroll container — so every figure inside would be timed
+     against a box that never scrolls, and never draw. */
+  overflow: clip;
   pointer-events: none;
   color: var(--ink);
 }

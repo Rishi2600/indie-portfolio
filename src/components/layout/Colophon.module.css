@@ -26,6 +26,12 @@
   page, and it sits beneath the text rather than behind it.
 */
 .seal {
+  /* Only half of the seal can ever scroll into view, so its construction is
+     compressed to finish while that half is entering. */
+  --draw-step: 3%;
+  --draw-span: 22%;
+  --draw-stretch: 4%;
+
   position: absolute;
   bottom: 0;
   left: 50%;
