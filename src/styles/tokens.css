@@ -1,0 +1,111 @@
+/*
+  Design tokens
+  =============
+
+  One source for the whole visual language. The palette is drawn from old
+  paper and iron-gall ink: warm, low-chroma, and browned rather than yellow.
+  Red appears only as rubrication — the ink a scribe reserves for numerals,
+  section marks and corrections — never as a field of colour.
+
+  Every value below is used somewhere. If a token stops being used, delete it.
+*/
+
+:root {
+  /* -- Paper ------------------------------------------------------------
+     Four grades of the same sheet, from the lit face to the shadowed edge. */
+  --paper: #f4f1e9;
+  --paper-sunk: #ece7db;
+  --paper-edge: #e3dcca;
+  --paper-deep: #d8d0bb;
+
+  /* -- Ink --------------------------------------------------------------
+     --ink-faint is the lightest tone still safe for small text on --paper
+     (4.8:1). --ink-ghost is below that on purpose: ornament only, never
+     anything a reader has to read. */
+  --ink: #22201c;
+  --ink-soft: #4c463c;
+  --ink-faint: #6f6757;
+  --ink-ghost: #a99f8b;
+
+  /* -- Rules ------------------------------------------------------------ */
+  --rule: #c9bfa9;
+  --rule-soft: #ded5c1;
+
+  /* -- Rubric -----------------------------------------------------------
+     Red ink. Numerals, section marks, the underline a link grows on hover.
+     5.9:1 on --paper, so it is safe for the small numerals it is used for. */
+  --rubric: #9c3a28;
+  --rubric-soft: #b05a44;
+
+  /* -- Indigo -----------------------------------------------------------
+     The second pigment, and rarer than the first. Focus rings and the one
+     or two marks that must not read as red. */
+  --indigo: #2d4257;
+
+  /* -- Type -------------------------------------------------------------
+     Three Latin faces, each with a job: a garalde for anything that is
+     read as prose, a grotesque for interface text, a monospace for
+     metadata. A fourth face carries the one line of Devanagari. */
+  --font-display: var(--font-garamond), "Iowan Old Style", Palatino, Georgia,
+    serif;
+  --font-text: var(--font-plex-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", "Cascadia Mono",
+    monospace;
+  --font-devanagari: var(--font-plex-devanagari), var(--font-text);
+
+  /* Scale. Fixed at the small end where precision matters, fluid at the
+     display end where the line has room to breathe. */
+  --step--2: 0.6875rem;
+  --step--1: 0.8125rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.1875rem;
+  --step-2: clamp(1.375rem, 1.22rem + 0.75vw, 1.75rem);
+  --step-3: clamp(1.75rem, 1.4rem + 1.7vw, 2.6rem);
+  --step-4: clamp(2.75rem, 1.85rem + 4.4vw, 5.25rem);
+
+  --leading-tight: 1.08;
+  --leading-title: 1.2;
+  --leading-body: 1.62;
+  --leading-loose: 1.8;
+
+  --tracking-label: 0.15em;
+  --tracking-wide: 0.05em;
+  --tracking-display: -0.015em;
+
+  /* -- Space ------------------------------------------------------------ */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 6.5rem;
+  --space-10: 9rem;
+
+  /* -- Measure and frame ------------------------------------------------
+     --measure is about 62 characters at --step-0, which is where prose stops
+     being comfortable. --rail is the margin the section numerals live in. */
+  --folio-max: 74rem;
+  --folio-pad: var(--space-5);
+  --rail: 8.5rem;
+  --rail-gap: var(--space-6);
+  --measure: 33rem;
+  --measure-wide: 44rem;
+
+  /* -- Line weight ------------------------------------------------------
+     Hairlines only. Nothing on this site is heavier than a pen stroke. */
+  --hair: 1px;
+  --radius: 0;
+  --radius-sm: 1px;
+
+  /* -- Motion -----------------------------------------------------------
+     One easing curve and three durations. Anything that needs a fourth is
+     doing too much. */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-1: 140ms;
+  --dur-2: 280ms;
+  --dur-3: 620ms;
+}
