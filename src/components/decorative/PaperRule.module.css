@@ -1,0 +1,20 @@
+.rule {
+  width: 100%;
+  border: 0;
+}
+
+.hair {
+  border-top: var(--hair) solid var(--rule-soft);
+}
+
+/*
+  A double rule: two hairlines with a 1px channel between them. Box-sizing is
+  border-box, so the 3px height is one border, one pixel of gap, one border.
+  It marks the openings and closings of the page, never the divisions inside
+  one.
+*/
+.double {
+  height: 3px;
+  border-top: var(--hair) solid var(--rule);
+  border-bottom: var(--hair) solid var(--rule-soft);
+}

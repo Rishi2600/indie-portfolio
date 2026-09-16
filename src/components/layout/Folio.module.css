@@ -1,0 +1,32 @@
+/*
+  The page block.
+
+  Wide enough to hold a rail of marginalia beside a column of prose, and ruled
+  down both sides once there is room for the margin — the way a scribe rules a
+  page before writing on it. The rules are painted as background gradients so
+  they need no extra elements and run unbroken from masthead to colophon.
+*/
+
+.folio {
+  max-width: var(--folio-max);
+  margin-inline: auto;
+  padding-inline: var(--folio-pad);
+}
+
+@media (min-width: 60rem) {
+  .folio {
+    padding-inline: var(--space-8);
+    background-repeat: no-repeat;
+    background-size: 1px 100%;
+    background-image:
+      linear-gradient(var(--rule-soft), var(--rule-soft)),
+      linear-gradient(var(--rule), var(--rule)),
+      linear-gradient(var(--rule), var(--rule)),
+      linear-gradient(var(--rule-soft), var(--rule-soft));
+    background-position:
+      0 0,
+      3px 0,
+      calc(100% - 3px) 0,
+      100% 0;
+  }
+}

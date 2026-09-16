@@ -1,0 +1,21 @@
+.divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  color: var(--ink-ghost);
+}
+
+.line {
+  flex: 1;
+  height: var(--hair);
+  background-color: var(--rule-soft);
+}
+
+/* The end-of-text mark: three glyphs, centred, with nothing either side. */
+.terminal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  color: var(--ink-ghost);
+}
