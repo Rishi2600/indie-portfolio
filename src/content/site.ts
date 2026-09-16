@@ -1,3 +1,13 @@
+import { isIndexable, resolveSiteUrl, type Env } from "@/lib/site-url";
+
+const env: Env = {
+  NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+  VERCEL_ENV: process.env.VERCEL_ENV,
+  VERCEL_URL: process.env.VERCEL_URL,
+};
+
+const siteEnv = { url: resolveSiteUrl(env), indexable: isIndexable(env) };
+
 /**
  * Site-level facts and structure.
  *
@@ -12,11 +22,13 @@ export const site = {
   description:
     "Rishi — full-stack, backend, Web3 and Solana developer. Backend developer at PinnTag, working across APIs, databases, infrastructure, real-time systems and AI agents.",
   /**
-   * The canonical origin. Set NEXT_PUBLIC_SITE_URL in the deployment
-   * environment; the localhost fallback keeps metadata valid in development
-   * and makes a missing variable obvious rather than silent.
+   * The canonical origin; see src/lib/site-url.ts for the rules. The
+   * variables are read by name, not by passing process.env along, so Next can
+   * see exactly which ones this depends on.
    */
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  url: siteEnv.url,
+  /** Whether search engines should index this deployment at all. */
+  indexable: siteEnv.indexable,
   ogLocale: "en_IN",
   /** Where this site's own source lives. Linked from the colophon. */
   repository: "https://github.com/Rishi2600/indie-portfolio",

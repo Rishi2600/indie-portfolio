@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     description: site.description,
     creator: "@secur3shell",
   },
-  robots: { index: true, follow: true },
+  robots: { index: site.indexable, follow: site.indexable },
 };
 
 export const viewport: Viewport = {

@@ -2,6 +2,11 @@ import type { MetadataRoute } from "next";
 import { site } from "@/content/site";
 
 export default function robots(): MetadataRoute.Robots {
+  // A preview deployment is a public copy of the site at another address.
+  if (!site.indexable) {
+    return { rules: { userAgent: "*", disallow: "/" } };
+  }
+
   return {
     rules: {
       userAgent: "*",
