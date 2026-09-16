@@ -1,0 +1,74 @@
+.opening {
+  position: relative;
+  padding-block: var(--space-8) var(--space-9);
+}
+
+/*
+  A watermark, not an illustration: the mark blown up to the size it would be
+  if it had been blind-stamped into the sheet, at an opacity where you notice
+  the page has something on it before you notice what.
+*/
+.watermark {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: min(52vw, 21rem);
+  height: auto;
+  transform: translateY(-50%);
+  color: var(--ink);
+  opacity: 0.055;
+  pointer-events: none;
+}
+
+.inner {
+  position: relative;
+}
+
+.name {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  font-family: var(--font-display);
+  font-size: var(--step-4);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-display);
+}
+
+/*
+  The same name in the other script it is written in. Hidden from assistive
+  technology because it is the same name, and hearing it twice helps nobody.
+*/
+.devanagari {
+  font-family: var(--font-devanagari);
+  font-size: var(--step-1);
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--ink-ghost);
+}
+
+/* A short rubricated rule, the way a scribe opens a passage. */
+.opener {
+  width: 4rem;
+  height: var(--hair);
+  margin-block: var(--space-5) var(--space-6);
+  background-color: var(--rubric);
+}
+
+.lead {
+  max-width: var(--measure-wide);
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  line-height: var(--leading-title);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+}
+
+.body {
+  max-width: var(--measure);
+  margin-top: var(--space-4);
+  font-size: var(--step-1);
+  line-height: var(--leading-loose);
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
