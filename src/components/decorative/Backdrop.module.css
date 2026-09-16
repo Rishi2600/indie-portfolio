@@ -1,0 +1,19 @@
+/*
+  The layer ornaments are drawn on.
+
+  It sits behind the content of whatever contains it (which must be
+  positioned and isolated), and reaches sideways past the folio's padding to
+  stop just inside the ruled margin — so a figure can bleed off the edge of
+  the page and be cut by the rule, the way a printed ornament is cut by the
+  trim. It clips everything it holds, which is what keeps a large figure from
+  ever widening the page.
+*/
+.backdrop {
+  position: absolute;
+  inset-block: 0;
+  inset-inline: calc(-1 * var(--folio-inset, 0px));
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--ink);
+}

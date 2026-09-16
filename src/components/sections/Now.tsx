@@ -1,3 +1,4 @@
+import { Construction } from "@/components/decorative/Construction";
 import { Section } from "@/components/layout/Section";
 import { profile } from "@/content/profile";
 import { formatDate } from "@/lib/time/format";
@@ -7,7 +8,13 @@ export function Now() {
   const { now } = profile;
 
   return (
-    <Section id="now" index="01" label="Now" title={now.title}>
+    <Section
+      id="now"
+      index="01"
+      label="Now"
+      title={now.title}
+      backdrop={<Construction className={styles.construction} />}
+    >
       <div className="prose">
         {now.paragraphs.map((paragraph) => (
           <p key={paragraph}>{paragraph}</p>

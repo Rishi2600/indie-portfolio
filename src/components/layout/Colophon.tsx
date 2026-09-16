@@ -1,5 +1,7 @@
+import { Backdrop } from "@/components/decorative/Backdrop";
 import { PaperRule } from "@/components/decorative/PaperRule";
 import { SectionDivider } from "@/components/decorative/SectionDivider";
+import { Yantra } from "@/components/decorative/Yantra";
 import { Clock } from "@/components/ui/Clock";
 import { VisitCount } from "@/components/ui/VisitCount";
 import { elsewhere } from "@/content/links";
@@ -16,6 +18,12 @@ const year = new Date().getFullYear();
 export function Colophon() {
   return (
     <footer className={styles.colophon}>
+      <Backdrop>
+        <div className={styles.seal}>
+          <Yantra draw="scroll" stroke={0.45} />
+        </div>
+      </Backdrop>
+
       <PaperRule variant="double" />
       <SectionDivider variant="terminal" className={styles.terminal} />
 

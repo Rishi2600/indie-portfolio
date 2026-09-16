@@ -1,0 +1,75 @@
+.yantra {
+  display: block;
+  overflow: visible;
+}
+
+/*
+  Drawing. Every stroke has pathLength 1, so a dash of 1 is the whole line and
+  an offset of 1 hides it; animating the offset to 0 draws it. The points are
+  not strokes, so they are inked in instead.
+
+  The resting state — no animation — is the finished figure. Motion is only
+  ever added on top, inside a reduced-motion guard, so a reader who has
+  asked for less movement gets the whole drawing and never a blank.
+*/
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes ink {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Once, as the page opens: ring by ring from the centre, about two seconds
+     in all. Nothing waits for it; the text is already there. */
+  .onLoad .ring > :not(.dot) {
+    stroke-dasharray: 1;
+    animation: draw 1.3s var(--ease) both;
+    animation-delay: calc(var(--ring) * 150ms + 150ms);
+  }
+
+  .onLoad .dot {
+    animation: ink 0.9s var(--ease) both;
+    animation-delay: calc(var(--ring) * 150ms + 500ms);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Tied to the scroll: the figure is constructed as it comes into view,
+       each ring starting a little later than the one inside it. */
+    /* One timeline for the whole figure, named on the svg: with view() on
+       each stroke, every petal would be timed to its own position on screen
+       and the figure would wipe from top to bottom instead of growing. */
+    .onScroll {
+      view-timeline-name: --yantra;
+    }
+
+    .onScroll .ring > :not(.dot) {
+      stroke-dasharray: 1;
+      animation: draw linear both;
+      animation-timeline: --yantra;
+      animation-range: entry calc(var(--ring) * 6%)
+        cover calc(30% + var(--ring) * 4%);
+    }
+
+    .onScroll .dot {
+      animation: ink linear both;
+      animation-timeline: --yantra;
+      animation-range: entry calc(var(--ring) * 6% + 10%)
+        cover calc(34% + var(--ring) * 4%);
+    }
+  }
+}

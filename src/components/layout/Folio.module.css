@@ -8,6 +8,12 @@
 */
 
 .folio {
+  /* How far an ornament may reach past the content edge before it is cut:
+     to the viewport edge on a phone, to just inside the inner margin rule
+     (at 3px) once the page is ruled. Read by Backdrop. */
+  --folio-inset: var(--folio-pad);
+
+  position: relative;
   max-width: var(--folio-max);
   margin-inline: auto;
   padding-inline: var(--folio-pad);
@@ -15,6 +21,8 @@
 
 @media (min-width: 60rem) {
   .folio {
+    --folio-inset: calc(var(--space-8) - 5px);
+
     padding-inline: var(--space-8);
     background-repeat: no-repeat;
     background-size: 1px 100%;

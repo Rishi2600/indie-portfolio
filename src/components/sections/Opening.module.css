@@ -1,33 +1,53 @@
 .opening {
   position: relative;
+  isolation: isolate;
   padding-block: var(--space-8);
 }
 
 /*
-  A watermark, not an illustration: the mark blown up to the size it would be
-  if it had been blind-stamped into the sheet, at an opacity where you notice
-  the page has something on it before you notice what.
+  The figure behind the opening: the mark grown into a full yantra and
+  constructed ring by ring as the page opens, at the opacity of a blind stamp
+  — you notice the page has something on it before you notice what.
 
-  It appears only once there is an empty column to put it in. Narrow screens
-  get the opening without it rather than with it printed behind the first
-  sentence, which is a different composition and not a worse one.
+  On a phone it would sit behind the first sentence, so there it is moved to
+  the top corner and cut by the edge of the screen: a fragment beside the
+  name rather than a figure under the text.
 */
-.watermark {
-  display: none;
+.figure {
+  position: absolute;
+  top: calc(-1 * var(--space-3));
+  right: -7rem;
+  width: 15rem;
+  opacity: 0.05;
 }
 
 @media (min-width: 52rem) {
-  .watermark {
-    display: block;
-    position: absolute;
+  .figure {
     top: 50%;
-    right: 0;
-    width: min(42vw, 21rem);
-    height: auto;
-    transform: translateY(-50%);
-    color: var(--ink);
-    opacity: 0.055;
-    pointer-events: none;
+    right: var(--space-7);
+    width: min(40vw, 25rem);
+    translate: 0 -50%;
+    opacity: 0.075;
+  }
+}
+
+/*
+  As the opening scrolls away, the figure turns a few degrees — the one
+  ornament on the site that answers the scroll directly.
+*/
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .figure {
+      animation: turn linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 100%;
+    }
+  }
+}
+
+@keyframes turn {
+  to {
+    rotate: 18deg;
   }
 }
 

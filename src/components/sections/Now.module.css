@@ -38,3 +38,22 @@
   letter-spacing: var(--tracking-wide);
   color: var(--ink-faint);
 }
+
+/*
+  Compass lines struck from the top-right corner of the section, in the empty
+  space beside the prose. Only on screens wide enough to have that space.
+*/
+.construction {
+  display: none;
+}
+
+@media (min-width: 60rem) {
+  .construction {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 22rem;
+    opacity: 0.09;
+  }
+}

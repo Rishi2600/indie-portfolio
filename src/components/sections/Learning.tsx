@@ -1,3 +1,4 @@
+import { Yantra } from "@/components/decorative/Yantra";
 import { Section } from "@/components/layout/Section";
 import { learning, learningNote } from "@/content/learning";
 import styles from "./Learning.module.css";
@@ -15,6 +16,11 @@ export function Learning() {
       index="03"
       label="Learning"
       title="Currently learning"
+      backdrop={
+        <div className={styles.padma}>
+          <Yantra rings={3} draw="scroll" stroke={0.55} />
+        </div>
+      }
     >
       <p className="note">{learningNote}</p>
 

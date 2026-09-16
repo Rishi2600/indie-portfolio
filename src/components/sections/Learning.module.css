@@ -26,3 +26,24 @@
   line-height: var(--leading-body);
   color: var(--ink-soft);
 }
+
+/*
+  Half a padma — the inner three rings of the opening's figure — centred on
+  the left margin rule, so the rule cuts it in two and only the half that
+  lies in the margin is on the page. It never reaches the text column.
+*/
+.padma {
+  display: none;
+}
+
+@media (min-width: 60rem) {
+  .padma {
+    display: block;
+    position: absolute;
+    top: 55%;
+    left: 0;
+    width: 22rem;
+    translate: -50% -50%;
+    opacity: 0.08;
+  }
+}

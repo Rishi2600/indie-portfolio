@@ -1,4 +1,5 @@
-import { MandalaMark } from "@/components/decorative/MandalaMark";
+import { Backdrop } from "@/components/decorative/Backdrop";
+import { Yantra } from "@/components/decorative/Yantra";
 import { profile } from "@/content/profile";
 import { site } from "@/content/site";
 import styles from "./Opening.module.css";
@@ -6,7 +7,11 @@ import styles from "./Opening.module.css";
 export function Opening() {
   return (
     <section className={styles.opening} aria-labelledby="opening-title">
-      <MandalaMark className={styles.watermark} size={336} />
+      <Backdrop>
+        <div className={styles.figure}>
+          <Yantra draw="load" stroke={0.5} />
+        </div>
+      </Backdrop>
 
       <div className={styles.inner}>
         <h1 id="opening-title" className={styles.name}>
