@@ -18,6 +18,8 @@ export const site = {
    */
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   ogLocale: "en_IN",
+  /** Where this site's own source lives. Linked from the colophon. */
+  repository: "https://github.com/Rishi2600/new-portfolio",
   /**
    * The name as it is written in Devanagari. It appears twice, small, as a
    * signature rather than as decoration.

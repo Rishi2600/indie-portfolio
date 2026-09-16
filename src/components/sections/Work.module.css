@@ -1,0 +1,90 @@
+.note {
+  max-width: var(--measure);
+  color: var(--ink-soft);
+}
+
+.index {
+  margin-top: var(--space-6);
+  border-top: var(--hair) solid var(--rule);
+}
+
+.entry {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: var(--space-2) var(--space-4);
+  padding-block: var(--space-5);
+  border-bottom: var(--hair) solid var(--rule-soft);
+}
+
+@media (min-width: 46rem) {
+  .entry {
+    grid-template-columns: 2.5rem minmax(0, 1fr) 8rem;
+  }
+}
+
+.entryTitle {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  line-height: var(--leading-title);
+}
+
+.description {
+  max-width: var(--measure);
+  margin-top: var(--space-2);
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
+.stack {
+  margin-top: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: var(--tracking-wide);
+  color: var(--ink-faint);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-4);
+}
+
+@media (min-width: 46rem) {
+  .meta {
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+  }
+}
+
+.metaLink {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+/*
+  The unfilled index: a numeral and a ruled line where an entry will go, the
+  way a ledger is ruled before anything is written in it. Hidden from
+  assistive technology — the sentence above already says the index is empty,
+  and three empty rows add nothing to hear.
+*/
+.reserved {
+  align-items: center;
+  padding-block: var(--space-4);
+}
+
+.reservedNumeral {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-wide);
+  color: var(--ink-ghost);
+}
+
+.reservedLine {
+  height: var(--hair);
+  background-color: var(--rule-soft);
+}

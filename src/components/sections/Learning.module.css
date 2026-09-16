@@ -1,0 +1,32 @@
+.note {
+  max-width: var(--measure);
+  color: var(--ink-soft);
+}
+
+.list {
+  max-width: var(--measure-wide);
+  margin-top: var(--space-6);
+  border-top: var(--hair) solid var(--rule);
+}
+
+.entry {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: baseline;
+  padding-block: var(--space-4);
+  border-bottom: var(--hair) solid var(--rule-soft);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  line-height: var(--leading-title);
+}
+
+.entryNote {
+  grid-column: 2;
+  margin-top: var(--space-1);
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}

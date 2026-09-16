@@ -1,0 +1,31 @@
+.note {
+  max-width: var(--measure);
+  color: var(--ink-soft);
+}
+
+.groups {
+  max-width: var(--measure-wide);
+  margin-top: var(--space-6);
+  border-top: var(--hair) solid var(--rule);
+}
+
+.group {
+  display: grid;
+  gap: var(--space-1);
+  padding-block: var(--space-3);
+  border-bottom: var(--hair) solid var(--rule-soft);
+}
+
+@media (min-width: 36rem) {
+  .group {
+    grid-template-columns: 11rem minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: baseline;
+  }
+}
+
+.values {
+  font-size: var(--step--1);
+  line-height: var(--leading-body);
+  color: var(--ink);
+}

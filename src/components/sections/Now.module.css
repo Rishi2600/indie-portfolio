@@ -1,0 +1,40 @@
+.facts {
+  max-width: var(--measure-wide);
+  margin-top: var(--space-6);
+  border-top: var(--hair) solid var(--rule-soft);
+}
+
+.fact {
+  display: grid;
+  gap: var(--space-1);
+  padding-block: var(--space-3);
+  border-bottom: var(--hair) solid var(--rule-soft);
+}
+
+@media (min-width: 36rem) {
+  .fact {
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: baseline;
+  }
+}
+
+.value {
+  font-size: var(--step--1);
+  line-height: var(--leading-body);
+  color: var(--ink);
+}
+
+.revised {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+}
+
+.revisedValue {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: var(--tracking-wide);
+  color: var(--ink-faint);
+}
