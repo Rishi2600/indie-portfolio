@@ -1,5 +1,5 @@
 import { Section } from "@/components/layout/Section";
-import { notes, notesIntro } from "@/content/notes";
+import { notes, notesEmpty, notesIntro } from "@/content/notes";
 import { formatDate } from "@/lib/time/format";
 import styles from "./Notes.module.css";
 
@@ -21,7 +21,10 @@ export function Notes() {
           ))}
         </ol>
       ) : (
-        <p className={`label ${styles.status}`}>Coming soon</p>
+        <div className={styles.empty}>
+          <p className="label">{notesEmpty.status}</p>
+          <p className="note">{notesEmpty.note}</p>
+        </div>
       )}
     </Section>
   );

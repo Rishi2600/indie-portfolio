@@ -7,7 +7,7 @@
 .entry {
   display: grid;
   grid-template-columns: 2.5rem minmax(0, 1fr);
-  gap: var(--space-4);
+  gap: var(--space-1) var(--space-4);
   align-items: baseline;
   padding-block: var(--space-4);
   border-bottom: var(--hair) solid var(--rule-soft);
@@ -21,7 +21,8 @@
 
 .entryNote {
   grid-column: 2;
-  margin-top: var(--space-1);
+  max-width: var(--measure);
   font-size: var(--step--1);
+  line-height: var(--leading-body);
   color: var(--ink-soft);
 }
