@@ -49,11 +49,11 @@ export function MandalaMark({
   title,
 }: Props) {
   // vectorEffect holds the stroke at a constant device width instead of
-  // letting it scale with the figure, so it is the same pen at every size: a
-  // hairline in the masthead and a hairline in a watermark twelve times
-  // larger. Without it the small marks thin to sub-pixel and grey out, and
-  // the large ones thicken into something drawn rather than ruled. It is not
-  // an inherited property, so every stroked shape below names it.
+  // letting it scale with the figure, so the small mark stays a crisp
+  // hairline rather than thinning to sub-pixel and greying out. It is not an
+  // inherited property, so every stroked shape below names it. (The large
+  // figures, which draw themselves, cannot use it: Chrome measures dashes
+  // in screen space for non-scaling strokes. See Yantra.)
   return (
     <svg
       viewBox="0 0 64 64"

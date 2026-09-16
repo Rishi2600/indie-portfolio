@@ -2,8 +2,11 @@ import { Section } from "@/components/layout/Section";
 import { projects, projectsNote } from "@/content/projects";
 import styles from "./Work.module.css";
 
-/** Ruled but unwritten rows drawn while the index has nothing in it. */
-const RESERVED_ROWS = 3;
+/**
+ * Ruled but unwritten rows drawn while the index has nothing in it: one for
+ * each of the five projects the work index is being prepared to hold.
+ */
+const RESERVED_ROWS = 5;
 
 const pad = (n: number) => String(n).padStart(2, "0");
 

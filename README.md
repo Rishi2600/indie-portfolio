@@ -54,8 +54,10 @@ src/
   components/
     layout/     the folio frame, sections, masthead, colophon
     sections/   one file per section of the page
-    ui/         clock, visit count, reveal-on-scroll
-    decorative/ the ornament system (SVG, drawn in code)
+    ui/         clock, visit count, inline lists
+    decorative/ the ornament system, all SVG drawn in code: the mark, the
+                yantra and its construction lines, rules, rosettes, the
+                backdrop layer figures sit on, and the birds
   content/      every piece of copy and data on the site
   lib/
     time/       IST / UTC clock
@@ -63,6 +65,9 @@ src/
     site-url.ts where the site lives, and whether to index it
   styles/       design tokens and base styles
 ```
+
+`DESIGN_DNA.md` is the visual and interaction constitution. Read it before
+changing anything visible.
 
 `src/content` is the only place that holds copy. Adding a project or a skill
 group means editing a data file, never a component.
