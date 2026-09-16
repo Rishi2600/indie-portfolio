@@ -30,13 +30,23 @@ export const profile = {
   },
 
   about: {
-    title: "About",
-    /** Replace `pending` with the real essay; delete this field when it lands. */
-    pending: {
-      heading: "Unwritten.",
+    title: "Breaking things, mostly",
+    paragraphs: [
+      "I like breaking things more than I like building them. Push on a system until something gives, then work out why — that is most of the fun.",
+      "I like to experiment, and I will happily burn a lot of tokens doing it.",
+      "I enjoy the difficult parts of engineering, the concepts that don't give themselves up on the first read. Solana and blockchains fascinate me, and hardware is fast becoming an obsession.",
+    ],
+    /**
+     * The example the essay leans on. It is told here as part of the story
+     * only; the project itself belongs to the work index, in its own phase.
+     */
+    example: {
+      label: "A case in point",
       paragraphs: [
-        "The longer piece goes here: what I enjoy building, what I am working through at the moment, which problems hold my attention, and what I have come to believe about software.",
+        "When work went remote, the team was spending around nine hours a day in a huddle call. So I built a GatherTown-like space from scratch to deal with it.",
+        "The company uses it now.",
       ],
+      principle: "Build things because you need them.",
     },
   },
 

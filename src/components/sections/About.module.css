@@ -1,15 +1,76 @@
 /*
-  Set in the roman, not the italic. Loading a second cut of the face for one
-  word costs more than the word is worth; the size and the lighter ink already
-  say this is a note about the page rather than the page.
+  The essay, with its example set beside it as a gloss — the way a
+  commentary sits in the margin of a manuscript page. Below the breakpoint
+  the gloss follows the essay instead.
 */
-.unwritten {
+.layout {
+  display: grid;
+  gap: var(--space-7);
+}
+
+@media (min-width: 72rem) {
+  .layout {
+    grid-template-columns: minmax(0, var(--measure)) minmax(15rem, 19rem);
+    column-gap: var(--space-8);
+    align-items: start;
+  }
+}
+
+.example {
+  max-width: var(--measure);
+  padding-left: var(--space-5);
+  /* The folio's double rule, turned inward to mark a passage apart. Painted
+     the same way the folio paints its own: two 1px gradients, no elements. */
+  background-repeat: no-repeat;
+  background-size: 1px 100%;
+  background-image:
+    linear-gradient(var(--rule), var(--rule)),
+    linear-gradient(var(--rule-soft), var(--rule-soft));
+  background-position:
+    0 0,
+    3px 0;
+}
+
+@media (min-width: 72rem) {
+  .example {
+    /* Aligns the gloss's first line with the essay's, not with its label. */
+    margin-top: calc(-1 * var(--space-5));
+  }
+}
+
+.exampleBody {
+  margin-top: var(--space-3);
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  line-height: var(--leading-prose);
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+.exampleBody > p + p {
+  margin-top: var(--space-3);
+}
+
+/*
+  The one sentence on the site set as a principle. The rosette is the red
+  mark a scribe put before a passage that mattered.
+*/
+.principle {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
   font-family: var(--font-display);
   font-size: var(--step-2);
   line-height: var(--leading-title);
-  color: var(--ink-faint);
+  color: var(--ink);
+  text-wrap: balance;
 }
 
-.body {
-  margin-top: var(--space-5);
+/* Sits on the first line of the sentence, not the middle of the block. */
+.mark {
+  flex: none;
+  align-self: flex-start;
+  margin-top: 0.36em;
+  color: var(--rubric);
 }
