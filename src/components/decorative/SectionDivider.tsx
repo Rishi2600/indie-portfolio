@@ -18,7 +18,12 @@ function Rosette({ size }: { size: number }) {
       aria-hidden="true"
     >
       {ANGLES.map((angle) => (
-        <path key={angle} d={PETAL} transform={`rotate(${angle} 12 12)`} />
+        <path
+          key={angle}
+          d={PETAL}
+          transform={`rotate(${angle} 12 12)`}
+          vectorEffect="non-scaling-stroke"
+        />
       ))}
       <circle
         cx={CENTRE}
@@ -47,9 +52,9 @@ export function SectionDivider({ variant = "ornament", className }: Props) {
         className={[styles.terminal, className].filter(Boolean).join(" ")}
         aria-hidden="true"
       >
-        <Rosette size={13} />
-        <Rosette size={19} />
-        <Rosette size={13} />
+        <Rosette size={15} />
+        <Rosette size={22} />
+        <Rosette size={15} />
       </div>
     );
   }

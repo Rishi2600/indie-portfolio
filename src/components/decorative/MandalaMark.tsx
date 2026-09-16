@@ -48,6 +48,12 @@ export function MandalaMark({
   detail = "full",
   title,
 }: Props) {
+  // vectorEffect holds the stroke at a constant device width instead of
+  // letting it scale with the figure, so it is the same pen at every size: a
+  // hairline in the masthead and a hairline in a watermark twelve times
+  // larger. Without it the small marks thin to sub-pixel and grey out, and
+  // the large ones thicken into something drawn rather than ruled. It is not
+  // an inherited property, so every stroked shape below names it.
   return (
     <svg
       viewBox="0 0 64 64"
@@ -58,16 +64,22 @@ export function MandalaMark({
       stroke="currentColor"
       strokeWidth={detail === "simple" ? 2 : 1.25}
       strokeLinejoin="round"
+      vectorEffect="non-scaling-stroke"
       {...(title ? { role: "img" } : { "aria-hidden": true })}
     >
       {title ? <title>{title}</title> : null}
-      <circle cx={CENTRE} cy={CENTRE} r="27" />
+      <circle cx={CENTRE} cy={CENTRE} r="27" vectorEffect="non-scaling-stroke" />
       {petalAngles.map((angle) => (
-        <path key={angle} d={PETAL} transform={`rotate(${angle} 32 32)`} />
+        <path
+          key={angle}
+          d={PETAL}
+          transform={`rotate(${angle} 32 32)`}
+          vectorEffect="non-scaling-stroke"
+        />
       ))}
       {detail === "full" ? (
         <>
-          <circle cx={CENTRE} cy={CENTRE} r="9" />
+          <circle cx={CENTRE} cy={CENTRE} r="9" vectorEffect="non-scaling-stroke" />
           {dots.map((dot) => (
             <circle
               key={dot.angle}

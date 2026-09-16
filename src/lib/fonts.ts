@@ -17,16 +17,22 @@ import {
  * worth blocking the first paint for.
  */
 
+/**
+ * Roman only. The italic is a second 47kB file, and the one word on the site
+ * that wanted it — the "Unwritten." standing in for the About essay — is not
+ * worth an eighth of the page's weight. Add `style: ["normal", "italic"]`
+ * back the moment there is real prose here with something to emphasise.
+ */
 export const garamond = EB_Garamond({
   subsets: ["latin"],
-  style: ["normal", "italic"],
   display: "swap",
   variable: "--font-garamond",
 });
 
+/** 400 only: nothing on the page sets interface text at 500. */
 export const plexSans = IBM_Plex_Sans({
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400"],
   display: "swap",
   variable: "--font-plex-sans",
 });
@@ -38,6 +44,18 @@ export const plexMono = IBM_Plex_Mono({
   variable: "--font-plex-mono",
 });
 
+/**
+ * The most expensive thing on the site per character: 51kB to set three
+ * glyphs, twice. It is not preloaded, so it arrives after the first paint and
+ * blocks nothing, and what it buys is the name in the other script it is
+ * written in, as real selectable text rather than as a picture of text.
+ *
+ * If that trade stops being worth it, the fix is not to delete the mark but
+ * to subset the face: Google will serve a font containing only the glyphs in
+ * `&text=`, which for these three is a couple of kilobytes, loaded through
+ * next/font/local from a file in the repository. That is a licence notice and
+ * a binary to carry, which is why it is not the first version.
+ */
 export const plexDevanagari = IBM_Plex_Sans_Devanagari({
   subsets: ["devanagari"],
   weight: ["400"],

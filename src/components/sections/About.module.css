@@ -1,7 +1,11 @@
+/*
+  Set in the roman, not the italic. Loading a second cut of the face for one
+  word costs more than the word is worth; the size and the lighter ink already
+  say this is a note about the page rather than the page.
+*/
 .unwritten {
   font-family: var(--font-display);
   font-size: var(--step-2);
-  font-style: italic;
   line-height: var(--leading-title);
   color: var(--ink-faint);
 }
