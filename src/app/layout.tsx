@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import { Birds } from "@/components/decorative/Birds";
 import { PaperGrain } from "@/components/decorative/PaperGrain";
 import { site } from "@/content/site";
 import { fontVariables } from "@/lib/fonts";
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" className={fontVariables}>
       <body>
         <PaperGrain />
+        <Birds />
         <div className="shell">{children}</div>
       </body>
     </html>
