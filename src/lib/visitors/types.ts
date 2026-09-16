@@ -13,22 +13,25 @@ export interface VisitorCounter {
 
 /**
  * Redis INCR answers with a number, GET with a string, and an unset key with
- * null. Anything else means the store is not what we think it is, and a
- * corrupt count is worse than no count.
+ * null. A count is a non-negative whole number; anything else means the store
+ * is not what we think it is, and a corrupt count is worse than no count.
+ *
+ * The string form is matched in full rather than handed to parseInt, which
+ * would read "12abc" as 12 and "-4" as -4 and carry on.
  */
 export function parseCount(value: unknown): number {
   if (value === null || value === undefined) return 0;
 
   if (typeof value === "number") {
-    if (!Number.isFinite(value)) {
-      throw new Error("Visit count was not a finite number");
+    if (!Number.isSafeInteger(value) || value < 0) {
+      throw new Error(`Visit count is not a non-negative integer: ${value}`);
     }
     return value;
   }
 
   if (typeof value === "string") {
-    const parsed = Number.parseInt(value, 10);
-    if (Number.isNaN(parsed)) {
+    const parsed = /^\d+$/.test(value) ? Number(value) : Number.NaN;
+    if (!Number.isSafeInteger(parsed)) {
       throw new Error(`Visit count was not numeric: ${value.slice(0, 32)}`);
     }
     return parsed;

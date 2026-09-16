@@ -25,16 +25,35 @@ export function createFileCounter(path: string): VisitorCounter {
     return run;
   }
 
+  /**
+   * A missing file is a counter that has never been incremented. Anything
+   * else that is not `{ "count": <n> }` is corrupt, and is refused rather
+   * than read as zero — reading it as zero would let the next visit write 1
+   * over whatever the real total was.
+   */
   async function read(): Promise<number> {
+    let raw: string;
     try {
-      const raw = await readFile(path, "utf8");
-      const parsed: unknown = JSON.parse(raw);
-      if (typeof parsed !== "object" || parsed === null) return 0;
-      return parseCount((parsed as { count?: unknown }).count);
+      raw = await readFile(path, "utf8");
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code === "ENOENT") return 0;
       throw error;
     }
+
+    const parsed: unknown = JSON.parse(raw);
+    if (
+      typeof parsed !== "object" ||
+      parsed === null ||
+      Array.isArray(parsed) ||
+      !("count" in parsed)
+    ) {
+      throw new Error(`Visit file is not a count record: ${path}`);
+    }
+    const count = (parsed as { count: unknown }).count;
+    if (count === null) {
+      throw new Error(`Visit file holds a null count: ${path}`);
+    }
+    return parseCount(count);
   }
 
   return {
