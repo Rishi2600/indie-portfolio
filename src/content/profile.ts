@@ -1,28 +1,29 @@
 /**
  * Everything the site says about Rishi.
  *
- * The rule for this file: nothing goes in it that has not been confirmed.
- * Where the writing is still to come, the placeholder describes what will
- * replace it rather than pretending to be it.
+ * The rule for this file: nothing goes in it that Rishi has not supplied.
+ * The wording is editorial; the facts underneath it are not. Where a
+ * sentence paraphrases, it paraphrases something he said, and it never adds
+ * a number, a product, a responsibility or a technology he did not name.
  */
 
 export const profile = {
-  /** The opening. Two sentences, both literally true, neither of them a pitch. */
   opening: {
     lead: "I build backend systems at PinnTag.",
-    body: "Full stack the rest of the time, Web3 and Solana included.",
+    body: "Full-stack developer and open-source contributor, with Web3 and Solana in the mix.",
   },
 
   now: {
     title: "What I'm doing now",
     paragraphs: [
-      "Backend Developer at PinnTag, building backend systems.",
-      "Full stack across the rest of my work, with Web3 and Solana alongside it.",
+      "I'm a backend developer at PinnTag. The work runs from backend APIs down to the databases and infrastructure beneath them, across distributed and real-time systems, and out to the newer ground of AI agents.",
+      "Beyond the four subjects under Currently learning, I'm increasingly pulled towards hardware, AI agents and real-time systems.",
     ],
     facts: [
-      { term: "Role", value: "Backend Developer" },
-      { term: "Place", value: "PinnTag" },
-      { term: "Working in", value: "Full stack · Backend · Web3 · Solana" },
+      { term: "Role", value: "Backend developer" },
+      { term: "At", value: "PinnTag" },
+      { term: "Also", value: "Full-stack developer, open-source contributor" },
+      { term: "On my mind", value: "Hardware · AI agents · Real-time systems" },
     ],
     /** The day this section was last revised by hand, not the build date. */
     updated: "2026-09-16",

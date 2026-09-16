@@ -12,17 +12,26 @@
   border-top: var(--hair) solid var(--rule);
 }
 
+/* Stacked on narrow screens: an email address is the longest unbreakable
+   string on the page and will not share a line with its label at 320px. */
 .row {
   display: grid;
-  grid-template-columns: 7rem minmax(0, 1fr);
-  gap: var(--space-4);
-  align-items: baseline;
+  gap: var(--space-1);
   padding-block: var(--space-3);
   border-bottom: var(--hair) solid var(--rule-soft);
 }
 
+@media (min-width: 30rem) {
+  .row {
+    grid-template-columns: 7rem minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: baseline;
+  }
+}
+
 .value {
   font-size: var(--step-0);
+  overflow-wrap: anywhere;
 }
 
 .arrow {

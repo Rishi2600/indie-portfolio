@@ -2,23 +2,38 @@ export type ProfileLink = {
   label: string;
   /** The handle or address as it should read on the page. */
   value: string;
+  href: string;
   /**
-   * Absent means the profile is not published yet. The row still renders —
-   * an acknowledged gap is more honest than a missing line — but it is not a
-   * link, and it is marked as pending.
+   * An address opens the reader's mail client; a profile is another page on
+   * the web, and is marked as leaving this one.
    */
-  href?: string;
+  kind: "email" | "profile";
 };
 
+/** Every address here is Rishi's own and approved for public display. */
 export const elsewhere: readonly ProfileLink[] = [
-  { label: "X", value: "@secur3shell", href: "https://x.com/secur3shell" },
+  {
+    label: "Email",
+    value: "rishiraj61777@gmail.com",
+    href: "mailto:rishiraj61777@gmail.com",
+    kind: "email",
+  },
+  {
+    label: "X",
+    value: "@secur3shell",
+    href: "https://x.com/secur3shell",
+    kind: "profile",
+  },
   {
     label: "GitHub",
     value: "Rishi2600",
     href: "https://github.com/Rishi2600",
+    kind: "profile",
   },
-  { label: "LinkedIn", value: "To be added" },
-  { label: "Email", value: "To be added" },
+  {
+    label: "LinkedIn",
+    value: "rishi-raj-687365232",
+    href: "https://www.linkedin.com/in/rishi-raj-687365232",
+    kind: "profile",
+  },
 ];
-
-export const PENDING = "To be added";

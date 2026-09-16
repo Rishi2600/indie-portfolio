@@ -8,9 +8,9 @@
 export const site = {
   name: "Rishi",
   /** Used in the document title and the masthead dateline. */
-  role: "Full-stack, backend and Solana developer",
+  role: "Full-stack, backend, Web3 and Solana developer",
   description:
-    "Rishi — full-stack, backend and Solana developer, currently building backend systems at PinnTag.",
+    "Rishi — full-stack, backend, Web3 and Solana developer. Backend developer at PinnTag, working across APIs, databases, infrastructure, real-time systems and AI agents.",
   /**
    * The canonical origin. Set NEXT_PUBLIC_SITE_URL in the deployment
    * environment; the localhost fallback keeps metadata valid in development

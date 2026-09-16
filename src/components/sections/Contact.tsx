@@ -4,9 +4,10 @@ import { profile } from "@/content/profile";
 import styles from "./Contact.module.css";
 
 /**
- * Two of these four rows are real and two are not yet. The unpublished ones
- * still get a line, because a gap the reader can see is worth more than a
- * profile quietly left out.
+ * The last page of the archive: one sentence and four addresses. Profiles
+ * carry rel="me", which is how other sites verify that these accounts and
+ * this page belong to the same person; the email does not, because an
+ * address is not a page.
  */
 export function Contact() {
   return (
@@ -23,20 +24,18 @@ export function Contact() {
           <div key={entry.label} className={styles.row}>
             <dt className="label">{entry.label}</dt>
             <dd className={styles.value}>
-              {entry.href ? (
-                <a
-                  className={`link ${styles.link}`}
-                  href={entry.href}
-                  rel="me"
-                >
-                  {entry.value}
+              <a
+                className={`link ${styles.link}`}
+                href={entry.href}
+                rel={entry.kind === "profile" ? "me" : undefined}
+              >
+                {entry.value}
+                {entry.kind === "profile" ? (
                   <span className={styles.arrow} aria-hidden="true">
                     ↗
                   </span>
-                </a>
-              ) : (
-                <span className="pending">{entry.value}</span>
-              )}
+                ) : null}
+              </a>
             </dd>
           </div>
         ))}

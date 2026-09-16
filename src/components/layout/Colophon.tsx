@@ -13,8 +13,6 @@ import styles from "./Colophon.module.css";
  */
 const year = new Date().getFullYear();
 
-const published = elsewhere.filter((entry) => entry.href);
-
 export function Colophon() {
   return (
     <footer className={styles.colophon}>
@@ -52,12 +50,12 @@ export function Colophon() {
 
         <div className={styles.closing}>
           <ul className={styles.links}>
-            {published.map((entry) => (
+            {elsewhere.map((entry) => (
               <li key={entry.label}>
                 <a
                   className={`label ${styles.link}`}
                   href={entry.href}
-                  rel="me"
+                  rel={entry.kind === "profile" ? "me" : undefined}
                 >
                   {entry.label}
                 </a>
