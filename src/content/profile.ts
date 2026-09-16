@@ -35,7 +35,6 @@ export const profile = {
       heading: "Unwritten.",
       paragraphs: [
         "The longer piece goes here: what I enjoy building, what I am working through at the moment, which problems hold my attention, and what I have come to believe about software.",
-        "It is easier to leave the page blank than to fill it with something I do not mean.",
       ],
     },
   },

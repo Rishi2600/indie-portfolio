@@ -16,4 +16,4 @@ export const learning: readonly LearningEntry[] = [
 ];
 
 export const learningNote =
-  "What I am reading around and building towards at the moment. Notes, papers and repositories will hang off these entries as they accumulate.";
+  "The four things I am learning about at the moment. Notes, papers and repositories will hang off these entries as they accumulate.";

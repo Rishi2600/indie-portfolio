@@ -1,23 +1,34 @@
 .opening {
   position: relative;
-  padding-block: var(--space-8) var(--space-9);
+  padding-block: var(--space-8);
 }
 
 /*
   A watermark, not an illustration: the mark blown up to the size it would be
   if it had been blind-stamped into the sheet, at an opacity where you notice
   the page has something on it before you notice what.
+
+  It appears only once there is an empty column to put it in. Narrow screens
+  get the opening without it rather than with it printed behind the first
+  sentence, which is a different composition and not a worse one.
 */
 .watermark {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  width: min(52vw, 21rem);
-  height: auto;
-  transform: translateY(-50%);
-  color: var(--ink);
-  opacity: 0.055;
-  pointer-events: none;
+  display: none;
+}
+
+@media (min-width: 52rem) {
+  .watermark {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: min(42vw, 21rem);
+    height: auto;
+    transform: translateY(-50%);
+    color: var(--ink);
+    opacity: 0.055;
+    pointer-events: none;
+  }
 }
 
 .inner {
@@ -44,7 +55,7 @@
   font-size: var(--step-1);
   line-height: 1;
   letter-spacing: 0;
-  color: var(--ink-ghost);
+  color: var(--ink-faint);
 }
 
 /* A short rubricated rule, the way a scribe opens a passage. */

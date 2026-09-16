@@ -37,7 +37,7 @@
 .devanagari {
   font-family: var(--font-devanagari);
   font-size: var(--step--1);
-  color: var(--ink-ghost);
+  color: var(--ink-faint);
 }
 
 .meta {

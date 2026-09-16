@@ -76,6 +76,12 @@
   padding-block: var(--space-4);
 }
 
+/*
+  Below the 4.5:1 floor on purpose, and exempt from it: these numerals carry
+  no information — the sentence above already says the index is empty — and
+  the list they sit in is hidden from assistive technology. Darkening them
+  would make three blank rows look like three entries.
+*/
 .reservedNumeral {
   font-family: var(--font-mono);
   font-size: var(--step--2);
@@ -85,6 +91,7 @@
 }
 
 .reservedLine {
+  grid-column: 2 / -1;
   height: var(--hair);
   background-color: var(--rule-soft);
 }

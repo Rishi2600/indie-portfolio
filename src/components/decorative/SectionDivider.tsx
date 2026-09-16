@@ -47,9 +47,9 @@ export function SectionDivider({ variant = "ornament", className }: Props) {
         className={[styles.terminal, className].filter(Boolean).join(" ")}
         aria-hidden="true"
       >
-        <Rosette size={10} />
-        <Rosette size={15} />
-        <Rosette size={10} />
+        <Rosette size={13} />
+        <Rosette size={19} />
+        <Rosette size={13} />
       </div>
     );
   }
