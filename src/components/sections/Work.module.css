@@ -226,6 +226,12 @@
   font-family: var(--font-mono);
   font-size: var(--step--2);
   letter-spacing: var(--tracking-label);
+}
+
+/* Capitals on the visible label only. Applied to the whole link, they would
+   reach the hidden project name too, and a screen reader may spell out a
+   word it is given in capitals. */
+.linkLabel {
   text-transform: uppercase;
 }
 
