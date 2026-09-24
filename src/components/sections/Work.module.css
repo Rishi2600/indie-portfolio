@@ -49,8 +49,11 @@
       background-color: var(--rule-soft);
       transform-origin: left;
       animation: inkRule linear both;
+      /* The subject is this 1px line, so an `entry` range would be over
+         within a pixel of scrolling. `cover` spans the viewport instead:
+         the line is drawn as it rises through the lower third. */
       animation-timeline: view();
-      animation-range: entry 0% entry 55%;
+      animation-range: cover 0% cover 32%;
     }
   }
 }
@@ -62,6 +65,41 @@
   to {
     transform: scaleX(1);
   }
+}
+
+/*
+  Then the numeral is set, a moment after the rule: an entry being written
+  into the ledger as the reader reaches it. The Work section is several
+  screens tall, so its own entrance is long over by the time the later
+  entries arrive — this is what gives each of them one. Only the numeral
+  moves, and it is decorative (hidden from assistive technology), so no
+  information waits on the animation.
+*/
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .numeral {
+      animation: inkNumeral linear both;
+      animation-timeline: view();
+      animation-range: cover 10% cover 38%;
+    }
+  }
+}
+
+@keyframes inkNumeral {
+  from {
+    opacity: 0;
+    filter: blur(1.5px);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+  }
+}
+
+/* Its own height, not the entry's: a stretched grid item would make its
+   view timeline as long as the whole entry. */
+.numeral {
+  align-self: start;
 }
 
 @media (min-width: 46rem) {
