@@ -79,21 +79,32 @@ function Entry({ project, position }: { project: Project; position: number }) {
         </dl>
 
         <p className={styles.links}>
-          {/* Source always; a live link only where one exists. */}
-          <a className={`link ${styles.projectLink}`} href={project.github}>
-            Source
+          {/* The visible label names where the link goes, set in small
+              capitals; the accessible name adds which project, in ordinary
+              case, so each link is unambiguous on its own and no screen
+              reader is tempted to spell "GITHUB" out. It begins with the
+              visible words, so a voice user can say what they see. A
+              repository always; a live site only where one exists. */}
+          <a
+            className={`link ${styles.projectLink}`}
+            href={project.github}
+            aria-label={`GitHub repository for ${project.name}`}
+          >
+            <span className={styles.linkLabel}>GitHub</span>
             <span className={styles.arrow} aria-hidden="true">
               ↗
             </span>
-            <span className="visually-hidden"> — {project.name} on GitHub</span>
           </a>
           {project.live ? (
-            <a className={`link ${styles.projectLink}`} href={project.live}>
-              Live
+            <a
+              className={`link ${styles.projectLink}`}
+              href={project.live}
+              aria-label={`Live site for ${project.name}`}
+            >
+              <span className={styles.linkLabel}>Live site</span>
               <span className={styles.arrow} aria-hidden="true">
                 ↗
               </span>
-              <span className="visually-hidden"> — {project.name}</span>
             </a>
           ) : null}
         </p>
