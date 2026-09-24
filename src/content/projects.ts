@@ -39,7 +39,8 @@ export type Project = {
   contribution: readonly string[];
   technologies: readonly string[];
   engineeringHighlights: readonly EngineeringNote[];
-  /** How it is actually used or deployed, in factual terms. */
+  /** How it is actually used or deployed, in factual terms. Detail-page
+   *  material: the index carries the short `status` label instead. */
   usage: string;
   /** Why it earns a place here. Detail-page material. */
   portfolioReason: string;
@@ -105,7 +106,7 @@ export const projects: readonly Project[] = [
     usage:
       "Built around an Indian sales team's lead-to-deal workflow, with seeded demo accounts for each role.",
     portfolioReason:
-      "A complete multi-role business application: relational data, business workflows, and permission boundaries that actually hold.",
+      "A complete multi-role business application: relational data, business workflows, and permission boundaries between roles.",
     status: "Demo deployment",
     github: "https://github.com/Rishi2600/crm",
     live: "https://crm-two-lovat-75.vercel.app/",
@@ -280,7 +281,7 @@ export const projects: readonly Project[] = [
       },
       {
         title: "A session that is a state machine",
-        body: "The room moves through waiting, active and ended as explicit states, which is what keeps every connected client agreeing about what is happening.",
+        body: "The room's lifecycle is modelled as explicit states — waiting, active, ended — and the rest of the session is driven by them.",
       },
     ],
     usage: "Built for technical interviewers and coding contest organisers.",

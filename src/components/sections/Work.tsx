@@ -29,7 +29,9 @@ function Note({ term, children }: { term: string; children: ReactNode }) {
  * It reads in the order the work should be read in: what it is, why it
  * exists, the part that was interesting to build, what it was built with,
  * and only then where to find it. The stack is last on purpose — it is the
- * least interesting thing about any of these.
+ * least interesting thing about any of these. How a project is deployed is
+ * the short label beside its name; the fuller `usage`, `contribution` and
+ * `portfolioReason` are for a dedicated page, and would only repeat here.
  *
  * Everything here comes from the project record, so the same data can fill a
  * dedicated page later without this component being involved.
@@ -75,7 +77,6 @@ function Entry({ project, position }: { project: Project; position: number }) {
             <InlineList items={project.technologies} className={styles.stack} />
           </Note>
 
-          <Note term="Used">{project.usage}</Note>
         </dl>
 
         <p className={styles.links}>
