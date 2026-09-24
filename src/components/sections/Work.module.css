@@ -1,82 +1,260 @@
+/*
+  The work index: one ruled entry per project, in the page's own language of
+  numerals in the margin, small labels and hairlines. Not cards — an entry
+  has no box of its own, only the rule that opens it and the space around it.
+*/
+
 .index {
-  margin-top: var(--space-6);
-  border-top: var(--hair) solid var(--rule);
+  margin-top: var(--space-7);
 }
 
+/*
+  On a phone the numeral takes its own line above the name, the way a
+  section's rail does; once there is width for a margin it moves into one.
+*/
 .entry {
+  position: relative;
   display: grid;
-  grid-template-columns: 2.5rem minmax(0, 1fr);
-  gap: var(--space-2) var(--space-4);
-  padding-block: var(--space-5);
-  border-bottom: var(--hair) solid var(--rule-soft);
+  gap: var(--space-2);
+  padding-block: var(--space-7);
 }
 
 @media (min-width: 46rem) {
   .entry {
-    grid-template-columns: 2.5rem minmax(0, 1fr) 8rem;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    column-gap: var(--space-4);
   }
 }
 
-.entryTitle {
-  font-family: var(--font-display);
-  font-size: var(--step-2);
-  line-height: var(--leading-title);
+.entry + .entry {
+  border-top: var(--hair) solid var(--rule-soft);
 }
 
-.description {
-  max-width: var(--measure);
-  margin-top: var(--space-2);
-  font-size: var(--step--1);
-  color: var(--ink-soft);
+/*
+  The rule between entries is inked across as the entry arrives, the same way
+  a section's rule is. At rest it is simply a line.
+*/
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .entry + .entry {
+      border-top-color: transparent;
+    }
+
+    .entry + .entry::before {
+      content: "";
+      position: absolute;
+      inset-inline: 0;
+      top: 0;
+      height: var(--hair);
+      background-color: var(--rule-soft);
+      transform-origin: left;
+      animation: inkRule linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+  }
 }
 
-.stack {
-  margin-top: var(--space-3);
-  font-family: var(--font-mono);
-  font-size: var(--step--2);
-  letter-spacing: var(--tracking-wide);
-  color: var(--ink-faint);
+@keyframes inkRule {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 
-.meta {
+@media (min-width: 46rem) {
+  /* Level with the name it belongs to. */
+  .numeral {
+    padding-top: 0.55em;
+  }
+}
+
+.body {
+  min-width: 0;
+}
+
+/* The deployment sits beside the name, as a qualifier of it, rather than
+   stranded at the far side of the column. */
+.head {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: var(--space-2) var(--space-4);
 }
 
+.name {
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  font-weight: 400;
+  line-height: var(--leading-title);
+  letter-spacing: var(--tracking-display);
+}
+
+/* A display name that is not settled yet says so, rather than pretending. */
+.nameNote {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: var(--tracking-wide);
+  color: var(--ink-faint);
+}
+
+.status {
+  flex: none;
+}
+
+.lede {
+  max-width: var(--measure-wide);
+  margin-top: var(--space-4);
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  line-height: var(--leading-title);
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.description {
+  max-width: var(--measure);
+  margin-top: var(--space-4);
+  font-family: var(--font-display);
+  font-size: var(--step-prose);
+  line-height: var(--leading-prose);
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+/* The same aligned label column the now section and the inventory use. */
+/* Held to the reading measure, so the rules relate to the text they carry
+   rather than running the whole width of the page. */
+.notes {
+  max-width: var(--measure-wide);
+  margin-top: var(--space-6);
+  border-top: var(--hair) solid var(--rule-soft);
+}
+
+.note {
+  display: grid;
+  gap: var(--space-2);
+  padding-block: var(--space-4);
+  border-bottom: var(--hair) solid var(--rule-soft);
+}
+
 @media (min-width: 46rem) {
-  .meta {
-    flex-direction: column;
-    align-items: flex-end;
-    text-align: right;
+  .note {
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: baseline;
   }
 }
 
-.metaLink {
+.noteBody {
+  max-width: var(--measure);
+  font-size: var(--step--1);
+  line-height: var(--leading-body);
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+.highlights {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.highlightTitle {
+  font-size: var(--step-0);
+  font-weight: 400;
+  line-height: var(--leading-body);
+  color: var(--ink);
+}
+
+.highlightBody {
+  margin-top: var(--space-1);
+  color: var(--ink-soft);
+}
+
+.stack {
+  color: var(--ink);
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  margin-top: var(--space-5);
+}
+
+.projectLink {
   font-family: var(--font-mono);
   font-size: var(--step--2);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
 }
 
-/*
-  The unfilled index: a numeral and a ruled line where an entry will go, the
-  way a ledger is ruled before anything is written in it. Hidden from
-  assistive technology — the sentence above already says the index is empty,
-  and three empty rows add nothing to hear.
-*/
-.reserved {
-  align-items: center;
-  padding-block: var(--space-4);
+.arrow {
+  display: inline-block;
+  margin-left: var(--space-2);
+  font-size: 0.85em;
+  color: var(--ink-faint);
+  transition: transform var(--dur-2) var(--ease);
+}
+
+.projectLink:hover .arrow,
+.projectLink:focus-visible .arrow {
+  transform: translate(2px, -2px);
+  color: var(--rubric);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow {
+    transition: none;
+  }
+
+  .projectLink:hover .arrow,
+  .projectLink:focus-visible .arrow {
+    transform: none;
+  }
 }
 
 /*
-  Below the 4.5:1 floor on purpose, and exempt from it: these numerals carry
-  no information — the sentence above already says the index is empty — and
-  the list they sit in is hidden from assistive technology. Darkening them
-  would make three blank rows look like three entries.
+  Half a padma cut by the right margin rule — the mirror of the one beside the
+  learning index, so the two longest sections of the page are each weighted
+  once, on opposite sides.
 */
+.padma {
+  display: none;
+}
+
+@media (min-width: 60rem) {
+  .padma {
+    display: block;
+    position: absolute;
+    top: 22%;
+    right: 0;
+    width: 20rem;
+    translate: 50% -50%;
+    opacity: 0.07;
+  }
+}
+
+/*
+  The unfilled ledger, kept for the case where nothing is featured: a numeral
+  and a ruled line where an entry would go. Hidden from assistive technology,
+  since the sentence above already says the index is empty.
+*/
+.reservedIndex {
+  border-top: var(--hair) solid var(--rule);
+}
+
+.reserved {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: center;
+  padding-block: var(--space-4);
+  border-bottom: var(--hair) solid var(--rule-soft);
+}
+
 .reservedNumeral {
   font-family: var(--font-mono);
   font-size: var(--step--2);
@@ -86,7 +264,6 @@
 }
 
 .reservedLine {
-  grid-column: 2 / -1;
   height: var(--hair);
   background-color: var(--rule-soft);
 }
