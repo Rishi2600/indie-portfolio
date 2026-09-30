@@ -1,6 +1,7 @@
 import { Backdrop } from "@/components/decorative/Backdrop";
 import type { ReactNode } from "react";
 import styles from "./Section.module.css";
+import { SectionLink } from "./SectionLink";
 
 type Props = {
   /** Also the anchor the navigation points at. */
@@ -46,9 +47,14 @@ export function Section({
       </div>
 
       <div>
-        <Heading id={headingId} className={styles.title}>
-          {title}
-        </Heading>
+        <div className={styles.heading}>
+          <Heading id={headingId} className={styles.title}>
+            {title}
+          </Heading>
+          <span className={styles.anchor}>
+            <SectionLink id={id} title={title} />
+          </span>
+        </div>
         {children}
       </div>
     </section>

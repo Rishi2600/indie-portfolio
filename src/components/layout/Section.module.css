@@ -75,9 +75,46 @@
   }
 }
 
-.title {
+.heading {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  width: fit-content;
   max-width: var(--measure-wide);
   margin-bottom: var(--space-5);
+}
+
+/*
+  The paragraph mark that links to the section. It is there for the reader who
+  goes looking for it: it appears when the heading is pointed at or the mark is
+  reached by keyboard, and stays up a moment after it has copied the address.
+  Where there is no pointer to hover with, it is simply shown.
+*/
+.anchor {
+  flex: none;
+  opacity: 0;
+}
+
+.heading:hover .anchor,
+.anchor:focus-within,
+.anchor:has([data-shown="true"]) {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .anchor {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .anchor {
+    transition: opacity var(--dur-2) var(--ease);
+  }
+}
+
+.title {
+  min-width: 0;
   font-family: var(--font-display);
   font-size: var(--step-3);
   font-weight: 400;
