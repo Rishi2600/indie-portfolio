@@ -1,7 +1,9 @@
+import { MarginMark } from "@/components/decorative/MarginMark";
 import { Section } from "@/components/layout/Section";
 import { InlineList } from "@/components/ui/InlineList";
 import { TechList } from "@/components/ui/TechIndex";
 import { techIndex } from "@/content/crossref";
+import { marks } from "@/content/marks";
 import { sectionIndex } from "@/content/site";
 import {
   exploring,
@@ -85,6 +87,8 @@ export function Skills() {
           ))}
         </div>
       </section>
+
+      <MarginMark {...marks.skills} top="38%" />
     </Section>
   );
 }

@@ -1,0 +1,81 @@
+/*
+  A mark in the margin, beside the ruled page rather than on it. Its centre
+  sits in the middle of the margin the folio leaves on the right, which is
+  half of --folio-inset out from the content edge. Below the width at which
+  the page is ruled there is no margin, and so no mark.
+*/
+.mark {
+  display: none;
+}
+
+@media (min-width: 60rem) {
+  .mark {
+    display: block;
+    position: absolute;
+    top: var(--top);
+    right: calc(var(--folio-inset) / -2 - 12px);
+    z-index: 2;
+  }
+}
+
+/* 24px square, the smallest comfortable target, round a 13px figure. */
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink-faint);
+  cursor: pointer;
+  transition: color var(--dur-1) var(--ease);
+}
+
+.button:hover,
+.button[aria-expanded="true"] {
+  color: var(--rubric);
+}
+
+/*
+  The note: a slip laid on the page beside the mark, reaching back over the
+  text. Hidden with `visibility` rather than removed, so it can fade, and so
+  that it is out of the accessibility tree until it is opened.
+*/
+.note {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  right: 0;
+  width: 17rem;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--paper);
+  border: var(--hair) solid var(--rule);
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  line-height: var(--leading-title);
+  color: var(--ink-soft);
+  text-wrap: pretty;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.note[data-open="true"] {
+  visibility: visible;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .note {
+    transition:
+      opacity var(--dur-2) var(--ease),
+      visibility var(--dur-2) var(--ease);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+}

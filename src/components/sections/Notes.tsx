@@ -1,4 +1,6 @@
+import { MarginMark } from "@/components/decorative/MarginMark";
 import { Section } from "@/components/layout/Section";
+import { marks } from "@/content/marks";
 import { notes, notesEmpty, notesIntro } from "@/content/notes";
 import { sectionIndex } from "@/content/site";
 import { formatDate } from "@/lib/time/format";
@@ -32,6 +34,8 @@ export function Notes() {
           <p className="note">{notesEmpty.note}</p>
         </div>
       )}
+
+      <MarginMark {...marks.notes} top="30%" />
     </Section>
   );
 }
