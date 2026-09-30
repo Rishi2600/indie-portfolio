@@ -53,6 +53,10 @@ const nextConfig: NextConfig = {
   // a route handler rather than during render, so every page stays static.
   poweredByHeader: false,
   reactStrictMode: true,
+  // `next dev` otherwise writes AGENTS.md and CLAUDE.md to the project root
+  // on every run. The project's working documents, those two included, live
+  // in the gitignored docs/ folder instead.
+  agentRules: false,
 };
 
 export default nextConfig;

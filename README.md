@@ -66,8 +66,10 @@ src/
   styles/       design tokens and base styles
 ```
 
-`DESIGN_DNA.md` is the visual and interaction constitution. Read it before
-changing anything visible.
+Working documents — the design DNA and the brief for each phase — live in
+`docs/`, which is gitignored and kept locally rather than published, so a
+fresh clone will not have it. Read `docs/DESIGN_DNA.md` before changing
+anything visible.
 
 `src/content` is the only place that holds copy. Adding a project or a skill
 group means editing a data file, never a component.
