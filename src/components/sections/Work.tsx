@@ -1,12 +1,14 @@
 import type { ReactNode } from "react";
 import { Yantra } from "@/components/decorative/Yantra";
 import { Section } from "@/components/layout/Section";
+import { ProjectLinks } from "@/components/projects/ProjectLinks";
 import { InlineList } from "@/components/ui/InlineList";
 import {
   featuredProjects,
   projectsNote,
   type Project,
 } from "@/content/projects";
+import { sectionIndex } from "@/content/site";
 import styles from "./Work.module.css";
 
 /** Ruled but unwritten rows, drawn only if the index is ever emptied. */
@@ -31,10 +33,10 @@ function Note({ term, children }: { term: string; children: ReactNode }) {
  * and only then where to find it. The stack is last on purpose — it is the
  * least interesting thing about any of these. How a project is deployed is
  * the short label beside its name; the fuller `usage`, `contribution` and
- * `portfolioReason` are for a dedicated page, and would only repeat here.
+ * `portfolioReason` are on the project's own page, which the first link
+ * leads to, and would only repeat here.
  *
- * Everything here comes from the project record, so the same data can fill a
- * dedicated page later without this component being involved.
+ * Everything here comes from the project record.
  */
 function Entry({ project, position }: { project: Project; position: number }) {
   return (
@@ -76,39 +78,9 @@ function Entry({ project, position }: { project: Project; position: number }) {
           <Note term="Built with">
             <InlineList items={project.technologies} className={styles.stack} />
           </Note>
-
         </dl>
 
-        <p className={styles.links}>
-          {/* The visible label names where the link goes, set in small
-              capitals; the accessible name adds which project, in ordinary
-              case, so each link is unambiguous on its own and no screen
-              reader is tempted to spell "GITHUB" out. It begins with the
-              visible words, so a voice user can say what they see. A
-              repository always; a live site only where one exists. */}
-          <a
-            className={`link ${styles.projectLink}`}
-            href={project.github}
-            aria-label={`GitHub repository for ${project.name}`}
-          >
-            <span className={styles.linkLabel}>GitHub</span>
-            <span className={styles.arrow} aria-hidden="true">
-              ↗
-            </span>
-          </a>
-          {project.live ? (
-            <a
-              className={`link ${styles.projectLink}`}
-              href={project.live}
-              aria-label={`Live site for ${project.name}`}
-            >
-              <span className={styles.linkLabel}>Live site</span>
-              <span className={styles.arrow} aria-hidden="true">
-                ↗
-              </span>
-            </a>
-          ) : null}
-        </p>
+        <ProjectLinks project={project} entryLink />
       </div>
     </li>
   );
@@ -118,7 +90,7 @@ export function Work() {
   return (
     <Section
       id="work"
-      index="02"
+      index={sectionIndex.work}
       label="Work"
       title="Selected work"
       backdrop={

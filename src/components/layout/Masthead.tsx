@@ -11,8 +11,12 @@ import styles from "./Masthead.module.css";
  *
  * Nothing about this is sticky. A bar that follows you down the page is a
  * product's habit, and this is not a product.
+ *
+ * The navigation points at sections of the home page. Another page passes
+ * "/" as its `basePath`, so the same links lead back to those sections
+ * instead of to an anchor that is not there.
  */
-export function Masthead() {
+export function Masthead({ basePath = "" }: { basePath?: string }) {
   return (
     <header id="top" className={styles.masthead}>
       <div className={styles.top}>
@@ -28,7 +32,10 @@ export function Masthead() {
           <ul className={styles.nav}>
             {nav.map((item) => (
               <li key={item.href}>
-                <a href={item.href} className={`label ${styles.navLink}`}>
+                <a
+                  href={`${basePath}${item.href}`}
+                  className={`label ${styles.navLink}`}
+                >
                   {item.label}
                 </a>
               </li>

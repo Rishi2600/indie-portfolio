@@ -2,9 +2,8 @@
  * The work index.
  *
  * Content only: nothing here knows how a project is displayed. The index on
- * the home page renders a subset of these fields, and a future
- * /projects/[slug] page can render the rest from the same entries without
- * anything moving.
+ * the home page renders a subset of these fields, and the /projects/[slug]
+ * page renders the rest from the same entries.
  *
  * The rule is the same as everywhere else on this site: no fact is written
  * here that Rishi did not supply. Numbers, deployments and test counts are
@@ -22,7 +21,7 @@ export type EngineeringNote = {
 export type Project = {
   /**
    * Stable, hand-written, and the project's identity: it is the key for
-   * lookups and the path a future detail page will live at. There is no
+   * lookups and the path its detail page lives at. There is no
    * separate id, because a second stable key would only be a thing to keep
    * in step with this one.
    */
@@ -347,12 +346,35 @@ export const projects: readonly Project[] = [
   },
 ];
 
-/** What the index shows, in the order above. */
+/**
+ * What the index shows, in the order above. Only these have a page of their
+ * own: a project that is not featured is neither listed nor reachable, and
+ * flipping `featured` is all it takes to change that.
+ */
 export const featuredProjects = projects.filter((project) => project.featured);
 
-/** For a future /projects/[slug] page, and for tests. */
+/** For the /projects/[slug] page, and for tests. */
 export function projectBySlug(slug: string): Project | undefined {
   return projects.find((project) => project.slug === slug);
+}
+
+/** Where a project's own page lives. */
+export function projectPath(slug: string): string {
+  return `/projects/${slug}`;
+}
+
+/**
+ * The entries either side of one in the index, so a detail page can lead on
+ * to the next. Either is undefined at the ends, and both are for a project
+ * that is not in the index at all.
+ */
+export function neighbours(slug: string): {
+  previous: Project | undefined;
+  next: Project | undefined;
+} {
+  const at = featuredProjects.findIndex((project) => project.slug === slug);
+  if (at === -1) return { previous: undefined, next: undefined };
+  return { previous: featuredProjects[at - 1], next: featuredProjects[at + 1] };
 }
 
 export const projectsNote =

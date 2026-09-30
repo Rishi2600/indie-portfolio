@@ -1,0 +1,147 @@
+/*
+  One project opened out, in the same ruled ledger the index sets it in: its
+  deployment as a small label, its one-line description and its paragraph in
+  the serif, then the fields that did not fit the index, each under a label in
+  an aligned column. No boxes: a rule and the space around it.
+*/
+
+.status {
+  margin-bottom: var(--space-3);
+}
+
+.lede {
+  max-width: var(--measure-wide);
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  line-height: var(--leading-title);
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.description {
+  max-width: var(--measure);
+  margin-top: var(--space-4);
+  font-family: var(--font-display);
+  font-size: var(--step-prose);
+  line-height: var(--leading-prose);
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+.notes {
+  max-width: var(--measure-wide);
+  margin-top: var(--space-6);
+  border-top: var(--hair) solid var(--rule-soft);
+}
+
+.note {
+  display: grid;
+  gap: var(--space-2);
+  padding-block: var(--space-4);
+  border-bottom: var(--hair) solid var(--rule-soft);
+}
+
+@media (min-width: 46rem) {
+  .note {
+    grid-template-columns: 8rem minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: baseline;
+  }
+}
+
+.noteBody {
+  max-width: var(--measure);
+  font-size: var(--step-0);
+  line-height: var(--leading-body);
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+/* What was built: a plain run of lines, each led by a dash in pencil. */
+.built {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.built li {
+  position: relative;
+  padding-left: var(--space-5);
+}
+
+.built li::before {
+  content: "–";
+  position: absolute;
+  left: 0;
+  color: var(--ink-ghost);
+}
+
+.highlights {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.highlightTitle {
+  font-size: var(--step-0);
+  font-weight: 400;
+  line-height: var(--leading-body);
+  color: var(--ink);
+}
+
+.highlightBody {
+  margin-top: var(--space-1);
+}
+
+.stack {
+  color: var(--ink);
+}
+
+/*
+  Where to go next: the entry before, the index, the entry after, ruled off
+  from the rest. The ends of the index simply have nothing on that side.
+*/
+.more {
+  margin-top: var(--space-7);
+  padding-top: var(--space-5);
+  border-top: var(--hair) solid var(--rule);
+}
+
+.moreList {
+  display: grid;
+  gap: var(--space-5);
+}
+
+@media (min-width: 40rem) {
+  .moreList {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .previous {
+    grid-column: 1;
+    justify-self: start;
+  }
+
+  .index {
+    grid-column: 2;
+    justify-self: center;
+    text-align: center;
+  }
+
+  .following {
+    grid-column: 3;
+    justify-self: end;
+    text-align: right;
+  }
+}
+
+.moreLink {
+  display: inline-grid;
+  gap: var(--space-1);
+  padding-bottom: 0.2em;
+}
+
+.moreName {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  line-height: var(--leading-title);
+}

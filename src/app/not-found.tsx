@@ -17,8 +17,8 @@ export default function NotFound() {
         <p className="numeral">404</p>
         <h1 className={styles.title}>There is no page at this address.</h1>
         <p className="prose">
-          It may have been a mistype, or it may never have existed. The site is
-          one page, so everything there is to read is at the beginning of it.
+          It may have been a mistype, or it may never have existed. Everything
+          there is to read starts at the beginning of the site.
         </p>
         <p className={styles.back}>
           <Link className="link" href="/">

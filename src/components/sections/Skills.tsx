@@ -1,5 +1,6 @@
 import { Section } from "@/components/layout/Section";
 import { InlineList } from "@/components/ui/InlineList";
+import { sectionIndex } from "@/content/site";
 import {
   exploring,
   skillGroups,
@@ -21,7 +22,12 @@ function Line({ line }: { line: SkillLine }) {
 
 export function Skills() {
   return (
-    <Section id="skills" index="04" label="Skills" title="What I work with">
+    <Section
+      id="skills"
+      index={sectionIndex.skills}
+      label="Skills"
+      title="What I work with"
+    >
       <p className="note">{skillsNote}</p>
 
       <dl className={styles.groups}>

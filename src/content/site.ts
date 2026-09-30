@@ -39,6 +39,22 @@ export const site = {
   nameDevanagari: "ऋषि",
 } as const;
 
+/**
+ * The numeral each section carries in the margin. They run in the order the
+ * sections appear in src/app/page.tsx, and they are also how other parts of
+ * the page cite a place: the technology cross-reference points at "02.1",
+ * the first entry of the work index.
+ */
+export const sectionIndex = {
+  now: "01",
+  work: "02",
+  learning: "03",
+  skills: "04",
+  about: "05",
+  notes: "06",
+  contact: "07",
+} as const;
+
 export type NavItem = {
   label: string;
   href: string;

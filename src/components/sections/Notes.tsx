@@ -1,11 +1,17 @@
 import { Section } from "@/components/layout/Section";
 import { notes, notesEmpty, notesIntro } from "@/content/notes";
+import { sectionIndex } from "@/content/site";
 import { formatDate } from "@/lib/time/format";
 import styles from "./Notes.module.css";
 
 export function Notes() {
   return (
-    <Section id="notes" index="06" label="Notes" title="Notes">
+    <Section
+      id="notes"
+      index={sectionIndex.notes}
+      label="Notes"
+      title="Notes"
+    >
       <p className={styles.intro}>{notesIntro}</p>
 
       {notes.length > 0 ? (

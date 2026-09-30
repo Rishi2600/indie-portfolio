@@ -1,13 +1,19 @@
 import { Rosette } from "@/components/decorative/Rosette";
 import { Section } from "@/components/layout/Section";
 import { profile } from "@/content/profile";
+import { sectionIndex } from "@/content/site";
 import styles from "./About.module.css";
 
 export function About() {
   const { title, paragraphs, example } = profile.about;
 
   return (
-    <Section id="about" index="05" label="About" title={title}>
+    <Section
+      id="about"
+      index={sectionIndex.about}
+      label="About"
+      title={title}
+    >
       <div className={styles.layout}>
         <div className="prose">
           {paragraphs.map((paragraph) => (

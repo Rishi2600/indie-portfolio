@@ -1,6 +1,7 @@
 import { Section } from "@/components/layout/Section";
 import { elsewhere } from "@/content/links";
 import { profile } from "@/content/profile";
+import { sectionIndex } from "@/content/site";
 import styles from "./Contact.module.css";
 
 /**
@@ -13,7 +14,7 @@ export function Contact() {
   return (
     <Section
       id="contact"
-      index="07"
+      index={sectionIndex.contact}
       label="Contact"
       title={profile.contact.title}
     >

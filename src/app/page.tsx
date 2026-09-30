@@ -12,8 +12,9 @@ import { Work } from "@/components/sections/Work";
 
 /**
  * One page, read top to bottom. The sections are numbered in the margin in
- * the order they appear here, and that numbering is the only thing that has
- * to stay in step with this file.
+ * the order they appear here (the numerals are `sectionIndex` in
+ * content/site.ts), and that numbering is the only thing that has to stay in
+ * step with this file.
  */
 export default function Page() {
   return (

@@ -1,6 +1,7 @@
 import { Yantra } from "@/components/decorative/Yantra";
 import { Section } from "@/components/layout/Section";
 import { learning, learningNote } from "@/content/learning";
+import { sectionIndex } from "@/content/site";
 import styles from "./Learning.module.css";
 
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -13,7 +14,7 @@ export function Learning() {
   return (
     <Section
       id="learning"
-      index="03"
+      index={sectionIndex.learning}
       label="Learning"
       title="Currently learning"
       backdrop={

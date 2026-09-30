@@ -11,6 +11,11 @@ type Props = {
   label: string;
   /** The heading. Every section has one; it is what names the landmark. */
   title: string;
+  /**
+   * 2 for a section of the home page, which already has its h1 in the
+   * opening. 1 for a page whose only content is one section.
+   */
+  level?: 1 | 2;
   /** An ornament drawn behind the section, cut by the page margin. */
   backdrop?: ReactNode;
   children: ReactNode;
@@ -21,10 +26,12 @@ export function Section({
   index,
   label,
   title,
+  level = 2,
   backdrop,
   children,
 }: Props) {
   const headingId = `${id}-title`;
+  const Heading = level === 1 ? "h1" : "h2";
 
   return (
     <section
@@ -39,9 +46,9 @@ export function Section({
       </div>
 
       <div>
-        <h2 id={headingId} className={styles.title}>
+        <Heading id={headingId} className={styles.title}>
           {title}
-        </h2>
+        </Heading>
         {children}
       </div>
     </section>

@@ -2,6 +2,7 @@ import { Construction } from "@/components/decorative/Construction";
 import { Section } from "@/components/layout/Section";
 import { InlineList } from "@/components/ui/InlineList";
 import { profile } from "@/content/profile";
+import { sectionIndex } from "@/content/site";
 import { formatDate } from "@/lib/time/format";
 import styles from "./Now.module.css";
 
@@ -11,7 +12,7 @@ export function Now() {
   return (
     <Section
       id="now"
-      index="01"
+      index={sectionIndex.now}
       label="Now"
       title={now.title}
       backdrop={<Construction className={styles.construction} />}

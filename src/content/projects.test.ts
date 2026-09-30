@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { featuredProjects, projectBySlug, projects } from "./projects";
+import {
+  featuredProjects,
+  neighbours,
+  projectBySlug,
+  projectPath,
+  projects,
+} from "./projects";
 
 /**
  * The project records are hand-written, and the mistakes hand-written data
@@ -125,5 +131,41 @@ describe("values used as React keys are unique within a project", () => {
     expect(new Set(project.contribution).size, "contribution").toBe(
       project.contribution.length,
     );
+  });
+});
+
+describe("addressing", () => {
+  it("puts a project's page at a path made from its slug", () => {
+    for (const project of projects) {
+      expect(projectPath(project.slug)).toBe(`/projects/${project.slug}`);
+    }
+  });
+});
+
+describe("neighbours", () => {
+  it("leads on from each entry of the index to the ones either side", () => {
+    featuredProjects.forEach((project, at) => {
+      const { previous, next } = neighbours(project.slug);
+      expect(previous, project.name).toBe(featuredProjects[at - 1]);
+      expect(next, project.name).toBe(featuredProjects[at + 1]);
+    });
+  });
+
+  it("has nothing before the first entry and nothing after the last", () => {
+    expect(neighbours(featuredProjects[0]!.slug).previous).toBeUndefined();
+    expect(neighbours(featuredProjects.at(-1)!.slug).next).toBeUndefined();
+  });
+
+  it("has no neighbours for a project that is not in the index", () => {
+    for (const project of projects.filter((p) => !p.featured)) {
+      expect(neighbours(project.slug)).toEqual({
+        previous: undefined,
+        next: undefined,
+      });
+    }
+    expect(neighbours("no-such-project")).toEqual({
+      previous: undefined,
+      next: undefined,
+    });
   });
 });
