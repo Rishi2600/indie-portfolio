@@ -42,7 +42,13 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={fontVariables}>
+    // base.css sets `scroll-behavior: smooth` for in-page links. Next 16 no
+    // longer switches it off during a route change, so without this attribute
+    // a new page opens where the last one was scrolled to and then sweeps up
+    // to the top in front of the reader, showing the foot of the page on the
+    // way. With it, Next makes that one jump instant and leaves smooth
+    // scrolling to in-page links.
+    <html lang="en" className={fontVariables} data-scroll-behavior="smooth">
       <body>
         <PaperGrain />
         <Birds />
