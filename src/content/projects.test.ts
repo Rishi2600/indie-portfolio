@@ -2,10 +2,12 @@ import { describe, expect, it } from "vitest";
 import {
   featuredProjects,
   neighbours,
+  projectAnchor,
   projectBySlug,
   projectPath,
   projects,
 } from "./projects";
+import { sectionIndex } from "./site";
 
 /**
  * The project records are hand-written, and the mistakes hand-written data
@@ -138,6 +140,17 @@ describe("addressing", () => {
   it("puts a project's page at a path made from its slug", () => {
     for (const project of projects) {
       expect(projectPath(project.slug)).toBe(`/projects/${project.slug}`);
+    }
+  });
+
+  it("gives every entry in the index an id of its own that no section uses", () => {
+    const ids = featuredProjects.map((p) => projectAnchor(p.slug));
+    expect(new Set(ids).size).toBe(ids.length);
+    // The ids the page already uses for its sections and its skip link.
+    const taken = [...Object.keys(sectionIndex), "content", "top", "entry"];
+    for (const id of ids) {
+      expect(id).toMatch(/^[a-z][a-z0-9-]*$/);
+      expect(taken).not.toContain(id);
     }
   });
 });

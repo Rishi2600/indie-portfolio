@@ -4,6 +4,16 @@
   which says what the items on it share.
 */
 
+/* What the dotted names mean, said once and kept quiet. */
+.hint {
+  max-width: var(--measure);
+  margin-top: var(--space-2);
+  font-size: var(--step--1);
+  line-height: var(--leading-body);
+  color: var(--ink-faint);
+  text-wrap: pretty;
+}
+
 .groups {
   max-width: var(--measure-wide);
   margin-top: var(--space-6);

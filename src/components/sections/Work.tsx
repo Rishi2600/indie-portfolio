@@ -2,9 +2,10 @@ import type { ReactNode } from "react";
 import { Yantra } from "@/components/decorative/Yantra";
 import { Section } from "@/components/layout/Section";
 import { ProjectLinks } from "@/components/projects/ProjectLinks";
-import { InlineList } from "@/components/ui/InlineList";
+import { TechList } from "@/components/ui/TechIndex";
 import {
   featuredProjects,
+  projectAnchor,
   projectsNote,
   type Project,
 } from "@/content/projects";
@@ -36,11 +37,12 @@ function Note({ term, children }: { term: string; children: ReactNode }) {
  * `portfolioReason` are on the project's own page, which the first link
  * leads to, and would only repeat here.
  *
- * Everything here comes from the project record.
+ * Everything here comes from the project record. The entry's id is what the
+ * technology cross-reference points at.
  */
 function Entry({ project, position }: { project: Project; position: number }) {
   return (
-    <li className={styles.entry}>
+    <li id={projectAnchor(project.slug)} className={styles.entry}>
       <span className={`numeral ${styles.numeral}`} aria-hidden="true">
         {pad(position)}
       </span>
@@ -76,7 +78,11 @@ function Entry({ project, position }: { project: Project; position: number }) {
           </Note>
 
           <Note term="Built with">
-            <InlineList items={project.technologies} className={styles.stack} />
+            <TechList
+              items={project.technologies}
+              place={project.slug}
+              className={styles.stack}
+            />
           </Note>
         </dl>
 

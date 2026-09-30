@@ -58,6 +58,32 @@
   }
 }
 
+/*
+  The cross-reference. When the reader picks a technology, each entry that was
+  built with it gets a red rule down the margin beside it — the mark a reader
+  pencils next to a passage to come back to. The entries need no script for
+  this: they only ask whether a name inside them is pressed.
+*/
+.entry::after {
+  content: "";
+  position: absolute;
+  inset-block: var(--space-7);
+  left: calc(-1 * var(--space-4));
+  width: var(--hair);
+  background-color: var(--rubric);
+  opacity: 0;
+}
+
+.entry:has([aria-pressed="true"])::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .entry::after {
+    transition: opacity var(--dur-2) var(--ease);
+  }
+}
+
 @keyframes inkRule {
   from {
     transform: scaleX(0);

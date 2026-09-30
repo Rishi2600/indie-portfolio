@@ -1,5 +1,7 @@
 import { Section } from "@/components/layout/Section";
 import { InlineList } from "@/components/ui/InlineList";
+import { TechList } from "@/components/ui/TechIndex";
+import { techIndex } from "@/content/crossref";
 import { sectionIndex } from "@/content/site";
 import {
   exploring,
@@ -7,15 +9,35 @@ import {
   skillsNote,
   type SkillLine,
 } from "@/content/skills";
+import { SKILLS_PLACE, technologyHint } from "@/content/technologies";
 import styles from "./Skills.module.css";
 
-function Line({ line }: { line: SkillLine }) {
+/**
+ * The inventory's names can be picked to see where else they appear. The
+ * pencilled lines cannot: they are not claims, and a cross-reference would
+ * read as one.
+ */
+function Line({
+  line,
+  crossReferenced = false,
+}: {
+  line: SkillLine;
+  crossReferenced?: boolean;
+}) {
   return (
     <div className={`${styles.line} ${line.label ? "" : styles.bare}`}>
       {line.label ? (
         <span className={styles.lineLabel}>{line.label}</span>
       ) : null}
-      <InlineList items={line.items} className={styles.items} />
+      {crossReferenced ? (
+        <TechList
+          items={line.items}
+          place={SKILLS_PLACE}
+          className={styles.items}
+        />
+      ) : (
+        <InlineList items={line.items} className={styles.items} />
+      )}
     </div>
   );
 }
@@ -29,6 +51,9 @@ export function Skills() {
       title="What I work with"
     >
       <p className="note">{skillsNote}</p>
+      {Object.keys(techIndex).length > 0 ? (
+        <p className={styles.hint}>{technologyHint}</p>
+      ) : null}
 
       <dl className={styles.groups}>
         {skillGroups.map((group) => (
@@ -36,7 +61,11 @@ export function Skills() {
             <dt className="label">{group.title}</dt>
             <dd className={styles.lines}>
               {group.lines.map((line) => (
-                <Line key={line.label ?? line.items[0]} line={line} />
+                <Line
+                  key={line.label ?? line.items[0]}
+                  line={line}
+                  crossReferenced
+                />
               ))}
             </dd>
           </div>

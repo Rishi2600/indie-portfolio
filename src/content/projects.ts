@@ -363,6 +363,11 @@ export function projectPath(slug: string): string {
   return `/projects/${slug}`;
 }
 
+/** The id of a project's entry in the home page's index, for links to it. */
+export function projectAnchor(slug: string): string {
+  return `work-${slug}`;
+}
+
 /**
  * The entries either side of one in the index, so a detail page can lead on
  * to the next. Either is undefined at the ends, and both are for a project

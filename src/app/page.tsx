@@ -9,6 +9,8 @@ import { Now } from "@/components/sections/Now";
 import { Opening } from "@/components/sections/Opening";
 import { Skills } from "@/components/sections/Skills";
 import { Work } from "@/components/sections/Work";
+import { TechIndexProvider } from "@/components/ui/TechIndex";
+import { techIndex } from "@/content/crossref";
 
 /**
  * One page, read top to bottom. The sections are numbered in the margin in
@@ -27,14 +29,16 @@ export default function Page() {
         <Masthead />
 
         <main id="content">
-          <Opening />
-          <Now />
-          <Work />
-          <Learning />
-          <Skills />
-          <About />
-          <Notes />
-          <Contact />
+          <TechIndexProvider index={techIndex}>
+            <Opening />
+            <Now />
+            <Work />
+            <Learning />
+            <Skills />
+            <About />
+            <Notes />
+            <Contact />
+          </TechIndexProvider>
         </main>
 
         <Colophon />

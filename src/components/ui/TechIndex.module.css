@@ -1,0 +1,55 @@
+/*
+  A name that appears in more than one place. At rest it is ruled with a dotted
+  line — a pencilled underline, lighter than a link's — and when picked it is
+  inked in red with the line made solid, the way the rest of the page inks
+  what it wants seen. It is set exactly as the plain names around it are.
+*/
+.term {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
+  text-decoration: underline dotted;
+  text-decoration-color: var(--ink-ghost);
+  text-decoration-thickness: var(--hair);
+  text-underline-offset: 0.25em;
+  transition: color var(--dur-1) var(--ease);
+}
+
+.term:hover {
+  color: var(--rubric);
+  text-decoration-color: var(--rubric-soft);
+}
+
+.term[aria-pressed="true"] {
+  color: var(--rubric);
+  text-decoration-style: solid;
+  text-decoration-color: var(--rubric);
+}
+
+/* "See also", as a book's index has it: the other places, in rubric numerals,
+   on the line after the name that was picked. */
+.where {
+  margin-left: var(--space-2);
+}
+
+.place {
+  text-decoration: none;
+}
+
+.place:hover,
+.place:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .term {
+    transition: none;
+  }
+}
