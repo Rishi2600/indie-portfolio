@@ -42,6 +42,20 @@
      or two marks that must not read as red. */
   --indigo: #2d4257;
 
+  /* What a keyboard reader sees around the element they are on: the second
+     pigment by day. */
+  --focus: var(--indigo);
+
+  /* -- The sheet --------------------------------------------------------
+     Selected text, the shading a page picks up towards its edges, and the
+     grain of the paper itself: fractal noise pushed through a colour matrix
+     until only a sparse scatter of dark specks is left (see PaperGrain). */
+  --selection: #ecd9d2;
+  --shade: rgba(124, 104, 68, 0.11);
+  --shade-from: 52%;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0.3 0.2 0 -0.52'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
+  --grain-opacity: 0.5;
+
   /* -- Type -------------------------------------------------------------
      Three Latin faces, each with a job: a garalde for anything that is
      read as prose, a grotesque for interface text, a monospace for
@@ -112,4 +126,51 @@
   --dur-1: 140ms;
   --dur-2: 280ms;
   --dur-3: 620ms;
+}
+
+/*
+  Night
+  =====
+
+  An indigo leaf written in pale gold: the blue-black paper that sutras were
+  written on in Nepal and Tibet, and the dark grounds of Jain manuscripts.
+  The same sheet and the same relationships as by day, read by lamplight
+  rather than inverted: ivory ink in its softer grades, rubric warmed to a
+  vermilion that holds on a dark ground, rules in faint blue-grey. Red is
+  still only rubrication.
+
+  Every pairing a reader has to read meets the same floor as by day; the
+  floors are written down and checked in tokens.test.ts. On indigo paper the
+  second pigment cannot be indigo, so focus turns to gold.
+
+  The attribute is set before the first paint by the script in the root
+  layout; nothing here waits for JavaScript to finish loading.
+*/
+:root[data-theme="night"] {
+  color-scheme: dark;
+
+  --paper: #252e3a;
+
+  --ink: #ece4cf;
+  --ink-soft: #cdc6b3;
+  --ink-faint: #a9a593;
+  --ink-ghost: #6b6f72;
+
+  --rule: #55606f;
+  --rule-soft: #3d4755;
+
+  --rubric: #f0937a;
+  --rubric-soft: #db7f66;
+
+  --focus: #e2c070;
+
+  --selection: #5a3b3a;
+  --shade: rgba(4, 6, 14, 0.36);
+  --shade-from: 46%;
+  /* Pale fibres instead of dark specks, from the same noise. */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.93 0 0 0 0 0.89 0 0 0 0 0.8 0.5 0.3 0.2 0 -0.52'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
+  --grain-opacity: 0.26;
+
+  /* The colour of the flame, as r g b, for the lamp. */
+  --lamp: 255 196 128;
 }

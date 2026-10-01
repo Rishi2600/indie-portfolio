@@ -79,12 +79,12 @@ svg {
 }
 
 ::selection {
-  background-color: #ecd9d2;
+  background-color: var(--selection);
   color: var(--ink);
 }
 
 :focus-visible {
-  outline: 2px solid var(--indigo);
+  outline: 2px solid var(--focus);
   outline-offset: 3px;
 }
 

@@ -15,19 +15,20 @@
   Fractal noise, pushed through a colour matrix that zeroes RGB and derives
   alpha from the noise's own luminance minus a threshold. Everything below the
   threshold clips to fully transparent, so what is left is a sparse scatter of
-  dark specks rather than an even grey film.
+  dark specks rather than an even grey film. The image and its strength are
+  tokens, so night can swap the specks for pale fibres.
 */
 .grain {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0.3 0.2 0 -0.52'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-image: var(--grain);
   background-size: 180px 180px;
-  opacity: 0.5;
+  opacity: var(--grain-opacity);
 }
 
 /* The warmth a page picks up towards its edges from being held. */
 .shade {
   background: radial-gradient(
     125% 95% at 50% 35%,
-    transparent 52%,
-    rgba(124, 104, 68, 0.11) 100%
+    transparent var(--shade-from),
+    var(--shade) 100%
   );
 }
