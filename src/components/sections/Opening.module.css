@@ -18,7 +18,8 @@
   top: calc(-1 * var(--space-3));
   right: -7rem;
   width: 15rem;
-  opacity: 0.05;
+  --figure-opacity: 0.05;
+  opacity: var(--figure-opacity);
 }
 
 @media (min-width: 52rem) {
@@ -27,7 +28,7 @@
     right: var(--space-7);
     width: min(40vw, 25rem);
     translate: 0 -50%;
-    opacity: 0.075;
+    --figure-opacity: 0.075;
   }
 }
 

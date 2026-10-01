@@ -44,6 +44,7 @@
     left: 0;
     width: 22rem;
     translate: -50% -50%;
-    opacity: 0.08;
+    --figure-opacity: 0.08;
+    opacity: var(--figure-opacity);
   }
 }
