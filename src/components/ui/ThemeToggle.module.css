@@ -2,7 +2,11 @@
   Day / Night, set in the dateline's small capitals. The theme in use is
   inked; the other waits in faint ink and turns rubric when pointed at.
 */
+/* Above the cave's darkness (Torch, z-index 2): however dark the page is,
+   the way back to daylight stays readable. */
 .toggle {
+  position: relative;
+  z-index: 3;
   display: inline-flex;
   align-items: baseline;
   gap: 0.45em;

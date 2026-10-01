@@ -1,0 +1,49 @@
+/*
+  The darkness of the cave, over everything on the page, with the torch's
+  light cut out of it (Torch.tsx). Above the content, so ground and writing
+  darken together; never above the day/night toggle, which stays readable
+  as the way out.
+*/
+.torch {
+  display: none;
+}
+
+:global(:root[data-theme="night"]) .torch {
+  --reach: clamp(280px, 25vw, 390px);
+
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  /* Until the flame is drawn: the same dark, with a still light at the
+     reading line, so the first paint is already the cave. */
+  background: radial-gradient(
+    ellipse calc(var(--reach) * 1.3) calc(var(--reach) * 0.9) at 50% 40%,
+    rgb(5 6 10 / 0) 0%,
+    rgb(5 6 10 / 0.04) 50%,
+    rgb(5 6 10 / 0.33) 80%,
+    rgb(5 6 10 / 0.55) 100%
+  );
+}
+
+/* On a touch screen the light is held wide across the reading line. */
+@media (hover: none), (pointer: coarse) {
+  :global(:root[data-theme="night"]) .torch {
+    --reach: max(62vw, 240px);
+  }
+}
+
+:global(:root[data-theme="night"]) .torch[data-burning] {
+  background: none;
+}
+
+/* Readers who ask for more contrast, high-contrast modes and paper all get
+   the page without darkness. */
+@media (prefers-contrast: more), (forced-colors: active), print {
+  :global(:root[data-theme="night"]) .torch {
+    display: none;
+  }
+}

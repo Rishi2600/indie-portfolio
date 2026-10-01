@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Birds } from "@/components/decorative/Birds";
-import { Lamp } from "@/components/decorative/Lamp";
 import { PaperGrain } from "@/components/decorative/PaperGrain";
+import { Torch } from "@/components/decorative/Torch";
 import { site } from "@/content/site";
 import { fontVariables } from "@/lib/fonts";
 import { themeScript } from "@/lib/theme";
@@ -75,9 +75,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         <PaperGrain />
-        <Lamp />
         <Birds />
-        <div className="shell">{children}</div>
+        <div className="shell">
+          {children}
+          <Torch />
+        </div>
       </body>
     </html>
   );
