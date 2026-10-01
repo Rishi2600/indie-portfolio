@@ -11,6 +11,11 @@
 */
 
 :root {
+  /* Day is light; night (at the foot of this file) says it is dark. Stated
+     here, so that a reader whose system is dark but who has chosen day does
+     not get dark scrollbars and form controls on a light page. */
+  color-scheme: light;
+
   /* -- Paper ------------------------------------------------------------
      Four grades of the same sheet, from the lit face to the shadowed edge. */
   --paper: #f4f1e9;

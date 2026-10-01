@@ -4,6 +4,7 @@ import { Birds } from "@/components/decorative/Birds";
 import { PaperGrain } from "@/components/decorative/PaperGrain";
 import { site } from "@/content/site";
 import { fontVariables } from "@/lib/fonts";
+import { themeScript } from "@/lib/theme";
 import "@/styles/tokens.css";
 import "@/styles/base.css";
 
@@ -35,9 +36,18 @@ export const metadata: Metadata = {
   robots: { index: site.indexable, follow: site.indexable },
 };
 
+/**
+ * The browser's own chrome follows the reader's system: the theme colour is
+ * read before any script runs, so a reader who has picked the other theme by
+ * hand keeps the system's bar colour. The page itself always follows the
+ * choice.
+ */
 export const viewport: Viewport = {
-  themeColor: "#f4f1e9",
-  colorScheme: "light",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f4f1e9" },
+    { media: "(prefers-color-scheme: dark)", color: "#252e3a" },
+  ],
+  colorScheme: "light dark",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -48,7 +58,20 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     // to the top in front of the reader, showing the foot of the page on the
     // way. With it, Next makes that one jump instant and leaves smooth
     // scrolling to in-page links.
-    <html lang="en" className={fontVariables} data-scroll-behavior="smooth">
+    //
+    // data-theme is "day" as rendered and corrected by themeScript before the
+    // first paint, which is why <html> may differ from what React rendered:
+    // suppressHydrationWarning lets the attribute the script set stand.
+    <html
+      lang="en"
+      className={fontVariables}
+      data-scroll-behavior="smooth"
+      data-theme="day"
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body>
         <PaperGrain />
         <Birds />
