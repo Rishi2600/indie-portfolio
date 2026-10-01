@@ -271,3 +271,35 @@ svg {
 .skip:focus {
   transform: none;
 }
+
+/* -- The lamp -------------------------------------------------------------
+
+   At night a reader with a mouse carries a small flame (Lamp.tsx), lit by
+   data-lamp on <html>. The faint figures behind the sections come up inside
+   its light and nowhere else: each states its resting strength as
+   --figure-opacity; inside the light it is lifted to 2.8 times that, and a
+   mask returns it to exactly its resting strength beyond 300px. Lifting and
+   lowering fade with the lamp; with the lamp out, nothing changes. */
+
+@property --lamp-strength {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+/* The strength fades on the figures themselves, not on <html>: an inherited
+   value changing at the root would restyle the whole page every frame of the
+   fade. Here only the handful of figures are touched. */
+:root[data-theme="night"] [data-lit] > * {
+  transition: --lamp-strength 700ms var(--ease);
+  opacity: calc(var(--figure-opacity, 1) * (1 + 1.8 * var(--lamp-strength)));
+  mask-image: radial-gradient(
+    circle 300px at var(--lamp-fx, -999px) var(--lamp-fy, -999px),
+    #000,
+    rgb(0 0 0 / calc(1 / (1 + 1.8 * var(--lamp-strength))))
+  );
+}
+
+:root[data-theme="night"][data-lamp="on"] [data-lit] > * {
+  --lamp-strength: 1;
+}
