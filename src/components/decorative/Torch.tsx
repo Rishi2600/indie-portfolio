@@ -91,11 +91,13 @@ export function Torch() {
         ? Math.min(Math.max(innerWidth * 0.25, 280), 390)
         : Math.max(innerWidth * 0.62, 240);
 
-    let following: "reading" | "pointer" | "focus" = "reading";
     // The light starts where the CSS stand-in drew it and is raised to the
     // title, slowly; once the reader moves it, it follows more closely.
+    let following: "arrival" | "reading" | "pointer" | "focus" = reduced.matches
+      ? "reading"
+      : "arrival";
     const at = readingLine();
-    let target = reduced.matches ? readingLine() : arrival();
+    let target = following === "arrival" ? arrival() : readingLine();
     let follow = 3.5;
     let frame = 0;
     let last = 0;
@@ -105,6 +107,7 @@ export function Torch() {
       canvas!.width = Math.ceil(innerWidth / SCALE);
       canvas!.height = Math.ceil(innerHeight / SCALE);
       if (following === "reading") target = readingLine();
+      if (following === "arrival") target = arrival();
       drawn = false;
     }
 
