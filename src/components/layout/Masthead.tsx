@@ -2,6 +2,7 @@ import Link from "next/link";
 import { MandalaMark } from "@/components/decorative/MandalaMark";
 import { PaperRule } from "@/components/decorative/PaperRule";
 import { Clock } from "@/components/ui/Clock";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { nav, site } from "@/content/site";
 import styles from "./Masthead.module.css";
 
@@ -49,6 +50,7 @@ export function Masthead({ basePath = "" }: { basePath?: string }) {
       <div className={styles.dateline}>
         <p className="label">{site.role}</p>
         <Clock />
+        <ThemeToggle />
       </div>
     </header>
   );

@@ -1,0 +1,45 @@
+/*
+  Day / Night, set in the dateline's small capitals. The theme in use is
+  inked; the other waits in faint ink and turns rubric when pointed at.
+*/
+.toggle {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45em;
+}
+
+/* Padding widens the target to a comfortable size; the matching negative
+   margin keeps the line exactly where the text alone would put it. */
+.option {
+  margin: -0.5rem -0.2rem;
+  padding: 0.5rem 0.2rem;
+  border: 0;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: var(--ink-faint);
+  cursor: pointer;
+  transition: color var(--dur-1) var(--ease);
+}
+
+.option:hover {
+  color: var(--rubric);
+}
+
+/* From the attribute the inline script sets, so it is right before hydration. */
+:global(:root[data-theme="day"]) .day,
+:global(:root[data-theme="night"]) .night {
+  color: var(--ink);
+  cursor: default;
+}
+
+.sep {
+  color: var(--ink-ghost);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .option {
+    transition: none;
+  }
+}

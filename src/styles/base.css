@@ -237,6 +237,15 @@ svg {
   }
 }
 
+/* While the theme changes, nothing transitions: every colour on the page
+   changes in the same frame, rather than each link and label fading to its
+   new colour at its own speed. ThemeToggle sets this for two frames. */
+:root[data-theme-switching] *,
+:root[data-theme-switching] *::before,
+:root[data-theme-switching] *::after {
+  transition: none !important;
+}
+
 /* The app shell, lifted above the two fixed paper layers. */
 .shell {
   position: relative;
