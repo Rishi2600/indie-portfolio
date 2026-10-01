@@ -17,6 +17,11 @@
   }
 }
 
+/* At night the page is a cave, and there is no sky to cross. */
+:global(:root[data-theme="night"]) .sky {
+  display: none;
+}
+
 /*
   One crossing. Straight across at a steady pace, rising a little over the
   whole width, from beyond one edge to beyond the other.

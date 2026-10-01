@@ -3,8 +3,9 @@ import styles from "./Backdrop.module.css";
 
 /**
  * Purely decorative, so the whole layer is removed from the accessibility
- * tree. Its figures are the ones the lamp lights at night (`data-lit`); each
- * states its resting strength as --figure-opacity.
+ * tree. Its figures (`data-lit`) are carvings on the cave wall at night,
+ * where they show more strongly; each states its resting strength as
+ * --figure-opacity.
  */
 export function Backdrop({ children }: { children: ReactNode }) {
   return (
