@@ -13,6 +13,7 @@ import {
   darknessFor,
   FIRST_DARKNESS,
   inTheDark,
+  reveal,
   STILL,
 } from "./torch";
 
@@ -248,6 +249,27 @@ describe("embers", () => {
         expect(e.alpha).toBeLessThanOrEqual(1);
         expect(e.size).toBeLessThanOrEqual(2);
       }
+    }
+  });
+});
+
+describe("finding a painting", () => {
+  it("shows nothing beyond the light's edge", () => {
+    expect(reveal(300, 300)).toBe(0);
+    expect(reveal(5000, 300)).toBe(0);
+  });
+
+  it("shows it all close to the flame", () => {
+    expect(reveal(0, 300)).toBe(1);
+    expect(reveal(100, 300)).toBe(1);
+  });
+
+  it("comes up steadily as the light draws near", () => {
+    let previous = 0;
+    for (let d = 400; d >= 0; d -= 5) {
+      const now = reveal(d, 300);
+      expect(now).toBeGreaterThanOrEqual(previous);
+      previous = now;
     }
   });
 });

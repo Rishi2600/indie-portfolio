@@ -8,7 +8,7 @@ import styles from "./CavePainting.module.css";
  *
  * They are on the wall only at night, and only the torch finds them: away
  * from its direct light they cannot be seen at all, not even in its
- * afterglow (Torch.tsx tells each one where the light is). They sit in the
+ * afterglow (Torch.tsx shows each as the light comes near). They sit in the
  * open stone beside a section, never behind its writing, and only on screens
  * wide enough to have that stone; on narrower ones there are none.
  *

@@ -10,6 +10,7 @@ import {
   DARK_RGB,
   darknessFor,
   EYES_KEY,
+  reveal,
   STILL,
   torchLight,
   type Ember,
@@ -42,6 +43,9 @@ const LOBES = [
  */
 const WIDE = 1.3;
 const TALL = 0.9;
+
+/** How strongly a painting shows when the light is full on it: worn paint. */
+const PAINTING_OPACITY = 0.78;
 
 const FINE_POINTER = "(hover: hover) and (pointer: fine)";
 const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
@@ -141,19 +145,24 @@ export function Torch() {
       torchLight.strength = f.strength;
       torchLight.burning = true;
 
-      // Tell each painting on the wall where the light is, relative to
-      // itself, so only the light shows it (CavePainting).
+      // Each painting on the wall shows as the light comes near it and is
+      // gone beyond its edge (CavePainting). Opacity alone, which the browser
+      // changes without repainting the worn paint; the darkness still shades
+      // across a painting the light only half reaches.
       const paintings = document.querySelectorAll<HTMLElement>("[data-painting]");
-      if (paintings.length > 0) {
-        const boxes = Array.from(paintings, (p) => p.getBoundingClientRect());
-        paintings.forEach((painting, i) => {
-          const box = boxes[i]!;
-          if (box.width === 0 || box.bottom < -span || box.top > innerHeight + span) return;
-          painting.style.setProperty("--light-x", `${torchLight.x - box.left}px`);
-          painting.style.setProperty("--light-y", `${torchLight.y - box.top}px`);
-          painting.style.setProperty("--light-r", `${torchLight.reach * 0.75 * f.strength}px`);
-        });
-      }
+      const boxes = Array.from(paintings, (p) => p.getBoundingClientRect());
+      paintings.forEach((painting, i) => {
+        const box = boxes[i]!;
+        if (box.width === 0) return;
+        const dx = Math.max(box.left - torchLight.x, 0, torchLight.x - box.right);
+        const dy = Math.max(box.top - torchLight.y, 0, torchLight.y - box.bottom);
+        const near = Math.hypot(dx, dy) + Math.min(box.width, box.height) * 0.35;
+        // Never fully transparent: a browser skips drawing what it cannot see,
+        // and would then draw the worn paint for the first time mid-sweep.
+        // One percent, under the cave's dark, is still nothing to the eye.
+        const shown = Math.max(0.01, reveal(near, span) * PAINTING_OPACITY).toFixed(2);
+        if (painting.style.opacity !== shown) painting.style.opacity = shown;
+      });
 
       const extra = eyesSince === null ? 0 : adjusting(now - eyesSince);
       ctx.globalCompositeOperation = "source-over";

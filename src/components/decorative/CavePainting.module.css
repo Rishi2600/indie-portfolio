@@ -1,8 +1,7 @@
 /*
   A painting on the cave wall (CavePainting.tsx). Behind the section's
-  writing, in the open stone to its right, and masked so that only the
-  torch's direct light shows it: the mask is centred where Torch.tsx says the
-  light is, relative to this painting.
+  writing, in the open stone to its right, and shown only as the torch's
+  direct light comes near: Torch.tsx sets its opacity.
 */
 .painting {
   display: none;
@@ -19,18 +18,14 @@
     width: var(--width);
     pointer-events: none;
     color: var(--painting);
-    opacity: 0.78;
-    mask-image: radial-gradient(
-      circle var(--light-r, 0px) at var(--light-x, -9999px) var(--light-y, -9999px),
-      #000 25%,
-      rgb(0 0 0 / 0.5) 60%,
-      transparent 100%
-    );
+    /* Set by the torch as its light comes near; unseen until then. */
+    opacity: 0.01;
+    will-change: opacity;
   }
 }
 
-/* Drawn once and kept as its own layer, so moving the light only moves the
-   mask over it, rather than repainting the worn paint every frame. */
+/* Drawn once and kept as its own layer, so revealing it only changes its
+   opacity, rather than repainting the worn paint every frame. */
 .art {
   display: block;
   width: 100%;

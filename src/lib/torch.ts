@@ -254,3 +254,18 @@ export function createEmbers(random: () => number = Math.random) {
     },
   };
 }
+
+/* -- Paintings -------------------------------------------------------------
+
+   How much of a painting on the wall the torch shows, from how far its light
+   is from the painting: nothing beyond the light's edge, all of it close in.
+   Only the direct light counts; the afterglow never shows a painting. */
+
+/** Shown in full within this share of the light's reach, gone beyond NEAR_END. */
+export const REVEAL_NEAR = 0.4;
+export const REVEAL_FAR = 0.95;
+
+export function reveal(distance: number, reach: number): number {
+  const t = Math.min(Math.max((distance / reach - REVEAL_NEAR) / (REVEAL_FAR - REVEAL_NEAR), 0), 1);
+  return 1 - t * t * (3 - 2 * t);
+}
