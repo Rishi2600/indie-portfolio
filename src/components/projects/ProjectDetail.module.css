@@ -36,6 +36,16 @@
   text-wrap: pretty;
 }
 
+.description {
+  max-width: var(--measure);
+  margin-top: var(--space-4);
+  font-family: var(--font-display);
+  font-size: var(--step-prose);
+  line-height: var(--leading-prose);
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
 .more {
   margin-top: var(--space-6);
   font-family: var(--font-display);

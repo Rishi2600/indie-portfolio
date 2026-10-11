@@ -17,7 +17,8 @@ function Note({ term, children }: { term: string; children: ReactNode }) {
 }
 
 /**
- * One project, opened out: what it is, why it exists, the parts that were
+ * One project, opened out: the line it is introduced by in the index, what
+ * it does, why it exists, the parts that were
  * fun to build, and what it was built with. Not every last detail; the
  * repository is one click away and has the rest.
  *
@@ -57,7 +58,8 @@ export function ProjectDetail({
         ) : null}
       </p>
 
-      <p className={styles.lede}>{project.description}</p>
+      <p className={styles.lede}>{project.teaser.text}</p>
+      <p className={styles.description}>{project.description}</p>
 
       <dl className={styles.notes}>
         <Note term="Why">{project.whyBuilt}</Note>

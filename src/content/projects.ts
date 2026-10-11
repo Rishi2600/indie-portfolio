@@ -155,7 +155,7 @@ export const projects: readonly Project[] = [
     summary:
       "The whole web platform for a packaged flavoured-ice brand: shop, enquiries and admin in one application.",
     description:
-      "A brand site, a product catalogue, consumer ordering, B2B enquiries and an admin dashboard for a packaged flavoured-ice brand. One Next.js app holds the lot.",
+      "Customers browse, fill a cart, check out and keep an account. Businesses send enquiries. The brand runs its catalogue, orders, customers and analytics from the admin side.",
     whyBuilt:
       "A real brand needed to sell directly, take business enquiries and run its own catalogue and orders, without the site pretending to do things it can't.",
     technologies: [
