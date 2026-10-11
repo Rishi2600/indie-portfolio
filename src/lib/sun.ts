@@ -96,7 +96,7 @@ export const ROOM_SHADE = 0.03;
 /** The paper's own waves and fibres, on their sides turned from the sun. */
 export const PAPER_SHADE = 0.025;
 /** A bird passing between the sun and the page. */
-export const BIRD_SHADE = 0.03;
+export const BIRD_SHADE = 0.045;
 
 /** Darkness laid over darkness: what is left is what each lets through. */
 export function combined(...shades: number[]): number {

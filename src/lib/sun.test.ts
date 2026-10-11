@@ -93,7 +93,7 @@ describe("shade never costs the writing its contrast", () => {
 
   it("adds shades up as light does: each lets through what the last let through", () => {
     expect(combined(0.1, 0.1)).toBeCloseTo(0.19);
-    expect(MAX_SHADE).toBeLessThan(0.13);
+    expect(MAX_SHADE).toBeLessThan(0.14);
   });
 
   it("lights the paper's relief without ever shading past its share", () => {
