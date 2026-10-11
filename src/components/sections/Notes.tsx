@@ -3,17 +3,20 @@ import { MarginMark } from "@/components/decorative/MarginMark";
 import { Section } from "@/components/layout/Section";
 import { marks } from "@/content/marks";
 import { notes, notesEmpty, notesIntro } from "@/content/notes";
-import { sectionIndex } from "@/content/site";
+import { chapter } from "@/content/site";
 import { formatDate } from "@/lib/time/format";
 import styles from "./Notes.module.css";
 
 export function Notes() {
+  const { numeral, label } = chapter("notes");
+
   return (
     <Section
       id="notes"
-      index={sectionIndex.notes}
-      label="Notes"
+      index={numeral}
+      label={label}
       title="Notes"
+      level={1}
     >
       <p className={styles.intro}>{notesIntro}</p>
 
@@ -24,7 +27,7 @@ export function Notes() {
               <time className="label" dateTime={note.date}>
                 {formatDate(note.date)}
               </time>
-              <h3 className={styles.entryTitle}>{note.title}</h3>
+              <h2 className={styles.entryTitle}>{note.title}</h2>
               <p className={styles.summary}>{note.summary}</p>
             </li>
           ))}

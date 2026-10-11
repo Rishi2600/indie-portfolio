@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { TurnLink } from "@/components/layout/ReadingOrder";
 import { projectPath, type Project } from "@/content/projects";
 import styles from "./ProjectLinks.module.css";
 
@@ -13,7 +13,8 @@ import styles from "./ProjectLinks.module.css";
  *
  * A repository always; a live site only where one exists. The project's own
  * page is offered from the index, where it is somewhere else to go, and not
- * from the page itself.
+ * from the page itself. The labels are short and casual; the accessible
+ * names say plainly where each one goes.
  */
 export function ProjectLinks({
   project,
@@ -25,26 +26,26 @@ export function ProjectLinks({
   return (
     <p className={styles.links}>
       {entryLink ? (
-        <Link
+        <TurnLink
           className={`link ${styles.projectLink}`}
           href={projectPath(project.slug)}
-          aria-label={`Full entry for ${project.name}`}
+          aria-label={`The fun parts of ${project.name}`}
         >
-          <span className={styles.linkLabel}>Full entry</span>
+          <span className={styles.linkLabel}>The fun parts</span>
           <span
             className={`${styles.arrow} ${styles.forward}`}
             aria-hidden="true"
           >
             →
           </span>
-        </Link>
+        </TurnLink>
       ) : null}
       <a
         className={`link ${styles.projectLink}`}
         href={project.github}
-        aria-label={`GitHub repository for ${project.name}`}
+        aria-label={`Code for ${project.name} on GitHub`}
       >
-        <span className={styles.linkLabel}>GitHub</span>
+        <span className={styles.linkLabel}>Code</span>
         <span className={styles.arrow} aria-hidden="true">
           ↗
         </span>
@@ -53,9 +54,9 @@ export function ProjectLinks({
         <a
           className={`link ${styles.projectLink}`}
           href={project.live}
-          aria-label={`Live site for ${project.name}`}
+          aria-label={`Try ${project.name} live`}
         >
-          <span className={styles.linkLabel}>Live site</span>
+          <span className={styles.linkLabel}>Try it</span>
           <span className={styles.arrow} aria-hidden="true">
             ↗
           </span>

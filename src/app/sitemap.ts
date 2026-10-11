@@ -1,24 +1,17 @@
 import type { MetadataRoute } from "next";
-import { featuredProjects, projectPath } from "@/content/projects";
+import { readingOrder } from "@/content/reading";
 import { site } from "@/content/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   // The site is statically built, so this is the time of the last deploy.
   const lastModified = new Date();
 
-  return [
-    {
-      url: site.url,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 1,
-    },
-    // Only the projects that are featured have a page.
-    ...featuredProjects.map((project) => ({
-      url: `${site.url}${projectPath(project.slug)}`,
-      lastModified,
-      changeFrequency: "yearly" as const,
-      priority: 0.6,
-    })),
-  ];
+  // Every page of the book, front to back: the start, the chapters, and the
+  // projects that are featured (only those have a page).
+  return readingOrder.map((leaf) => ({
+    url: leaf.href === "/" ? site.url : `${site.url}${leaf.href}`,
+    lastModified,
+    changeFrequency: leaf.href.startsWith("/projects/") ? ("yearly" as const) : ("monthly" as const),
+    priority: leaf.href === "/" ? 1 : leaf.href.startsWith("/projects/") ? 0.6 : 0.8,
+  }));
 }

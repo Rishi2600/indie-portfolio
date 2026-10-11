@@ -1,7 +1,8 @@
 /*
-  An inventory, ruled like a ledger. Each group is a row: its name in the
-  label column, its lines beside it. A line may carry its own small label,
-  which says what the items on it share.
+  The stack, ruled like a ledger: each group a row, its name in the label
+  column. What sits beside the name is not the same from row to row. Some
+  groups are a row of names set large, some are written out as a sentence,
+  some are small labelled lines (content/skills.ts says which).
 */
 
 /* What the dotted names mean, said once and kept quiet. */
@@ -38,6 +39,34 @@
 .lines {
   display: grid;
   gap: var(--space-2);
+}
+
+/* A row of names and nothing else, set in the serif at display size. */
+.names {
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  line-height: var(--leading-title);
+  letter-spacing: var(--tracking-display);
+  color: var(--ink);
+}
+
+/* Written out, the way you would say it. */
+.sentence {
+  max-width: var(--measure);
+  font-family: var(--font-display);
+  font-size: var(--step-prose);
+  line-height: var(--leading-prose);
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+.sentence button {
+  color: var(--ink);
+}
+
+/* A row of large names stands a little taller than the others. */
+.group:has(.names) {
+  padding-block: var(--space-5);
 }
 
 /* Label above items on a phone, beside them once there is room. */
@@ -108,6 +137,7 @@
 }
 
 .exploringNote {
+  font-style: italic;
   font-family: var(--font-display);
   font-size: var(--step-1);
   line-height: var(--leading-title);

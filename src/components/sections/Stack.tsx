@@ -2,23 +2,24 @@ import { CavePainting } from "@/components/decorative/CavePainting";
 import { MarginMark } from "@/components/decorative/MarginMark";
 import { Section } from "@/components/layout/Section";
 import { InlineList } from "@/components/ui/InlineList";
-import { TechList } from "@/components/ui/TechIndex";
+import { TechList, TechName } from "@/components/ui/TechIndex";
 import { techIndex } from "@/content/crossref";
 import { marks } from "@/content/marks";
-import { sectionIndex } from "@/content/site";
+import { chapter } from "@/content/site";
 import {
   exploring,
-  skillGroups,
-  skillsNote,
+  stack,
+  stackIntro,
   type SkillLine,
+  type StackGroup,
 } from "@/content/skills";
 import { SKILLS_PLACE, technologyHint } from "@/content/technologies";
-import styles from "./Skills.module.css";
+import styles from "./Stack.module.css";
 
 /**
- * The inventory's names can be picked to see where else they appear. The
- * pencilled lines cannot: they are not claims, and a cross-reference would
- * read as one.
+ * A labelled line of names. The inked lines can be picked to see where else
+ * a name turns up; the pencilled ones cannot, since they are not claims and
+ * a cross-reference would read as one.
  */
 function Line({
   line,
@@ -45,31 +46,52 @@ function Line({
   );
 }
 
-export function Skills() {
+/** One group, in whichever form its record asks for. */
+function Group({ group }: { group: StackGroup }) {
+  switch (group.form) {
+    case "names":
+      return (
+        <TechList items={group.items} place={SKILLS_PLACE} className={styles.names} />
+      );
+    case "sentence":
+      return (
+        <p className={styles.sentence}>
+          {group.says.map((phrase, i) =>
+            typeof phrase === "string" ? (
+              phrase
+            ) : (
+              <TechName key={i} name={phrase.tech} place={SKILLS_PLACE} />
+            ),
+          )}
+        </p>
+      );
+    case "lines":
+      return (
+        <div className={styles.lines}>
+          {group.lines.map((line) => (
+            <Line key={line.label ?? line.items[0]} line={line} crossReferenced />
+          ))}
+        </div>
+      );
+  }
+}
+
+export function Stack() {
+  const { numeral, label } = chapter("stack");
+
   return (
-    <Section
-      id="skills"
-      index={sectionIndex.skills}
-      label="Skills"
-      title="What I work with"
-    >
-      <p className="note">{skillsNote}</p>
+    <Section id="stack" index={numeral} label={label} title="What I build with" level={1}>
+      <p className="note">{stackIntro}</p>
       {Object.keys(techIndex).length > 0 ? (
         <p className={styles.hint}>{technologyHint}</p>
       ) : null}
 
       <dl className={styles.groups}>
-        {skillGroups.map((group) => (
+        {stack.map((group) => (
           <div key={group.title} className={styles.group}>
             <dt className="label">{group.title}</dt>
-            <dd className={styles.lines}>
-              {group.lines.map((line) => (
-                <Line
-                  key={line.label ?? line.items[0]}
-                  line={line}
-                  crossReferenced
-                />
-              ))}
+            <dd>
+              <Group group={group} />
             </dd>
           </div>
         ))}
@@ -77,9 +99,9 @@ export function Skills() {
 
       <section className={styles.exploring} aria-labelledby="exploring-title">
         <div className={styles.exploringHead}>
-          <h3 id="exploring-title" className={styles.exploringTitle}>
+          <h2 id="exploring-title" className={styles.exploringTitle}>
             {exploring.title}
-          </h3>
+          </h2>
           <p className={styles.exploringNote}>{exploring.note}</p>
         </div>
         <div className={styles.exploringLines}>
@@ -89,7 +111,7 @@ export function Skills() {
         </div>
       </section>
 
-      <MarginMark {...marks.skills} top="38%" />
+      <MarginMark {...marks.stack} top="38%" />
       <CavePainting kind="dancers" top="70%" />
     </Section>
   );

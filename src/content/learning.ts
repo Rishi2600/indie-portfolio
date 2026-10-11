@@ -12,21 +12,21 @@ export type LearningEntry = {
 export const learning: readonly LearningEntry[] = [
   {
     title: "Distributed systems",
-    note: "Part of the day job at PinnTag, which is reason enough to learn it properly.",
+    note: "It's part of the day job at PinnTag, so I'd better learn it properly.",
   },
   {
     title: "System design",
-    note: "Deciding what the pieces are and how they meet, before any of them exist.",
+    note: "Working out what the pieces are and how they meet, before any of them exist. Harder than it sounds.",
   },
   {
     title: "Web2",
-    note: "The ordinary web: servers, databases, and what happens to a request between them.",
+    note: "Yes, the plain old web. Servers, databases, and whatever happens to a request in between.",
   },
   {
     title: "Solana development",
-    note: "Programs on Solana, in Rust, with Anchor.",
+    note: "Programs on Solana, in Rust, with Anchor. Send snacks.",
   },
 ];
 
 export const learningNote =
-  "The four subjects I am working through at the moment. Notes, papers and repositories will hang off these entries as the archive grows.";
+  "Four things I'm working through right now. Notes and repos will hang off these as I go.";

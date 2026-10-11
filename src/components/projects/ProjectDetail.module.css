@@ -1,12 +1,30 @@
 /*
-  One project opened out, in the same ruled ledger the index sets it in: its
-  deployment as a small label, its one-line description and its paragraph in
-  the serif, then the fields that did not fit the index, each under a label in
-  an aligned column. No boxes: a rule and the space around it.
+  One project opened out, in the same ruled ledger the index sets it in: a
+  way back to the index and the deployment as small labels, what it does in
+  the serif, then why, the fun parts and the stack, each under a label in an
+  aligned column. No boxes: a rule and the space around it.
 */
 
+.back {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.backLink {
+  text-decoration: none;
+  transition: color var(--dur-1) var(--ease);
+}
+
+.backLink:hover,
+.backLink:focus-visible {
+  color: var(--rubric);
+}
+
 .status {
-  margin-bottom: var(--space-3);
+  color: var(--ink-soft);
 }
 
 .lede {
@@ -18,14 +36,12 @@
   text-wrap: pretty;
 }
 
-.description {
-  max-width: var(--measure);
-  margin-top: var(--space-4);
+.more {
+  margin-top: var(--space-6);
   font-family: var(--font-display);
-  font-size: var(--step-prose);
-  line-height: var(--leading-prose);
+  font-size: var(--step-1);
+  font-style: italic;
   color: var(--ink-soft);
-  text-wrap: pretty;
 }
 
 .notes {
@@ -57,24 +73,6 @@
   text-wrap: pretty;
 }
 
-/* What was built: a plain run of lines, each led by a dash in pencil. */
-.built {
-  display: grid;
-  gap: var(--space-2);
-}
-
-.built li {
-  position: relative;
-  padding-left: var(--space-5);
-}
-
-.built li::before {
-  content: "–";
-  position: absolute;
-  left: 0;
-  color: var(--ink-ghost);
-}
-
 .highlights {
   display: grid;
   gap: var(--space-5);
@@ -93,55 +91,4 @@
 
 .stack {
   color: var(--ink);
-}
-
-/*
-  Where to go next: the entry before, the index, the entry after, ruled off
-  from the rest. The ends of the index simply have nothing on that side.
-*/
-.more {
-  margin-top: var(--space-7);
-  padding-top: var(--space-5);
-  border-top: var(--hair) solid var(--rule);
-}
-
-.moreList {
-  display: grid;
-  gap: var(--space-5);
-}
-
-@media (min-width: 40rem) {
-  .moreList {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-4);
-  }
-
-  .previous {
-    grid-column: 1;
-    justify-self: start;
-  }
-
-  .index {
-    grid-column: 2;
-    justify-self: center;
-    text-align: center;
-  }
-
-  .following {
-    grid-column: 3;
-    justify-self: end;
-    text-align: right;
-  }
-}
-
-.moreLink {
-  display: inline-grid;
-  gap: var(--space-1);
-  padding-bottom: 0.2em;
-}
-
-.moreName {
-  font-family: var(--font-display);
-  font-size: var(--step-1);
-  line-height: var(--leading-title);
 }

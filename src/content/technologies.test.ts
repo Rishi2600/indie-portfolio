@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { featuredProjects, projectAnchor } from "./projects";
+import { featuredProjects, projectPath } from "./projects";
 import { sectionIndex } from "./site";
-import { skillGroups } from "./skills";
+import { stack, stackNames } from "./skills";
 import {
   buildTechIndex,
   otherPlaces,
@@ -10,8 +10,9 @@ import {
 } from "./technologies";
 
 const options = {
-  numerals: { work: "02", skills: "04" },
-  anchorOf: (slug: string) => `entry-${slug}`,
+  numerals: { work: "02", stack: "03" },
+  projectHref: (slug: string) => `/projects/${slug}`,
+  stackHref: "/stack",
 };
 
 describe("technologyKey", () => {
@@ -37,10 +38,7 @@ describe("buildTechIndex", () => {
     { slug: "a", name: "A", technologies: ["Rust", "Next.js 14"] },
     { slug: "b", name: "B", technologies: ["next.js", "Go"] },
   ];
-  const groups = [
-    { lines: [{ items: ["Next.js"] }, { items: ["Rust"] }] },
-    { lines: [{ items: ["Next.js"] }] },
-  ];
+  const groups = ["Next.js", "Rust", "Next.js"];
   const index = buildTechIndex(projects, groups, options);
 
   it("lists every place a technology appears, projects first and in order", () => {
@@ -52,23 +50,23 @@ describe("buildTechIndex", () => {
     expect(index["rust"]?.map((place) => place.id)).toEqual(["a", SKILLS_PLACE]);
   });
 
-  it("cites a project by its position in the work index and the skills by their section", () => {
+  it("cites a project by its position in the work and the stack by its chapter", () => {
     expect(index["next.js"]?.map((place) => place.label)).toEqual([
       "02.1",
       "02.2",
-      "04",
+      "03",
     ]);
   });
 
-  it("points each place at where it is on the page", () => {
+  it("points each place at its page", () => {
     expect(index["next.js"]?.map((place) => place.href)).toEqual([
-      "#entry-a",
-      "#entry-b",
-      "#skills",
+      "/projects/a",
+      "/projects/b",
+      "/stack",
     ]);
   });
 
-  it("counts the skills once, however many groups hold the name", () => {
+  it("counts the stack once, however many times it names something", () => {
     const skills = index["next.js"]?.filter((p) => p.id === SKILLS_PLACE);
     expect(skills).toHaveLength(1);
   });
@@ -93,7 +91,7 @@ describe("otherPlaces", () => {
       { slug: "a", name: "A", technologies: ["Rust"] },
       { slug: "b", name: "B", technologies: ["Rust"] },
     ],
-    [{ lines: [{ items: ["Rust"] }] }],
+    ["Rust"],
     options,
   );
 
@@ -120,9 +118,10 @@ describe("otherPlaces", () => {
 });
 
 describe("the real records", () => {
-  const index = buildTechIndex(featuredProjects, skillGroups, {
-    numerals: { work: sectionIndex.work, skills: sectionIndex.skills },
-    anchorOf: projectAnchor,
+  const index = buildTechIndex(featuredProjects, stackNames(stack), {
+    numerals: { work: sectionIndex.work, stack: sectionIndex.stack },
+    projectHref: projectPath,
+    stackHref: "/stack",
   });
 
   it("finds something to cross-reference", () => {
@@ -135,12 +134,12 @@ describe("the real records", () => {
     }
   });
 
-  it("gives every place a label, a title and a same-page link", () => {
+  it("gives every place a label, a title and a link to a page of the site", () => {
     for (const places of Object.values(index)) {
       for (const place of places) {
         expect(place.label).toMatch(/^\d{2}(\.\d+)?$/);
         expect(place.title.trim()).toBeTruthy();
-        expect(place.href).toMatch(/^#[\w-]+$/);
+        expect(place.href).toMatch(/^\/[\w/-]+$/);
       }
     }
   });
@@ -150,7 +149,7 @@ describe("the real records", () => {
     // is a spelling that belongs in SAME_AS and has been missed.
     const names = [
       ...featuredProjects.flatMap((p) => p.technologies),
-      ...skillGroups.flatMap((g) => g.lines.flatMap((l) => l.items)),
+      ...stackNames(stack),
     ];
     const keys = [...new Set(names.map(technologyKey))];
     for (const short of keys) {

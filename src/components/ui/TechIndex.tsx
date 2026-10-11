@@ -37,8 +37,7 @@ const TechContext = createContext<Shared | null>(null);
  * The state behind the cross-reference: which technology, if any, is picked.
  *
  * Nothing is marked by this component itself. Each name reads the selection
- * and marks itself, and the work index marks an entry that holds a marked
- * name with a rule of its own, in CSS, so the entries need no JavaScript.
+ * and marks itself, and says where else it can be found.
  *
  * Esc puts everything back. A name picked again does too.
  */
@@ -114,14 +113,18 @@ export function TechList({
               </span>{" "}
             </>
           ) : null}
-          <Name name={item} place={place} />
+          <TechName name={item} place={place} />
         </li>
       ))}
     </ul>
   );
 }
 
-function Name({ name, place }: { name: string; place: string }) {
+/**
+ * One name, selectable if it turns up elsewhere. TechList sets a run of them;
+ * this is for a name that sits inside a sentence.
+ */
+export function TechName({ name, place }: { name: string; place: string }) {
   const shared = useContext(TechContext);
   const origin = useId();
   const key = technologyKey(name);

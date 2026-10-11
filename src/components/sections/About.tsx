@@ -1,18 +1,22 @@
+import { MarginMark } from "@/components/decorative/MarginMark";
 import { Rosette } from "@/components/decorative/Rosette";
 import { Section } from "@/components/layout/Section";
 import { profile } from "@/content/profile";
-import { sectionIndex } from "@/content/site";
+import { marks } from "@/content/marks";
+import { chapter } from "@/content/site";
 import styles from "./About.module.css";
 
 export function About() {
   const { title, paragraphs, example } = profile.about;
+  const { numeral, label } = chapter("about");
 
   return (
     <Section
       id="about"
-      index={sectionIndex.about}
-      label="About"
+      index={numeral}
+      label={label}
       title={title}
+      level={1}
     >
       <div className={styles.layout}>
         <div className="prose">
@@ -34,6 +38,8 @@ export function About() {
           </p>
         </div>
       </div>
+
+      <MarginMark {...marks.about} top="20%" />
     </Section>
   );
 }

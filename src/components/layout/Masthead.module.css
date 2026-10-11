@@ -78,6 +78,25 @@
   transform: scaleX(1);
 }
 
+/* The chapter being read: inked, with its rule already drawn. */
+.navLink[aria-current] {
+  color: var(--ink);
+}
+
+.navLink[aria-current]::after {
+  transform: scaleX(1);
+}
+
+/* Not a chapter, a way out of the book: set in red, and set apart. */
+.hi {
+  color: var(--rubric);
+}
+
+.hi:hover,
+.hi:focus-visible {
+  color: var(--rubric);
+}
+
 .dateline {
   display: flex;
   flex-wrap: wrap;

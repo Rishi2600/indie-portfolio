@@ -2,7 +2,7 @@
  * The technology cross-reference.
  *
  * A technology's name is written by hand in two kinds of place: on each
- * project, and in the skills inventory. The two are not always spelt alike
+ * project, and in the stack. The two are not always spelt alike
  * ("Next.js 14", "Solana development"), so a name is reduced to a key, and
  * the key is what ties the places together. Only a technology that turns up
  * in more than one place gets an entry: a name that appears once has nothing
@@ -31,11 +31,11 @@ export function technologyKey(name: string): string {
   return SAME_AS[key] ?? key;
 }
 
-/** One place a technology appears: an entry in the work index, or the skills. */
+/** One place a technology appears: a project's page, or the stack. */
 export type Place = {
   /** What the place is, so the place a reader started from can be left out. */
   id: string;
-  /** How it is cited: "02.1" for the first work entry, "04" for the skills. */
+  /** How it is cited: "02.1" for the first project, "03" for the stack. */
   label: string;
   /** What it is called, for assistive technology. */
   title: string;
@@ -47,28 +47,25 @@ export type TechIndex = Readonly<Record<string, readonly Place[]>>;
 
 /** The part of a project this needs, so a test need not build a whole one. */
 type Listed = { slug: string; name: string; technologies: readonly string[] };
-type Inventory = { lines: readonly { items: readonly string[] }[] };
 
-/**
- * The skills are one place however many groups a name sits in: Next.js is
- * under two of them, and both are "04".
- */
-export const SKILLS_PLACE = "skills";
-
-/** The id of the skills section, which Skills.tsx must carry. */
-const SKILLS_HREF = "#skills";
+/** The stack is one place however many times a name turns up in it. */
+export const SKILLS_PLACE = "stack";
 
 export function buildTechIndex(
   projects: readonly Listed[],
-  groups: readonly Inventory[],
+  /** Every name in the stack, in any order, repeats and all. */
+  inventory: readonly string[],
   {
     numerals,
-    anchorOf,
+    projectHref,
+    stackHref,
   }: {
-    /** The margin numerals of the two sections the places live in. */
-    numerals: { work: string; skills: string };
-    /** The id of a project's entry in the work index. */
-    anchorOf: (slug: string) => string;
+    /** The margin numerals of the two chapters the places live in. */
+    numerals: { work: string; stack: string };
+    /** Where a project's page is. */
+    projectHref: (slug: string) => string;
+    /** Where the stack is. */
+    stackHref: string;
   },
 ): TechIndex {
   const found = new Map<string, Place[]>();
@@ -87,22 +84,18 @@ export function buildTechIndex(
       id: project.slug,
       label: `${numerals.work}.${position + 1}`,
       title: project.name,
-      href: `#${anchorOf(project.slug)}`,
+      href: projectHref(project.slug),
     };
     for (const name of project.technologies) add(name, place);
   });
 
-  const skills: Place = {
+  const stack: Place = {
     id: SKILLS_PLACE,
-    label: numerals.skills,
-    title: "Skills",
-    href: SKILLS_HREF,
+    label: numerals.stack,
+    title: "Stack",
+    href: stackHref,
   };
-  for (const group of groups) {
-    for (const line of group.lines) {
-      for (const name of line.items) add(name, skills);
-    }
-  }
+  for (const name of inventory) add(name, stack);
 
   return Object.fromEntries(
     [...found].filter(([, places]) => places.length > 1),
@@ -120,4 +113,4 @@ export function otherPlaces(
 }
 
 export const technologyHint =
-  "Names ruled with a dotted line turn up in more than one place. Select one to see where.";
+  "Names with a dotted line show up in more than one place. Click one to see where.";

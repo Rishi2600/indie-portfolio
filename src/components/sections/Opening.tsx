@@ -1,5 +1,6 @@
 import { Backdrop } from "@/components/decorative/Backdrop";
 import { Yantra } from "@/components/decorative/Yantra";
+import { Obsession } from "@/components/ui/Obsession";
 import { profile } from "@/content/profile";
 import { site } from "@/content/site";
 import styles from "./Opening.module.css";
@@ -25,6 +26,7 @@ export function Opening() {
 
         <p className={styles.lead}>{profile.opening.lead}</p>
         <p className={styles.body}>{profile.opening.body}</p>
+        <Obsession {...profile.opening.obsessions} />
       </div>
     </section>
   );

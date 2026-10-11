@@ -18,6 +18,9 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
+  /* Its own layer when the page turns, so the darkness stays above the page
+     (styles/base.css). */
+  view-transition-name: torch;
   /* Until the flame is drawn: the same dark, with a still light at the
      reading line, so the first paint is already the cave. */
   background: radial-gradient(

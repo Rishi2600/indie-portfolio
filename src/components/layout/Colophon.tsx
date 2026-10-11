@@ -5,7 +5,8 @@ import { Yantra } from "@/components/decorative/Yantra";
 import { Clock } from "@/components/ui/Clock";
 import { VisitCount } from "@/components/ui/VisitCount";
 import { elsewhere } from "@/content/links";
-import { site } from "@/content/site";
+import { profile } from "@/content/profile";
+import { sayHiId, site } from "@/content/site";
 import styles from "./Colophon.module.css";
 
 /**
@@ -15,6 +16,16 @@ import styles from "./Colophon.module.css";
  */
 const year = new Date().getFullYear();
 
+/**
+ * The foot of every page: where to find Rishi, then the colophon a printer
+ * sets on the last leaf: the identity once more, the two clocks and the visit
+ * count, and a note on how the thing was made.
+ *
+ * Saying hi is here rather than on a page of its own, so it is never more
+ * than a scroll away. Profiles carry rel="me", which is how other sites
+ * verify that these accounts and this page belong to the same person; the
+ * email does not, because an address is not a page.
+ */
 export function Colophon() {
   return (
     <footer className={styles.colophon}>
@@ -23,6 +34,35 @@ export function Colophon() {
           <Yantra draw="scroll" stroke={0.45} />
         </div>
       </Backdrop>
+
+      <section id={sayHiId} className={styles.hi} aria-labelledby={`${sayHiId}-title`}>
+        <h2 id={`${sayHiId}-title`} className={styles.hiTitle}>
+          {profile.contact.title}
+        </h2>
+        <p className={styles.hiBody}>{profile.contact.body}</p>
+
+        <ul className={styles.addresses}>
+          {elsewhere.map((entry) => (
+            <li key={entry.label}>
+              <a
+                className={`link ${styles.address}`}
+                href={entry.href}
+                rel={entry.kind === "profile" ? "me" : undefined}
+              >
+                <span className="label">{entry.label}</span>
+                <span className={styles.value}>
+                  {entry.value}
+                  {entry.kind === "profile" ? (
+                    <span className={styles.arrow} aria-hidden="true">
+                      ↗
+                    </span>
+                  ) : null}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       <PaperRule variant="double" />
       <SectionDivider variant="terminal" className={styles.terminal} />
@@ -35,7 +75,7 @@ export function Colophon() {
               {site.nameDevanagari}
             </span>
           </p>
-          <p className="label">{site.role}</p>
+          <p className="label">{site.tagline}</p>
         </div>
 
         <div className={styles.meta}>
@@ -48,34 +88,18 @@ export function Colophon() {
 
       <div className={styles.foot}>
         <p className={styles.note}>
-          Set in EB Garamond and IBM Plex, on a page ruled the way a scribe
-          rules one. Built with Next.js; the source is{" "}
+          Ruled like an old manuscript and set in EB Garamond and IBM Plex.
+          Built with Next.js. The source is{" "}
           <a className="link" href={site.repository}>
             on GitHub
-          </a>
-          .
+          </a>{" "}
+          if you want to see how it works.
         </p>
 
         <div className={styles.closing}>
-          <ul className={styles.links}>
-            {elsewhere.map((entry) => (
-              <li key={entry.label}>
-                <a
-                  className={`label ${styles.link}`}
-                  href={entry.href}
-                  rel={entry.kind === "profile" ? "me" : undefined}
-                >
-                  {entry.label}
-                </a>
-              </li>
-            ))}
-            <li>
-              <a className={`label ${styles.link}`} href="#top">
-                Back to top
-              </a>
-            </li>
-          </ul>
-
+          <a className={`label ${styles.link}`} href="#top">
+            Back to top
+          </a>
           <p className="label">
             © {year} {site.name}
           </p>

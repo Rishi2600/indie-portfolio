@@ -1,0 +1,126 @@
+/*
+  A contents page: titles on the left, numerals on the right, a line of
+  leader dots between them, and a gloss under each chapter in a smaller hand.
+  Pointing at a chapter inks it: the title goes red, the dots darken and the
+  numeral steps towards it, as if a finger were running along the line.
+*/
+
+.contents {
+  position: relative;
+  padding-block: var(--space-7) var(--space-6);
+  border-top: var(--hair) solid var(--rule-soft);
+}
+
+@media (min-width: 52rem) {
+  .contents {
+    padding-left: calc(var(--rail) + var(--rail-gap));
+  }
+}
+
+.heading {
+  margin-bottom: var(--space-5);
+}
+
+.list {
+  max-width: var(--measure-wide);
+  counter-reset: none;
+}
+
+.chapter + .chapter {
+  margin-top: var(--space-5);
+}
+
+.entry,
+.subEntry {
+  display: grid;
+  grid-template-columns: auto minmax(1.5rem, 1fr) auto;
+  align-items: baseline;
+  column-gap: var(--space-3);
+  color: inherit;
+  text-decoration: none;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  line-height: var(--leading-title);
+  letter-spacing: var(--tracking-display);
+  transition: color var(--dur-1) var(--ease);
+}
+
+.leader {
+  align-self: end;
+  height: 0.5em;
+  margin-bottom: 0.35em;
+  background-image: radial-gradient(circle, var(--ink-ghost) 0.07rem, transparent 0.08rem);
+  background-size: 0.5rem 0.5rem;
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  transition: opacity var(--dur-2) var(--ease);
+  opacity: 0.7;
+}
+
+.numeral {
+  transition: translate var(--dur-2) var(--ease);
+}
+
+.gloss {
+  grid-column: 1 / -1;
+  margin-top: var(--space-1);
+  font-size: var(--step--1);
+  line-height: var(--leading-body);
+  color: var(--ink-faint);
+}
+
+.entry:hover .title,
+.entry:focus-visible .title,
+.subEntry:hover .subTitle,
+.subEntry:focus-visible .subTitle {
+  color: var(--rubric);
+}
+
+.entry:hover .leader,
+.entry:focus-visible .leader,
+.subEntry:hover .leader,
+.subEntry:focus-visible .leader {
+  opacity: 1;
+}
+
+.entry:hover .numeral,
+.entry:focus-visible .numeral,
+.subEntry:hover .numeral,
+.subEntry:focus-visible .numeral {
+  translate: -0.4rem 0;
+}
+
+/* The work's projects, set in a step and a size smaller under it. */
+.sub {
+  display: grid;
+  gap: var(--space-1);
+  margin-top: var(--space-3);
+  padding-left: var(--space-6);
+}
+
+.subTitle {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  line-height: var(--leading-title);
+  color: var(--ink-soft);
+  transition: color var(--dur-1) var(--ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .title,
+  .subTitle,
+  .leader,
+  .numeral {
+    transition: none;
+  }
+
+  .entry:hover .numeral,
+  .entry:focus-visible .numeral,
+  .subEntry:hover .numeral,
+  .subEntry:focus-visible .numeral {
+    translate: none;
+  }
+}

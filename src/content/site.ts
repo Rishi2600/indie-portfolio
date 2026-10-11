@@ -17,10 +17,12 @@ const siteEnv = { url: resolveSiteUrl(env), indexable: isIndexable(env) };
 
 export const site = {
   name: "Rishi",
-  /** Used in the document title and the masthead dateline. */
-  role: "Full-stack, backend, Web3 and Solana developer",
+  /** Used in the document title, where it has to say plainly what he does. */
+  role: "Backend, full-stack and Solana developer",
+  /** The same thing said the way he would say it, under the masthead. */
+  tagline: "Builds backends. Breaks things for fun.",
   description:
-    "Rishi — full-stack, backend, Web3 and Solana developer. Backend developer at PinnTag, working across APIs, databases, infrastructure, real-time systems and AI agents.",
+    "Rishi builds backends at PinnTag and breaks things for fun. Full-stack, open source, Web3 and Solana, and lately hardware and AI agents.",
   /**
    * The canonical origin; see src/lib/site-url.ts for the rules. The
    * variables are read by name, not by passing process.env along, so Next can
@@ -40,30 +42,72 @@ export const site = {
 } as const;
 
 /**
- * The numeral each section carries in the margin. They run in the order the
- * sections appear in src/app/page.tsx, and they are also how other parts of
- * the page cite a place: the technology cross-reference points at "02.1",
- * the first entry of the work index.
+ * The chapters, in reading order. Each is a page of its own, and this list is
+ * the one place their order is kept: the masthead, the contents on the home
+ * page, the numerals in the margin and the arrow keys that turn from one page
+ * to the next all read it.
+ *
+ * The technology cross-reference cites a place by these numerals too: "02.1"
+ * is the first entry of the work.
  */
-export const sectionIndex = {
-  now: "01",
-  work: "02",
-  learning: "03",
-  skills: "04",
-  about: "05",
-  notes: "06",
-  contact: "07",
-} as const;
-
-export type NavItem = {
+export type Chapter = {
+  key: "now" | "work" | "stack" | "about" | "notes";
+  numeral: string;
+  /** The short name, for the masthead and the margin. */
   label: string;
   href: string;
+  /** One line on the contents page saying what is behind the link. */
+  gloss: string;
 };
 
-export const nav: readonly NavItem[] = [
-  { label: "Work", href: "#work" },
-  { label: "Learning", href: "#learning" },
-  { label: "About", href: "#about" },
-  { label: "Notes", href: "#notes" },
-  { label: "Contact", href: "#contact" },
+export const chapters: readonly Chapter[] = [
+  {
+    key: "now",
+    numeral: "01",
+    label: "Now",
+    href: "/now",
+    gloss: "What I'm doing, and what I'm learning while I do it.",
+  },
+  {
+    key: "work",
+    numeral: "02",
+    label: "Work",
+    href: "/projects",
+    gloss: "Five things I built. The repos do most of the talking.",
+  },
+  {
+    key: "stack",
+    numeral: "03",
+    label: "Stack",
+    href: "/stack",
+    gloss: "The toolbox, plus the stuff I want in it.",
+  },
+  {
+    key: "about",
+    numeral: "04",
+    label: "About",
+    href: "/about",
+    gloss: "Mostly about breaking things.",
+  },
+  {
+    key: "notes",
+    numeral: "05",
+    label: "Notes",
+    href: "/notes",
+    gloss: "An empty shelf. For now.",
+  },
 ];
+
+export type ChapterKey = Chapter["key"];
+
+export function chapter(key: ChapterKey): Chapter {
+  return chapters.find((c) => c.key === key)!;
+}
+
+/** The margin numeral of each chapter, by key. */
+export const sectionIndex = Object.fromEntries(
+  chapters.map((c) => [c.key, c.numeral]),
+) as Record<ChapterKey, string>;
+
+/** Where the "say hi" block sits at the foot of every page. */
+export const sayHiId = "say-hi";

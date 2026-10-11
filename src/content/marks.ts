@@ -16,12 +16,16 @@ export type Mark = {
 };
 
 export const marks = {
-  skills: {
-    label: "A small mark in the margin beside the skills",
-    note: "Found it. The inked list is what I work with; the pencilled part is what I would like to.",
+  stack: {
+    label: "A small mark in the margin beside the stack",
+    note: "Found it. The inked stuff I use. The pencilled stuff I'm eyeing.",
   },
   notes: {
     label: "A small mark in the margin beside the notes",
-    note: "Nothing is filed yet, but the shelf is ruled. Breaking things is quick; writing down why they broke takes longer.",
+    note: "Breaking things is quick. Writing down why they broke takes longer. Hence the empty shelf.",
+  },
+  about: {
+    label: "A small mark in the margin beside the about page",
+    note: "This page used to read like a cover letter. Much better now.",
   },
 } as const satisfies Record<string, Mark>;

@@ -237,6 +237,94 @@ svg {
   }
 }
 
+/* -- Turning the page ---------------------------------------------------
+
+   Moving between pages of the archive (components/layout/Turn.tsx). Further
+   into the book, the page leaves a little to the left and the next arrives
+   from the right; back towards the front, the other way. It is short, and
+   the distance is small: enough to say which way you went, not a page-flip
+   to sit through. The masthead and the colophon are on every page and do
+   not move.
+
+   With less motion asked for, the page only fades: no movement at all.   */
+
+@keyframes turnFade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes turnSlide {
+  from {
+    translate: var(--turn-from) 0;
+  }
+}
+
+::view-transition {
+  /* Clicks during the turn reach the page, not the overlay. */
+  pointer-events: none;
+}
+
+::view-transition-old(.turn-forward),
+::view-transition-old(.turn-back) {
+  animation:
+    var(--dur-1) ease-in both reverse turnFade,
+    var(--dur-2) var(--ease) both reverse turnSlide;
+}
+
+::view-transition-new(.turn-forward),
+::view-transition-new(.turn-back) {
+  animation:
+    var(--dur-2) ease-out var(--dur-1) both turnFade,
+    var(--dur-3) var(--ease) both turnSlide;
+}
+
+::view-transition-old(.turn-forward) {
+  --turn-from: -1.5rem;
+}
+
+::view-transition-new(.turn-forward) {
+  --turn-from: 2rem;
+}
+
+::view-transition-old(.turn-back) {
+  --turn-from: 1.5rem;
+}
+
+::view-transition-new(.turn-back) {
+  --turn-from: -2rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(.turn-forward),
+  ::view-transition-old(.turn-back) {
+    animation: var(--dur-1) ease-in both reverse turnFade;
+  }
+
+  ::view-transition-new(.turn-forward),
+  ::view-transition-new(.turn-back) {
+    animation: var(--dur-2) ease-out both turnFade;
+  }
+}
+
+/* At night the darkness lies over everything, the turning page included.
+   Without its own place in the transition the torch's canvas would be part
+   of the page underneath, and the turning page would be drawn above it at
+   full brightness for a moment: a flash, which the cave never allows. So
+   the darkness is lifted above the page and held still while it turns. */
+::view-transition-group(torch) {
+  z-index: 2;
+  animation: none;
+}
+
+::view-transition-old(torch) {
+  display: none;
+}
+
+::view-transition-new(torch) {
+  animation: none;
+}
+
 /* While the theme changes, nothing transitions: every colour on the page
    changes in the same frame, rather than each link and label fading to its
    new colour at its own speed. ThemeToggle sets this for two frames. */

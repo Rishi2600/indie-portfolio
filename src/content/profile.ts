@@ -1,57 +1,56 @@
 /**
- * Everything the site says about Rishi.
+ * Everything the site says about Rishi, in his voice.
  *
  * The rule for this file: nothing goes in it that Rishi has not supplied.
- * The wording is editorial; the facts underneath it are not. Where a
- * sentence paraphrases, it paraphrases something he said, and it never adds
- * a number, a product, a responsibility or a technology he did not name.
+ * The tone is casual and the jokes are the page's; the facts underneath them
+ * are not. A sentence may paraphrase something he said, but it never adds a
+ * number, a product, a responsibility or a technology he did not name.
  */
 
 export const profile = {
   opening: {
-    lead: "I build backend systems at PinnTag.",
-    body: "Full-stack developer and open-source contributor, with Web3 and Solana in the mix.",
+    lead: "I write backends for a living at PinnTag, and break things for fun.",
+    body: "Full-stack when I need to be, open source when I can, and a little too into Web3 and Solana.",
+    /**
+     * The things he says he cannot stop thinking about. The opening shows one
+     * at a time and the reader can flip through them.
+     */
+    obsessions: {
+      before: "Lately I can't stop thinking about",
+      items: ["hardware", "AI agents", "real-time systems"],
+    },
   },
 
   now: {
-    title: "What I'm doing now",
+    title: "What I'm up to",
     paragraphs: [
-      "I'm a backend developer at PinnTag. The work runs from backend APIs down to the databases and infrastructure beneath them, across distributed and real-time systems, and out to the newer ground of AI agents.",
-      "Beyond the four subjects under Currently learning, I'm increasingly pulled towards hardware, AI agents and real-time systems.",
+      "Day job: backend developer at PinnTag. That covers a lot of ground: APIs, the databases and infrastructure under them, distributed and real-time systems, and lately AI agents too.",
+      "Outside of that I keep drifting towards hardware. And AI agents. And real-time systems. It's becoming a problem.",
     ],
-    facts: [
-      { term: "Role", value: "Backend developer" },
-      { term: "At", value: "PinnTag" },
-      { term: "Also", value: "Full-stack developer, open-source contributor" },
-      { term: "On my mind", value: ["Hardware", "AI agents", "Real-time systems"] },
-    ],
-    /** The day this section was last revised by hand, not the build date. */
+    /** The day this page was last rewritten by hand, not the build date. */
     updated: "2026-09-16",
   },
 
   about: {
     title: "Breaking things, mostly",
     paragraphs: [
-      "I like breaking things more than I like building them. Push on a system until something gives, then work out why — that is most of the fun.",
-      "I like to experiment, and I will happily burn a lot of tokens doing it.",
-      "I enjoy the difficult parts of engineering, the concepts that don't give themselves up on the first read. Solana and blockchains fascinate me, and hardware is fast becoming an obsession.",
+      "I like breaking things more than I like building them. Push on a system until something gives, then figure out why. That's most of the fun.",
+      "I like to experiment, and I'll happily burn a lot of tokens doing it.",
+      "I like the hard parts, the ideas that don't give themselves up on the first read. Solana and blockchains fascinate me, and hardware is fast turning into an obsession.",
     ],
-    /**
-     * The example the essay leans on. It is told here as part of the story
-     * only; the project itself belongs to the work index, in its own phase.
-     */
+    /** The story the page leans on. The project itself is not in the work. */
     example: {
-      label: "A case in point",
+      label: "Case in point",
       paragraphs: [
-        "When work went remote, the team was spending around nine hours a day in a huddle call. So I built a GatherTown-like space from scratch to deal with it.",
+        "When work went remote, the team was spending about nine hours a day in a huddle call. So I built a GatherTown-style space from scratch to deal with it.",
         "The company uses it now.",
       ],
-      principle: "Build things because you need them.",
+      principle: "Moral of the story: build the thing you need.",
     },
   },
 
   contact: {
-    title: "Let's talk",
-    body: "For interesting engineering problems, collaborations, or just a good technical conversation.",
+    title: "Say hi",
+    body: "Got an interesting engineering problem, a collab, or just want to talk shop? I'm around.",
   },
 } as const;

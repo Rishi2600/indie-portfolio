@@ -2,20 +2,21 @@ import { CavePainting } from "@/components/decorative/CavePainting";
 import { Yantra } from "@/components/decorative/Yantra";
 import { Section } from "@/components/layout/Section";
 import { learning, learningNote } from "@/content/learning";
-import { sectionIndex } from "@/content/site";
+import { chapter } from "@/content/site";
 import styles from "./Learning.module.css";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
 /**
  * A reading index rather than a skills grid: these are things being learned,
- * not things being claimed.
+ * not things being claimed. It is the second half of the now page, and its
+ * numeral says so.
  */
 export function Learning() {
   return (
     <Section
       id="learning"
-      index={sectionIndex.learning}
+      index={`${chapter("now").numeral}.1`}
       label="Learning"
       title="Currently learning"
       backdrop={

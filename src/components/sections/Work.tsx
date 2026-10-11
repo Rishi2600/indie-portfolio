@@ -1,129 +1,139 @@
 import { CavePainting } from "@/components/decorative/CavePainting";
-import type { ReactNode } from "react";
+import { MarginMark } from "@/components/decorative/MarginMark";
 import { Yantra } from "@/components/decorative/Yantra";
 import { Section } from "@/components/layout/Section";
+import { TurnLink } from "@/components/layout/ReadingOrder";
 import { ProjectLinks } from "@/components/projects/ProjectLinks";
-import { TechList } from "@/components/ui/TechIndex";
+import { RandomProject } from "@/components/ui/RandomProject";
 import {
+  drawerNote,
   featuredProjects,
   projectAnchor,
-  projectsNote,
+  projectPath,
+  projectsIntro,
   type Project,
 } from "@/content/projects";
-import { sectionIndex } from "@/content/site";
+import { chapter } from "@/content/site";
 import styles from "./Work.module.css";
-
-/** Ruled but unwritten rows, drawn only if the index is ever emptied. */
-const RESERVED_ROWS = 5;
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-function Note({ term, children }: { term: string; children: ReactNode }) {
+const SHAPE = {
+  line: styles.asLine,
+  quote: styles.asQuote,
+  aside: styles.asAside,
+} as const;
+
+/** The project's name, as the way into its page. */
+function Name({ project }: { project: Project }) {
   return (
-    <div className={styles.note}>
-      <dt className="label">{term}</dt>
-      <dd className={styles.noteBody}>{children}</dd>
-    </div>
+    <h2 className={styles.name}>
+      <TurnLink href={projectPath(project.slug)} className={styles.nameLink}>
+        {project.name}
+      </TurnLink>
+      {project.nameNote ? (
+        <span className={styles.nameNote}> ({project.nameNote})</span>
+      ) : null}
+    </h2>
   );
 }
 
+function Status({ project }: { project: Project }) {
+  return project.status ? (
+    <p className={`label ${styles.status}`}>{project.status}</p>
+  ) : null;
+}
+
 /**
- * One entry in the index.
+ * One entry in the index: a teaser and the ways in, and nothing else. What
+ * it does, why it exists and the interesting parts are on its page; the rest
+ * is in the repository.
  *
- * It reads in the order the work should be read in: what it is, why it
- * exists, the part that was interesting to build, what it was built with,
- * and only then where to find it. The stack is last on purpose — it is the
- * least interesting thing about any of these. How a project is deployed is
- * the short label beside its name; the fuller `usage`, `contribution` and
- * `portfolioReason` are on the project's own page, which the first link
- * leads to, and would only repeat here.
- *
- * Everything here comes from the project record. The entry's id is what the
- * technology cross-reference points at.
+ * Each project introduces itself the way its record says to (Teaser in
+ * content/projects.ts), so the entries do not all look alike: one leads with
+ * its name, one with a line from the project, one with a note in the margin.
+ * They share the numeral, the rule and the links, which is enough to read as
+ * one list.
  */
 function Entry({ project, position }: { project: Project; position: number }) {
+  const { teaser } = project;
+
   return (
-    <li id={projectAnchor(project.slug)} className={styles.entry}>
+    <li
+      id={projectAnchor(project.slug)}
+      className={`${styles.entry} ${SHAPE[teaser.kind]}`}
+    >
       <span className={`numeral ${styles.numeral}`} aria-hidden="true">
         {pad(position)}
       </span>
 
       <div className={styles.body}>
-        <div className={styles.head}>
-          <h3 className={styles.name}>
-            {project.name}
-            {project.nameNote ? (
-              <span className={styles.nameNote}> ({project.nameNote})</span>
-            ) : null}
-          </h3>
-          {project.status ? (
-            <p className={`label ${styles.status}`}>{project.status}</p>
-          ) : null}
-        </div>
-
-        <p className={styles.lede}>{project.shortDescription}</p>
-        <p className={styles.description}>{project.description}</p>
-
-        <dl className={styles.notes}>
-          <Note term="Why">{project.whyBuilt}</Note>
-
-          <Note term="Engineering">
-            <ul className={styles.highlights}>
-              {project.engineeringHighlights.map((highlight) => (
-                <li key={highlight.title}>
-                  <h4 className={styles.highlightTitle}>{highlight.title}</h4>
-                  <p className={styles.highlightBody}>{highlight.body}</p>
-                </li>
-              ))}
-            </ul>
-          </Note>
-
-          <Note term="Built with">
-            <TechList
-              items={project.technologies}
-              place={project.slug}
-              className={styles.stack}
-            />
-          </Note>
-        </dl>
+        {teaser.kind === "quote" ? (
+          <>
+            <p className={styles.quote}>
+              <span aria-hidden="true">“</span>
+              {teaser.text}
+              <span aria-hidden="true">”</span>
+            </p>
+            <div className={styles.head}>
+              <span className={styles.dash} aria-hidden="true">
+                —
+              </span>
+              <Name project={project} />
+              <Status project={project} />
+            </div>
+          </>
+        ) : (
+          <>
+            <div className={styles.head}>
+              <Name project={project} />
+              <Status project={project} />
+            </div>
+            <p className={styles.lede}>{teaser.text}</p>
+          </>
+        )}
 
         <ProjectLinks project={project} entryLink />
       </div>
+
+      {teaser.kind === "aside" ? (
+        <p className={styles.aside}>{teaser.aside}</p>
+      ) : null}
     </li>
   );
 }
 
 export function Work() {
+  const { numeral, label } = chapter("work");
+
   return (
     <Section
       id="work"
-      index={sectionIndex.work}
-      label="Work"
-      title="Selected work"
+      index={numeral}
+      label={label}
+      title="Stuff I built"
+      level={1}
       backdrop={
         <div className={styles.padma}>
           <Yantra rings={3} draw="scroll" stroke={0.55} />
         </div>
       }
     >
-      <p className="note">{projectsNote}</p>
+      <p className="note">{projectsIntro}</p>
+      <RandomProject
+        projects={featuredProjects.map((p) => ({
+          name: p.name,
+          href: projectPath(p.slug),
+        }))}
+      />
 
-      {featuredProjects.length > 0 ? (
-        <ol className={styles.index}>
-          {featuredProjects.map((project, i) => (
-            <Entry key={project.slug} project={project} position={i + 1} />
-          ))}
-        </ol>
-      ) : (
-        <ol className={`${styles.index} ${styles.reservedIndex}`} aria-hidden="true">
-          {Array.from({ length: RESERVED_ROWS }, (_, i) => (
-            <li key={i} className={styles.reserved}>
-              <span className={styles.reservedNumeral}>{pad(i + 1)}</span>
-              <span className={styles.reservedLine} />
-            </li>
-          ))}
-        </ol>
-      )}
+      <ol className={styles.index}>
+        {featuredProjects.map((project, i) => (
+          <Entry key={project.slug} project={project} position={i + 1} />
+        ))}
+      </ol>
+
+      <MarginMark {...drawerNote} top="62%" />
       <CavePainting kind="bison" top="46%" />
     </Section>
   );

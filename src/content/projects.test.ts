@@ -1,13 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
   featuredProjects,
-  neighbours,
   projectAnchor,
   projectBySlug,
   projectPath,
   projects,
 } from "./projects";
-import { sectionIndex } from "./site";
+import { sayHiId, sectionIndex } from "./site";
 
 /**
  * The project records are hand-written, and the mistakes hand-written data
@@ -94,20 +93,17 @@ describe("links", () => {
 });
 
 describe("each record is complete enough to render", () => {
-  const required = [
-    "shortDescription",
-    "description",
-    "whyBuilt",
-    "usage",
-    "portfolioReason",
-  ] as const;
+  const required = ["summary", "description", "whyBuilt"] as const;
 
   it.each(projects.map((p) => [p.name, p] as const))("%s", (_, project) => {
     for (const field of required) {
       expect(project[field].trim().length, field).toBeGreaterThan(20);
     }
+    expect(project.teaser.text.trim().length, "teaser").toBeGreaterThan(20);
+    if (project.teaser.kind === "aside") {
+      expect(project.teaser.aside.trim(), "aside").toBeTruthy();
+    }
     expect(project.technologies.length).toBeGreaterThan(0);
-    expect(project.contribution.length).toBeGreaterThan(0);
     expect(project.engineeringHighlights.length).toBeGreaterThan(0);
     expect(typeof project.featured).toBe("boolean");
 
@@ -129,10 +125,6 @@ describe("values used as React keys are unique within a project", () => {
     expect(new Set(titles).size, "engineering highlight titles").toBe(
       titles.length,
     );
-
-    expect(new Set(project.contribution).size, "contribution").toBe(
-      project.contribution.length,
-    );
   });
 });
 
@@ -147,7 +139,14 @@ describe("addressing", () => {
     const ids = featuredProjects.map((p) => projectAnchor(p.slug));
     expect(new Set(ids).size).toBe(ids.length);
     // The ids the page already uses for its sections and its skip link.
-    const taken = [...Object.keys(sectionIndex), "content", "top", "entry"];
+    const taken = [
+      ...Object.keys(sectionIndex),
+      "learning",
+      sayHiId,
+      "content",
+      "top",
+      "entry",
+    ];
     for (const id of ids) {
       expect(id).toMatch(/^[a-z][a-z0-9-]*$/);
       expect(taken).not.toContain(id);
@@ -155,30 +154,18 @@ describe("addressing", () => {
   });
 });
 
-describe("neighbours", () => {
-  it("leads on from each entry of the index to the ones either side", () => {
+describe("the index", () => {
+  it("does not introduce every project the same way", () => {
+    const shapes = new Set(featuredProjects.map((p) => p.teaser.kind));
+    expect(shapes.size).toBeGreaterThan(1);
+  });
+
+  it("never sets two quotes one after the other", () => {
     featuredProjects.forEach((project, at) => {
-      const { previous, next } = neighbours(project.slug);
-      expect(previous, project.name).toBe(featuredProjects[at - 1]);
-      expect(next, project.name).toBe(featuredProjects[at + 1]);
-    });
-  });
-
-  it("has nothing before the first entry and nothing after the last", () => {
-    expect(neighbours(featuredProjects[0]!.slug).previous).toBeUndefined();
-    expect(neighbours(featuredProjects.at(-1)!.slug).next).toBeUndefined();
-  });
-
-  it("has no neighbours for a project that is not in the index", () => {
-    for (const project of projects.filter((p) => !p.featured)) {
-      expect(neighbours(project.slug)).toEqual({
-        previous: undefined,
-        next: undefined,
-      });
-    }
-    expect(neighbours("no-such-project")).toEqual({
-      previous: undefined,
-      next: undefined,
+      const before = featuredProjects[at - 1];
+      if (project.teaser.kind === "quote") {
+        expect(before?.teaser.kind, project.name).not.toBe("quote");
+      }
     });
   });
 });

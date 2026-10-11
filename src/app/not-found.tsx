@@ -15,14 +15,14 @@ export default function NotFound() {
       <div className={styles.page}>
         <MandalaMark className={styles.mark} size={30} />
         <p className="numeral">404</p>
-        <h1 className={styles.title}>There is no page at this address.</h1>
+        <h1 className={styles.title}>Nothing here. I didn&apos;t break this one, I promise.</h1>
         <p className="prose">
-          It may have been a mistype, or it may never have existed. Everything
-          there is to read starts at the beginning of the site.
+          Maybe a typo, maybe it never existed. Everything that does exist
+          starts at the front.
         </p>
         <p className={styles.back}>
           <Link className="link" href="/">
-            Back to the beginning
+            Back to the front
           </Link>
         </p>
       </div>

@@ -9,10 +9,10 @@ export type Note = {
 export const notes: readonly Note[] = [];
 
 export const notesIntro =
-  "A place for the things I learn, build, break, and understand.";
+  "Where I'll write down what I learn, build, break and eventually understand.";
 
 /** Shown while `notes` is empty. No topics are promised and none are listed. */
 export const notesEmpty = {
-  status: "No entries yet",
-  note: "Nothing has been filed here yet. This part of the archive opens with its first entry.",
+  status: "Nothing yet",
+  note: "The shelf is up. The books aren't. The first one goes here when it's written.",
 };
