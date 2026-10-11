@@ -69,13 +69,15 @@ export type ReliefTile = {
   data: Uint8Array;
 };
 
-export type ReliefKind = "forms" | "grain";
+export type ReliefKind = "forms" | "grain" | "paper";
 
 /**
  * A tile of rock relief.
  *
  * "forms" is the large tile: broad bulges, strata tilted across the wall,
  * and cracks. "grain" is the small tile: the roughness of the stone itself.
+ * "paper" is a leaf of an old book by day: the gentle waves a page takes on
+ * with age, and the fibres laid along it when it was made.
  */
 export function reliefTile(kind: ReliefKind, size: number, seed = 1): ReliefTile {
   const random = seeded(seed);
@@ -106,6 +108,20 @@ export function reliefTile(kind: ReliefKind, size: number, seed = 1): ReliefTile
         height[j * size + i] = h - 0.18 * split;
       }
     }
+  } else if (kind === "paper") {
+    const cockle = fractal(2, 3, random);
+    const fibre = fractal(16, 3, random);
+    const fleck = fractal(32, 2, random);
+    for (let j = 0; j < size; j++) {
+      for (let i = 0; i < size; i++) {
+        const u = i / size;
+        const v = j / size;
+        // Fibres run along the sheet: the noise is read stretched across it,
+        // folded back on itself so the tile still wraps.
+        const along = fibre(u, (v * 4) % 1);
+        height[j * size + i] = 0.7 * cockle(u, v) + 0.2 * along + 0.1 * fleck(u, v);
+      }
+    }
   } else {
     const rough = fractal(8, 4, random);
     for (let j = 0; j < size; j++) {
@@ -123,7 +139,7 @@ export function reliefTile(kind: ReliefKind, size: number, seed = 1): ReliefTile
   for (let k = 0; k < height.length; k++) height[k] = (height[k]! - lo) / (hi - lo || 1);
 
   // Which way each texel faces, from the slope to its neighbours (wrapping).
-  const steep = kind === "forms" ? size * 0.085 : size * 0.05;
+  const steep = kind === "forms" ? size * 0.085 : kind === "paper" ? size * 0.03 : size * 0.05;
   const data = new Uint8Array(size * size * 4);
   const h = (i: number, j: number) => height[((j + size) % size) * size + ((i + size) % size)]!;
   for (let j = 0; j < size; j++) {

@@ -20,7 +20,7 @@ const night = css.slice(css.indexOf(':root[data-theme="night"] {'));
 const token = (name: string) => new RegExp(`${name}:\\s*(#[0-9a-f]{6});`).exec(night)![1]!;
 
 describe("the relief", () => {
-  const tiles = [reliefTile("forms", 128, 7), reliefTile("grain", 64, 3)];
+  const tiles = [reliefTile("forms", 128, 7), reliefTile("grain", 64, 3), reliefTile("paper", 64, 11)];
 
   it.each(tiles)("tiles without a seam (size $size)", ({ size, data }) => {
     // The height across the tile's edge changes no more than it does between
