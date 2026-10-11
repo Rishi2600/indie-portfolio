@@ -30,10 +30,4 @@ export const elsewhere: readonly ProfileLink[] = [
     href: "https://github.com/Rishi2600",
     kind: "profile",
   },
-  {
-    label: "LinkedIn",
-    value: "rishi-raj-687365232",
-    href: "https://www.linkedin.com/in/rishi-raj-687365232",
-    kind: "profile",
-  },
 ];

@@ -1,6 +1,7 @@
 import { CavePainting } from "@/components/decorative/CavePainting";
 import { Yantra } from "@/components/decorative/Yantra";
 import { Section } from "@/components/layout/Section";
+import { InlineList } from "@/components/ui/InlineList";
 import { learning, learningNote } from "@/content/learning";
 import { chapter } from "@/content/site";
 import styles from "./Learning.module.css";
@@ -32,6 +33,9 @@ export function Learning() {
           <li key={entry.title} className={styles.entry}>
             <span className="numeral">{pad(i + 1)}</span>
             <h3 className={styles.title}>{entry.title}</h3>
+            {entry.topics ? (
+              <InlineList items={entry.topics} className={styles.topics} />
+            ) : null}
             {entry.note ? (
               <p className={styles.entryNote}>{entry.note}</p>
             ) : null}
