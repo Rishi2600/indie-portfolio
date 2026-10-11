@@ -1,3 +1,5 @@
+import { EYES_KEY } from "./torch";
+
 /**
  * Day or night, and who decided.
  *
@@ -34,8 +36,14 @@ export function choiceToStore(picked: Theme, systemPrefersDark: boolean): Theme 
  * plain ES5; theme.test.ts runs it against `resolveTheme` case by case so
  * the two cannot drift. Storage that throws (a private window, blocked site
  * data) and a browser without matchMedia both fall through to day.
+ *
+ * It also marks a reader who has never been in the cave (data-eyes="new"),
+ * so their first night opens darker before anything is painted and eases
+ * as their eyes adjust (lib/torch.ts). Where storage cannot be read, nobody
+ * is marked: a reader the site cannot remember is not made to wait every
+ * time.
  */
 export const themeScript =
-  `(function(){var t=null;try{t=localStorage.getItem("${THEME_KEY}")}catch(e){}` +
+  `(function(){var t=null,e=null;try{t=localStorage.getItem("${THEME_KEY}");e=localStorage.getItem("${EYES_KEY}")}catch(x){e="?"}` +
   `if(t!=="day"&&t!=="night"){t=window.matchMedia&&window.matchMedia("${DARK_QUERY}").matches?"night":"day"}` +
-  `document.documentElement.setAttribute("data-theme",t)})()`;
+  `var r=document.documentElement;r.setAttribute("data-theme",t);if(!e)r.setAttribute("data-eyes","new")})()`;

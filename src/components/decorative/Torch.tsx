@@ -2,10 +2,17 @@
 
 import { useEffect, useRef } from "react";
 import {
+  adjusting,
+  ADJUST_SECONDS,
+  createAfterglow,
+  createEmbers,
   createFlame,
   DARK_RGB,
   darknessFor,
+  EYES_KEY,
   STILL,
+  torchLight,
+  type Ember,
   type FlameState,
 } from "@/lib/torch";
 import styles from "./Torch.module.css";
@@ -60,8 +67,13 @@ type Point = { x: number; y: number };
  * background, with the light at the reading line, so the first paint is
  * already the cave; the drawn flame replaces it in a single frame.
  *
+ * Where the torch has just been stays faintly lit for a few seconds; a
+ * reader's first night opens darker and eases as their eyes adjust; and now
+ * and then a spark leaves the flame (lib/torch.ts has each of these).
+ *
  * Readers who ask for more contrast get no darkness at all, and readers who
- * ask for less motion get a light that follows them but does not flicker.
+ * ask for less motion get a light that follows them but does not flicker,
+ * throws no sparks and opens at the cave's ordinary dark.
  */
 export function Torch() {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -76,6 +88,10 @@ export function Torch() {
     const reduced = window.matchMedia(REDUCED_MOTION);
     const moreContrast = window.matchMedia(MORE_CONTRAST);
     const flame = createFlame();
+    const afterglow = createAfterglow();
+    const embers = createEmbers();
+    // When this reader's eyes began adjusting, if this is their first night.
+    let eyesSince: number | null = null;
 
     const readingLine = (): Point => ({ x: innerWidth / 2, y: innerHeight * 0.4 });
 
@@ -111,7 +127,7 @@ export function Torch() {
       drawn = false;
     }
 
-    function draw(f: FlameState) {
+    function draw(f: FlameState, now: number, sparks: readonly Ember[]) {
       const w = canvas!.width;
       const h = canvas!.height;
       const span = reach();
@@ -119,10 +135,36 @@ export function Torch() {
       const cx = (at.x + f.dx * span) / SCALE;
       const cy = (at.y + f.dy * span) / SCALE;
 
+      torchLight.x = at.x + f.dx * span;
+      torchLight.y = at.y + f.dy * span;
+      torchLight.reach = span * f.reach;
+      torchLight.strength = f.strength;
+      torchLight.burning = true;
+
+      const extra = eyesSince === null ? 0 : adjusting(now - eyesSince);
       ctx.globalCompositeOperation = "source-over";
       ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = `rgba(${DARK_RGB.join(",")}, ${darknessFor(f.strength)})`;
+      ctx.fillStyle = `rgba(${DARK_RGB.join(",")}, ${Math.min(0.8, darknessFor(f.strength) + extra)})`;
       ctx.fillRect(0, 0, w, h);
+
+      // Where the torch has just been, still faintly lit.
+      ctx.globalCompositeOperation = "destination-out";
+      for (const mark of afterglow.glowing(now)) {
+        const x = mark.x / SCALE;
+        const y = (mark.y - scrollY) / SCALE;
+        const r = (mark.r * 0.85) / SCALE;
+        if (y + r * TALL < 0 || y - r * TALL > h) continue;
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(WIDE, TALL);
+        const glow = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
+        glow.addColorStop(0, `rgba(0,0,0,${mark.alpha})`);
+        glow.addColorStop(0.6, `rgba(0,0,0,${mark.alpha * 0.7})`);
+        glow.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = glow;
+        ctx.fillRect(-r, -r, r * 2, r * 2);
+        ctx.restore();
+      }
 
       // Everything from here is drawn in a frame centred on the flame and
       // stretched wide, so the pool is an oval.
@@ -162,6 +204,21 @@ export function Torch() {
       ctx.fillStyle = rim;
       ctx.fillRect(-R * 1.2, -R * 1.2, R * 2.4, R * 2.4);
       ctx.restore();
+
+      // A spark, now and then. (restore() brought back the erasing mode the
+      // afterglow left set, so paint is chosen again here.)
+      ctx.globalCompositeOperation = "source-over";
+      for (const spark of sparks) {
+        const x = spark.x / SCALE;
+        const y = spark.y / SCALE;
+        const r = spark.size * 1.6;
+        const ember = ctx.createRadialGradient(x, y, 0, x, y, r);
+        ember.addColorStop(0, `rgba(255,226,170,${spark.alpha})`);
+        ember.addColorStop(0.45, `rgba(255,150,60,${spark.alpha * 0.8})`);
+        ember.addColorStop(1, "rgba(200,70,20,0)");
+        ctx.fillStyle = ember;
+        ctx.fillRect(x - r, y - r, r * 2, r * 2);
+      }
     }
 
     function tick(now: number) {
@@ -171,8 +228,18 @@ export function Torch() {
       const moving = Math.abs(target.x - at.x) + Math.abs(target.y - at.y) > 0.3;
       at.x += (target.x - at.x) * ease;
       at.y += (target.y - at.y) * ease;
-      if (!reduced.matches) draw(flame.step(dt));
-      else if (moving || !drawn) draw(STILL);
+      const seconds = now / 1000;
+      afterglow.leave(at.x, at.y + scrollY, reach(), seconds);
+      if (eyesSince !== null && seconds - eyesSince > ADJUST_SECONDS) {
+        eyesSince = null;
+        root.removeAttribute("data-eyes");
+      }
+      if (!reduced.matches) {
+        const f = flame.step(dt);
+        draw(f, seconds, embers.step(dt, at.x + f.dx * reach(), at.y + f.dy * reach() - reach() * 0.08));
+      } else if (moving || !drawn || afterglow.glowing(seconds).length > 0) {
+        draw(STILL, seconds, []);
+      }
       if (!drawn) canvas!.setAttribute("data-burning", "");
       drawn = true;
       frame = requestAnimationFrame(tick);
@@ -183,8 +250,23 @@ export function Torch() {
       !moreContrast.matches &&
       document.visibilityState === "visible";
 
+    // A reader's first night: the cave opens darker and eases as their eyes
+    // adjust. Recorded at once, so it never happens to them again. Readers
+    // who ask for less motion are spared the wait.
+    function firstNight() {
+      if (root.getAttribute("data-eyes") !== "new") return;
+      try {
+        localStorage.setItem(EYES_KEY, "1");
+      } catch {
+        // Not remembered; the head script will not mark them next time either.
+      }
+      if (reduced.matches) root.removeAttribute("data-eyes");
+      else eyesSince = performance.now() / 1000;
+    }
+
     function update() {
       if (lit() && !frame) {
+        firstNight();
         last = 0;
         // Resizing clears the canvas: show the CSS dark again until the
         // first frame is drawn, so the page is never lit all over.
@@ -194,6 +276,8 @@ export function Torch() {
       } else if (!lit() && frame) {
         cancelAnimationFrame(frame);
         frame = 0;
+        torchLight.burning = false;
+        afterglow.clear();
       }
     }
 

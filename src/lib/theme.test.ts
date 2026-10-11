@@ -34,26 +34,37 @@ describe("the script in <head>", () => {
   afterEach(() => vi.unstubAllGlobals());
 
   /** Runs the real script string against a stubbed browser; returns the theme it set. */
-  function run({ stored, dark, storage = "works", matchMedia = true }: {
+  function run({ stored, dark, storage = "works", matchMedia = true, eyes = "1" }: {
     stored: string | null;
     dark: boolean;
     storage?: "works" | "throws";
     matchMedia?: boolean;
+    eyes?: string | null;
   }): string | null {
-    let set: string | null = null;
+    return runAll({ stored, dark, storage, matchMedia, eyes }).theme;
+  }
+
+  function runAll({ stored, dark, storage = "works", matchMedia = true, eyes = "1" }: {
+    stored: string | null;
+    dark: boolean;
+    storage?: "works" | "throws";
+    matchMedia?: boolean;
+    eyes?: string | null;
+  }) {
+    const attrs: Record<string, string> = {};
     const media = matchMedia ? () => ({ matches: dark }) : undefined;
     vi.stubGlobal("window", { matchMedia: media });
     vi.stubGlobal("localStorage", {
-      getItem: () => {
+      getItem: (key: string) => {
         if (storage === "throws") throw new Error("SecurityError");
-        return stored;
+        return key === "cave-eyes" ? eyes : stored;
       },
     });
     vi.stubGlobal("document", {
-      documentElement: { setAttribute: (name: string, value: string) => { if (name === "data-theme") set = value; } },
+      documentElement: { setAttribute: (name: string, value: string) => { attrs[name] = value; } },
     });
     new Function(themeScript)();
-    return set;
+    return { theme: attrs["data-theme"] ?? null, eyes: attrs["data-eyes"] ?? null };
   }
 
   const cases: [string | null, boolean][] = [
@@ -73,6 +84,15 @@ describe("the script in <head>", () => {
 
   it("falls back to day in a browser without matchMedia", () => {
     expect(run({ stored: null, dark: true, matchMedia: false })).toBe<Theme>("day");
+  });
+
+  it("marks a reader who has never been in the cave, and nobody else", () => {
+    expect(runAll({ stored: null, dark: true, eyes: null }).eyes).toBe("new");
+    expect(runAll({ stored: null, dark: true, eyes: "1" }).eyes).toBeNull();
+  });
+
+  it("marks nobody when storage cannot be read, so no one waits on every visit", () => {
+    expect(runAll({ stored: null, dark: true, storage: "throws" }).eyes).toBeNull();
   });
 
   it("is plain enough for any browser: no arrow functions, let, const or template literals", () => {
