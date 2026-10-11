@@ -1,7 +1,20 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { createFlame, DARKNESS, darknessFor, inTheDark, STILL } from "./torch";
+import {
+  adjusting,
+  ADJUST_SECONDS,
+  AFTERGLOW_SECONDS,
+  AFTERGLOW_STRENGTH,
+  createAfterglow,
+  createEmbers,
+  createFlame,
+  DARKNESS,
+  darknessFor,
+  FIRST_DARKNESS,
+  inTheDark,
+  STILL,
+} from "./torch";
 
 /** A repeatable stand-in for Math.random. */
 function seeded(seed: number) {
@@ -140,5 +153,101 @@ describe("the flame", () => {
   it("has a still state for readers who ask for less motion", () => {
     expect(STILL).toMatchObject({ reach: 1, strength: 1, dx: 0, dy: 0 });
     expect(STILL.licks.every((l) => l === 0)).toBe(true);
+  });
+});
+
+describe("afterglow", () => {
+  it("lingers where the torch has been, and fades to nothing", () => {
+    const glow = createAfterglow();
+    glow.leave(100, 100, 300, 0);
+    glow.leave(400, 100, 300, 0.1);
+    const soon = glow.glowing(0.5);
+    expect(soon).toHaveLength(2);
+    expect(soon[0]!.alpha).toBeLessThanOrEqual(AFTERGLOW_STRENGTH);
+    expect(glow.glowing(1.5)[0]!.alpha).toBeLessThan(soon[0]!.alpha);
+    expect(glow.glowing(AFTERGLOW_SECONDS + 0.2)).toHaveLength(0);
+  });
+
+  it("never lifts the dark as far as the light itself does", () => {
+    expect(AFTERGLOW_STRENGTH).toBeLessThan(0.5);
+  });
+
+  it("keeps a held torch's place glowing from the moment it leaves, not from when it arrived", () => {
+    const glow = createAfterglow();
+    for (let t = 0; t <= 10; t += 0.1) glow.leave(200, 200, 300, t);
+    expect(glow.glowing(10)).toHaveLength(1);
+    expect(glow.glowing(11)[0]!.alpha).toBeGreaterThan(0);
+  });
+
+  it("keeps a bounded number of marks however far the torch travels", () => {
+    const glow = createAfterglow();
+    for (let i = 0; i < 1000; i++) glow.leave(i * 100, 0, 300, i * 0.001);
+    expect(glow.glowing(1).length).toBeLessThanOrEqual(48);
+  });
+});
+
+describe("eyes adjusting", () => {
+  it("starts darker than the cave and settles to it", () => {
+    expect(DARKNESS + adjusting(0)).toBeCloseTo(FIRST_DARKNESS);
+    expect(adjusting(ADJUST_SECONDS)).toBe(0);
+    expect(adjusting(ADJUST_SECONDS * 3)).toBe(0);
+  });
+
+  it("only ever eases, never darkens again on the way", () => {
+    let previous = adjusting(0);
+    for (let t = 0.05; t <= ADJUST_SECONDS; t += 0.05) {
+      const now = adjusting(t);
+      expect(now).toBeLessThanOrEqual(previous + 1e-12);
+      previous = now;
+    }
+  });
+
+  it("is brief and modest", () => {
+    expect(ADJUST_SECONDS).toBeLessThanOrEqual(5);
+    expect(FIRST_DARKNESS).toBeLessThanOrEqual(0.72);
+  });
+});
+
+describe("embers", () => {
+  function fly(seconds: number, seed = 1) {
+    const embers = createEmbers(seeded(seed));
+    const frames: ReturnType<ReturnType<typeof createEmbers>["step"]>[] = [];
+    for (let t = 0; t < seconds; t += 1 / 60) frames.push(embers.step(1 / 60, 500, 500));
+    return frames;
+  }
+
+  it.each([1, 2, 3])("are rare: one every twelve to thirty-two seconds (seed %i)", (seed) => {
+    const frames = fly(600, seed);
+    let born = 0;
+    for (let i = 1; i < frames.length; i++) if (frames[i]!.length > frames[i - 1]!.length) born++;
+    expect(born).toBeGreaterThanOrEqual(600 / 32 - 2);
+    expect(born).toBeLessThanOrEqual(600 / 12 + 2);
+  });
+
+  it("never fill the air: at most two at once", () => {
+    for (const frame of fly(600)) expect(frame.length).toBeLessThanOrEqual(2);
+  });
+
+  it("rise from the flame and go out within about two seconds", () => {
+    const embers = createEmbers(seeded(5));
+    let first: { y: number } | undefined;
+    let t = 0;
+    for (; t < 60; t += 1 / 60) {
+      const [spark] = embers.step(1 / 60, 500, 500);
+      if (spark && !first) first = spark;
+      if (first && !spark) break;
+      if (spark && first) expect(spark.y).toBeLessThanOrEqual(first.y + 1);
+    }
+    expect(first).toBeDefined();
+  });
+
+  it("are tiny and never brighter than full", () => {
+    for (const frame of fly(300)) {
+      for (const e of frame) {
+        expect(e.alpha).toBeGreaterThanOrEqual(0);
+        expect(e.alpha).toBeLessThanOrEqual(1);
+        expect(e.size).toBeLessThanOrEqual(2);
+      }
+    }
   });
 });

@@ -116,3 +116,141 @@ export function createFlame(random: () => number = Math.random) {
     },
   };
 }
+
+/**
+ * Where the light is, for the other parts of the cave that answer to it (the
+ * rock, the paintings). Torch writes it every frame; nothing else does. In
+ * viewport pixels, like the pointer.
+ */
+export const torchLight = {
+  x: 0,
+  y: 0,
+  /** The light's usual reach, in pixels. */
+  reach: 0,
+  /** How brightly it burns, as FlameState.strength. */
+  strength: 1,
+  /** Whether the torch is burning at all. */
+  burning: false,
+};
+
+/* -- Afterglow -------------------------------------------------------------
+
+   Where the torch has just been stays faintly lit for a few seconds before
+   the dark closes back in, so the lines just read are still there to glance
+   back at. Marks are kept in page coordinates, so they stay on the writing
+   they lit when the page scrolls. */
+
+/** How long a place stays faintly lit after the torch leaves it. */
+export const AFTERGLOW_SECONDS = 3.5;
+/** At most, how much of the dark an afterglow lifts: well short of the light. */
+export const AFTERGLOW_STRENGTH = 0.4;
+const MAX_MARKS = 48;
+
+export type GlowMark = { x: number; y: number; r: number; alpha: number };
+
+export function createAfterglow() {
+  let marks: { x: number; y: number; r: number; t: number }[] = [];
+
+  return {
+    /** The torch is at (x, y) on the page, with reach r, at time `now` in seconds. */
+    leave(x: number, y: number, r: number, now: number) {
+      const last = marks[marks.length - 1];
+      // A torch held still refreshes the mark it is on rather than piling up new
+      // ones, so the place keeps its glow from the moment the torch leaves it.
+      if (last && Math.hypot(last.x - x, last.y - y) < r * 0.15) {
+        last.t = now;
+        return;
+      }
+      marks.push({ x, y, r, t: now });
+      if (marks.length > MAX_MARKS) marks.shift();
+    },
+    /** What is still glowing at `now`, fading as it ages. */
+    glowing(now: number): GlowMark[] {
+      marks = marks.filter((m) => now - m.t < AFTERGLOW_SECONDS);
+      return marks.map((m) => {
+        const left = 1 - (now - m.t) / AFTERGLOW_SECONDS;
+        return { x: m.x, y: m.y, r: m.r, alpha: AFTERGLOW_STRENGTH * left * left };
+      });
+    },
+    clear() {
+      marks = [];
+    },
+  };
+}
+
+/* -- Eyes adjusting --------------------------------------------------------
+
+   The first time a reader steps into the cave it is darker than usual, and
+   it eases to its ordinary dark over a few seconds, as eyes adjust. It
+   happens once: the head script marks a reader who has never been in (see
+   lib/theme.ts), and the torch records that they have. The torch is already
+   on the title, so the name is never in the dark. */
+
+export const EYES_KEY = "cave-eyes";
+export const ADJUST_SECONDS = 4;
+/** How dark the cave is in the first moment, before the eyes adjust. */
+export const FIRST_DARKNESS = 0.7;
+
+/** The extra darkness at `elapsed` seconds into the first visit. */
+export function adjusting(elapsed: number): number {
+  const t = Math.min(Math.max(elapsed / ADJUST_SECONDS, 0), 1);
+  const eased = t * t * (3 - 2 * t);
+  return (FIRST_DARKNESS - DARKNESS) * (1 - eased);
+}
+
+/* -- Embers ----------------------------------------------------------------
+
+   Now and then a spark leaves the flame, rises, drifts and goes out. Rare on
+   purpose: one every twelve to thirty-two seconds, never more than two in the
+   air, each gone within about two seconds. */
+
+export type Ember = { x: number; y: number; alpha: number; size: number };
+
+export function createEmbers(random: () => number = Math.random) {
+  type Spark = {
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    age: number;
+    life: number;
+    size: number;
+    sway: number;
+  };
+  let sparks: Spark[] = [];
+  let until = 6 + random() * 10;
+
+  return {
+    /** Advances dt seconds with the flame at (x, y); returns the sparks in the air. */
+    step(dt: number, x: number, y: number): Ember[] {
+      const step = Math.min(Math.max(dt, 0), 0.1);
+      until -= step;
+      if (until <= 0 && sparks.length < 2) {
+        sparks.push({
+          x: x + (random() - 0.5) * 14,
+          y: y - 8,
+          vx: (random() - 0.5) * 22,
+          vy: -(46 + random() * 34),
+          age: 0,
+          life: 1.3 + random() * 0.8,
+          size: 1.1 + random() * 0.9,
+          sway: random() * Math.PI * 2,
+        });
+        until = 12 + random() * 20;
+      }
+      sparks = sparks.filter((s) => {
+        s.age += step;
+        s.vy *= Math.exp(-step * 0.6);
+        s.x += (s.vx + Math.sin(s.age * 6 + s.sway) * 9) * step;
+        s.y += s.vy * step;
+        return s.age < s.life;
+      });
+      return sparks.map((s) => ({
+        x: s.x,
+        y: s.y,
+        size: s.size,
+        alpha: Math.min(1, s.age / 0.15) * Math.pow(1 - s.age / s.life, 1.5),
+      }));
+    },
+  };
+}
