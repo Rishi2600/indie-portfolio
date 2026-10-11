@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Birds } from "@/components/decorative/Birds";
 import { PaperGrain } from "@/components/decorative/PaperGrain";
+import { Rock } from "@/components/decorative/Rock";
 import { Torch } from "@/components/decorative/Torch";
 import { site } from "@/content/site";
 import { fontVariables } from "@/lib/fonts";
@@ -74,6 +75,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
+        <Rock />
         <PaperGrain />
         <Birds />
         <div className="shell">

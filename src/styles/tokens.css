@@ -176,7 +176,8 @@
   /* The cave closes in at the edges. */
   --shade: rgba(0, 0, 0, 0.55);
   --shade-from: 38%;
-  /* Stone: broad mottling where the rock catches light, over a fine speckle. */
-  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.008 0.019' numOctaves='4' seed='7' stitchTiles='stitch' result='a'/%3E%3CfeColorMatrix in='a' type='matrix' values='0 0 0 0 0.92 0 0 0 0 0.8 0 0 0 0 0.64 0 0 0 1.1 -0.5' result='m'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='3' stitchTiles='stitch' result='b'/%3E%3CfeColorMatrix in='b' type='matrix' values='0 0 0 0 0.95 0 0 0 0 0.88 0 0 0 0 0.76 0.55 0.3 0.15 0 -0.5' result='f'/%3E%3CfeMerge%3E%3CfeMergeNode in='m'/%3E%3CfeMergeNode in='f'/%3E%3C/feMerge%3E%3C/filter%3E%3Crect width='320' height='320' filter='url(%23s)'/%3E%3C/svg%3E");
-  --grain-opacity: 0.13;
+  /* The stone's fine speckle. Its forms, ledges and cracks are the rock
+     wall's own (Rock.tsx), lit by the torch. */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.95 0 0 0 0 0.88 0 0 0 0 0.76 0.55 0.3 0.15 0 -0.5'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
+  --grain-opacity: 0.16;
 }
