@@ -13,18 +13,19 @@ const FINIALS = [
  * The ruled page everything on the site sits inside. There is exactly one,
  * wrapping masthead, contents and colophon together, so the side rules are
  * continuous rather than restarting at each band. On wide screens each rule
- * ends in a small rosette, the way a scribe finishes a ruled border.
+ * ends in a small rosette, the way a scribe finishes a ruled border, laid in
+ * gold leaf by day.
  */
 export function Folio({ children }: { children: ReactNode }) {
   return (
     <div className={styles.folio}>
-      {FINIALS.map((position) => (
+      {FINIALS.map((position, i) => (
         <span
           key={position}
           className={`${styles.finial} ${position}`}
           aria-hidden="true"
         >
-          <Rosette size={11} />
+          <Rosette size={11} gilt={`gilt-finial-${i}`} />
         </span>
       ))}
       {children}

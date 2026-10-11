@@ -10,6 +10,8 @@
  * changes the whole figure and nothing has to be redrawn by hand.
  */
 
+import { GoldLeaf } from "./GoldLeaf";
+
 const PETALS = 8;
 const CENTRE = 32;
 const DOT_RADIUS = 24.5;
@@ -40,6 +42,8 @@ type Props = {
   detail?: "full" | "simple";
   /** Supplying a title makes the mark an image; without one it is hidden. */
   title?: string;
+  /** Laid in gold leaf by day, under this gradient id. */
+  gilt?: string;
 };
 
 export function MandalaMark({
@@ -47,7 +51,9 @@ export function MandalaMark({
   className,
   detail = "full",
   title,
+  gilt,
 }: Props) {
+  const ink = gilt ? `url(#${gilt})` : "currentColor";
   // vectorEffect holds the stroke at a constant device width instead of
   // letting it scale with the figure, so the small mark stays a crisp
   // hairline rather than thinning to sub-pixel and greying out. It is not an
@@ -61,13 +67,15 @@ export function MandalaMark({
       height={size}
       className={className}
       fill="none"
-      stroke="currentColor"
+      stroke={ink}
       strokeWidth={detail === "simple" ? 2 : 1.25}
       strokeLinejoin="round"
       vectorEffect="non-scaling-stroke"
       {...(title ? { role: "img" } : { "aria-hidden": true })}
+      {...(gilt ? { "data-gilt": "" } : {})}
     >
       {title ? <title>{title}</title> : null}
+      {gilt ? <GoldLeaf id={gilt} /> : null}
       <circle cx={CENTRE} cy={CENTRE} r="27" vectorEffect="non-scaling-stroke" />
       {petalAngles.map((angle) => (
         <path
@@ -86,7 +94,7 @@ export function MandalaMark({
               cx={dot.x.toFixed(2)}
               cy={dot.y.toFixed(2)}
               r="0.9"
-              fill="currentColor"
+              fill={ink}
               stroke="none"
             />
           ))}
@@ -96,7 +104,7 @@ export function MandalaMark({
         cx={CENTRE}
         cy={CENTRE}
         r="2.4"
-        fill="currentColor"
+        fill={ink}
         stroke="none"
       />
     </svg>

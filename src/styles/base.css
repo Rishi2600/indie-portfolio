@@ -281,3 +281,26 @@ svg {
 :root[data-theme="night"] [data-lit] > * {
   opacity: calc(var(--figure-opacity, 1) * 2);
 }
+
+/* Gold leaf is a daylight thing. At night, in high-contrast modes and in
+   print the gilded marks are ink again. */
+:root[data-theme="night"] [data-gilt][stroke^="url"],
+:root[data-theme="night"] [data-gilt] [fill^="url"] {
+  stroke: currentColor;
+}
+
+:root[data-theme="night"] [data-gilt] [fill^="url"] {
+  fill: currentColor;
+  stroke: none;
+}
+
+@media (forced-colors: active), print {
+  [data-gilt][stroke^="url"] {
+    stroke: currentColor;
+  }
+
+  [data-gilt] [fill^="url"] {
+    fill: currentColor;
+    stroke: none;
+  }
+}

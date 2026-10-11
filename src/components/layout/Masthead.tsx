@@ -26,7 +26,7 @@ export function Masthead({ basePath = "" }: { basePath?: string }) {
           className={styles.mark}
           aria-label={`${site.name} — home`}
         >
-          <MandalaMark size={26} />
+          <MandalaMark size={26} gilt="gilt-mark" />
         </Link>
 
         <nav aria-label="Sections">

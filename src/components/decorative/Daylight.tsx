@@ -171,7 +171,8 @@ function paperTile(tile: ReliefTile, sun: Sun): HTMLCanvasElement {
  * gold still.
  */
 function gild(still: boolean) {
-  const at = still ? 0.35 : (((scrollY / 900) % 1) + 1) % 1;
+  // At the top of the page the glint is across the middle of the mark.
+  const at = still ? 0.35 : (((scrollY / 900 + 0.35) % 1) + 1) % 1;
   for (const gradient of document.querySelectorAll<SVGLinearGradientElement>("linearGradient[data-glint]")) {
     const stops = gradient.querySelectorAll("stop");
     const offsets = [0, at - 0.18, at, at + 0.18, 1].map((o) => Math.min(Math.max(o, 0), 1));

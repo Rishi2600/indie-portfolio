@@ -47,6 +47,13 @@
      or two marks that must not read as red. */
   --indigo: #2d4257;
 
+  /* -- Gold leaf ---------------------------------------------------------
+     Laid on the masthead's mark and the page's corner rosettes by day, as a
+     manuscript is illuminated: deep gold, catching a band of light. Two
+     small marks only, never text, never a field of colour. */
+  --gilt-deep: #8c6a2a;
+  --gilt-light: #e6c56e;
+
   /* What a keyboard reader sees around the element they are on: the second
      pigment by day. */
   --focus: var(--indigo);

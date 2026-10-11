@@ -1,3 +1,5 @@
+import { GoldLeaf } from "./GoldLeaf";
+
 const CENTRE = 12;
 /** The same petal as the mandala's, at four-fold symmetry instead of eight. */
 const PETAL = "M12 12 C9.6 8.4 9.6 5.4 12 3 C14.4 5.4 14.4 8.4 12 12 Z";
@@ -6,6 +8,8 @@ const ANGLES = [0, 90, 180, 270];
 type Props = {
   size: number;
   className?: string;
+  /** Laid in gold leaf by day, under this gradient id. */
+  gilt?: string;
 };
 
 /**
@@ -13,7 +17,8 @@ type Props = {
  * at text size. It closes the page, caps the margin rules, and marks the one
  * sentence on the site that is set as a principle. Always decorative.
  */
-export function Rosette({ size, className }: Props) {
+export function Rosette({ size, className, gilt }: Props) {
+  const ink = gilt ? `url(#${gilt})` : "currentColor";
   return (
     <svg
       viewBox="0 0 24 24"
@@ -21,12 +26,14 @@ export function Rosette({ size, className }: Props) {
       height={size}
       className={className}
       fill="none"
-      stroke="currentColor"
+      stroke={ink}
       strokeWidth="1.4"
       strokeLinejoin="round"
       aria-hidden="true"
       focusable="false"
+      {...(gilt ? { "data-gilt": "" } : {})}
     >
+      {gilt ? <GoldLeaf id={gilt} /> : null}
       {ANGLES.map((angle) => (
         <path
           key={angle}
@@ -39,7 +46,7 @@ export function Rosette({ size, className }: Props) {
         cx={CENTRE}
         cy={CENTRE}
         r="1.1"
-        fill="currentColor"
+        fill={ink}
         stroke="none"
       />
     </svg>
