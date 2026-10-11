@@ -170,6 +170,10 @@
   --rubric: #e9825a;
   --rubric-soft: #d06c49;
 
+  /* The same ochre as it has worn into the rock, for the paintings the
+     torch finds (CavePainting.tsx). Decoration, never text. */
+  --painting: #c0603a;
+
   --focus: #f0c46e;
 
   --selection: #6a3a26;

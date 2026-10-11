@@ -1,3 +1,4 @@
+import { CavePainting } from "@/components/decorative/CavePainting";
 import { MarginMark } from "@/components/decorative/MarginMark";
 import { Section } from "@/components/layout/Section";
 import { marks } from "@/content/marks";
@@ -36,6 +37,7 @@ export function Notes() {
       )}
 
       <MarginMark {...marks.notes} top="30%" />
+      <CavePainting kind="hands" top="52%" />
     </Section>
   );
 }

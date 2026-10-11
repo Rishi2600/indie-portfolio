@@ -141,6 +141,20 @@ export function Torch() {
       torchLight.strength = f.strength;
       torchLight.burning = true;
 
+      // Tell each painting on the wall where the light is, relative to
+      // itself, so only the light shows it (CavePainting).
+      const paintings = document.querySelectorAll<HTMLElement>("[data-painting]");
+      if (paintings.length > 0) {
+        const boxes = Array.from(paintings, (p) => p.getBoundingClientRect());
+        paintings.forEach((painting, i) => {
+          const box = boxes[i]!;
+          if (box.width === 0 || box.bottom < -span || box.top > innerHeight + span) return;
+          painting.style.setProperty("--light-x", `${torchLight.x - box.left}px`);
+          painting.style.setProperty("--light-y", `${torchLight.y - box.top}px`);
+          painting.style.setProperty("--light-r", `${torchLight.reach * 0.75 * f.strength}px`);
+        });
+      }
+
       const extra = eyesSince === null ? 0 : adjusting(now - eyesSince);
       ctx.globalCompositeOperation = "source-over";
       ctx.clearRect(0, 0, w, h);

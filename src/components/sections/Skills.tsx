@@ -1,3 +1,4 @@
+import { CavePainting } from "@/components/decorative/CavePainting";
 import { MarginMark } from "@/components/decorative/MarginMark";
 import { Section } from "@/components/layout/Section";
 import { InlineList } from "@/components/ui/InlineList";
@@ -89,6 +90,7 @@ export function Skills() {
       </section>
 
       <MarginMark {...marks.skills} top="38%" />
+      <CavePainting kind="dancers" top="70%" />
     </Section>
   );
 }

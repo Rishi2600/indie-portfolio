@@ -1,3 +1,4 @@
+import { CavePainting } from "@/components/decorative/CavePainting";
 import { Construction } from "@/components/decorative/Construction";
 import { Section } from "@/components/layout/Section";
 import { InlineList } from "@/components/ui/InlineList";
@@ -47,6 +48,7 @@ export function Now() {
           {formatDate(now.updated)}
         </time>
       </p>
+      <CavePainting kind="archers" top="52%" />
     </Section>
   );
 }

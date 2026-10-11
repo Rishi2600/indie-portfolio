@@ -1,3 +1,4 @@
+import { CavePainting } from "@/components/decorative/CavePainting";
 import type { ReactNode } from "react";
 import { Yantra } from "@/components/decorative/Yantra";
 import { Section } from "@/components/layout/Section";
@@ -123,6 +124,7 @@ export function Work() {
           ))}
         </ol>
       )}
+      <CavePainting kind="bison" top="46%" />
     </Section>
   );
 }

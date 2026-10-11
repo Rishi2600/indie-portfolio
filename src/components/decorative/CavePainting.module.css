@@ -1,0 +1,46 @@
+/*
+  A painting on the cave wall (CavePainting.tsx). Behind the section's
+  writing, in the open stone to its right, and masked so that only the
+  torch's direct light shows it: the mask is centred where Torch.tsx says the
+  light is, relative to this painting.
+*/
+.painting {
+  display: none;
+}
+
+/* Only where there is open stone beside the writing to paint on. */
+@media (min-width: 76rem) {
+  :global(:root[data-theme="night"]) .painting {
+    display: block;
+    position: absolute;
+    top: var(--top);
+    right: calc(-1 * var(--space-6) - var(--space-4) * 0.75);
+    z-index: -1;
+    width: var(--width);
+    pointer-events: none;
+    color: var(--painting);
+    opacity: 0.78;
+    mask-image: radial-gradient(
+      circle var(--light-r, 0px) at var(--light-x, -9999px) var(--light-y, -9999px),
+      #000 25%,
+      rgb(0 0 0 / 0.5) 60%,
+      transparent 100%
+    );
+  }
+}
+
+/* Drawn once and kept as its own layer, so moving the light only moves the
+   mask over it, rather than repainting the worn paint every frame. */
+.art {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  will-change: transform;
+}
+
+@media (prefers-contrast: more), (forced-colors: active), print {
+  :global(:root[data-theme="night"]) .painting {
+    display: none;
+  }
+}

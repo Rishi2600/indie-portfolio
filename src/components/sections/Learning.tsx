@@ -1,3 +1,4 @@
+import { CavePainting } from "@/components/decorative/CavePainting";
 import { Yantra } from "@/components/decorative/Yantra";
 import { Section } from "@/components/layout/Section";
 import { learning, learningNote } from "@/content/learning";
@@ -36,6 +37,7 @@ export function Learning() {
           </li>
         ))}
       </ol>
+      <CavePainting kind="deer" top="38%" />
     </Section>
   );
 }
