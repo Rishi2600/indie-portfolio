@@ -59,7 +59,7 @@ export type Project = {
 /**
  * In the order Rishi listed them, which is the order they are read in.
  *
- * Five are featured. The sixth is kept here whole and not shown: it is last
+ * Six are featured. The seventh is kept here whole and not shown: it is last
  * in the supplied order and its name is a working title, and that is the
  * whole reason. Flipping `featured` is all it takes to change which appear.
  */
@@ -260,6 +260,42 @@ export const projects: readonly Project[] = [
     featured: true,
   },
   {
+    slug: "delve",
+    name: "delve",
+    teaser: {
+      kind: "quote",
+      text: "Every directory becomes a room, every file becomes a monster.",
+    },
+    summary:
+      "A terminal roguelike that turns a directory into a dungeon, and only ever reads it.",
+    description:
+      "Point it at a folder and play it. Folders are rooms, files are monsters: the extension picks the kind, the size picks how tough, the last edit picks whether it's awake. Your .gitignore hides the secret rooms. A freshly cloned repo is the worst case, because every file in it is hunting you.",
+    whyBuilt:
+      "I wanted to walk around my own projects instead of just listing them. Killing README.md and looting a Scroll of README.md is a bonus.",
+    technologies: ["Rust", "ratatui", "crossterm", "clap"],
+    engineeringHighlights: [
+      {
+        title: "Kill files, delete nothing",
+        body: "It's strictly read-only. A test snapshots a folder (sizes, permissions, mtimes, content hashes, symlink targets) and checks it's identical after a scan and a 400-turn session of fighting and looting. Making the scanner write a file breaks it.",
+      },
+      {
+        title: "Same folder, same dungeon",
+        body: "A hand-written FNV-1a hash of the folder's path seeds ChaCha8, so a folder always gives you the same map.",
+      },
+      {
+        title: "Secrets live in .gitignore",
+        body: "Ignored folders become secret rooms behind secret doors you have to search for. Tougher monsters in there, better loot.",
+      },
+      {
+        title: "A bot checks the balance",
+        body: "A stair-diving bot has to be able to win and to lose on a just-cloned project. If it only ever does one, the tests fail.",
+      },
+    ],
+    status: "On crates.io",
+    github: "https://github.com/Rishi2600/delve",
+    featured: true,
+  },
+  {
     slug: "pulse-analytics",
     name: "Pulse Analytics",
     nameNote: "working title",
@@ -332,8 +368,8 @@ export function projectAnchor(slug: string): string {
 export const projectsIntro =
   "The short version. Each one has a page with the fun parts, and the repo has everything else.";
 
-/** The sixth project, mentioned only in the margin of the index. */
+/** The seventh project, mentioned only in the margin of the index. */
 export const drawerNote = {
   label: "A small mark in the margin beside the work",
-  note: "There's a sixth one in the drawer. It doesn't have a proper name yet, so it stays in there.",
+  note: "There's a seventh one in the drawer. It doesn't have a proper name yet, so it stays in there.",
 };

@@ -15,7 +15,7 @@ import { sayHiId, sectionIndex } from "./site";
  * keys. None of this tests prose.
  */
 
-const FEATURED_COUNT = 5;
+const FEATURED_COUNT = 6;
 
 describe("the archive", () => {
   it("holds every candidate, featured or not", () => {
