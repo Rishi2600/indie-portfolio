@@ -44,7 +44,9 @@ function noiseField(seed: number): Float32Array {
   let s = seed >>> 0;
   const random = () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296);
   const field = new Float32Array(TILE * TILE);
-  let amplitude = 0.55;
+  // Weighted towards the fine octaves: paint flakes in chips and crumbs,
+  // with only a few broad losses, not in even breaks along a stroke.
+  let amplitude = 0.4;
   for (const cell of [64, 32, 16, 8, 4]) {
     const n = TILE / cell;
     const grid = Array.from({ length: n * n }, random);
@@ -62,7 +64,7 @@ function noiseField(seed: number): Float32Array {
         field[y * TILE + x]! += (top + (bottom - top) * ty) * amplitude;
       }
     }
-    amplitude *= 0.55;
+    amplitude *= 0.74;
   }
   return field;
 }
@@ -147,35 +149,69 @@ function stroke(ctx: CanvasRenderingContext2D, mark: StrokeMark) {
       ctx.stroke();
     }
   }
+  // The ridges of a fingertip dragged through paint: thin streaks along the
+  // stroke where less of it was laid down.
+  ctx.globalCompositeOperation = "destination-out";
+  ctx.globalAlpha = 0.28;
+  for (const offset of [-0.28, -0.06, 0.2]) {
+    ctx.lineWidth = mark.size * 0.07;
+    ctx.beginPath();
+    points.forEach((p, i) => {
+      const q = points[Math.min(i + 1, points.length - 1)]!;
+      const r = points[Math.max(i - 1, 0)]!;
+      const nx = -(q.y - r.y);
+      const ny = q.x - r.x;
+      const length = Math.hypot(nx, ny) || 1;
+      const shift = offset * mark.size * (0.35 + 0.65 * p.w);
+      const x = p.x + (nx / length) * shift;
+      const y = p.y + (ny / length) * shift;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  }
+  ctx.globalCompositeOperation = "source-over";
   ctx.globalAlpha = 1;
 }
 
 /** A hand, palm at the origin and fingers up, a little different every time. */
 function handShape(ctx: CanvasRenderingContext2D, size: number, random: () => number) {
-  const palm = size * 0.24;
+  const palm = size * 0.27;
   ctx.beginPath();
-  ctx.ellipse(0, 0, palm * 0.95, palm * 1.1, 0, 0, Math.PI * 2);
-  // The wrist and forearm, fading out of the stencil.
-  ctx.rect(-palm * 0.7, 0, palm * 1.4, size * 0.9);
+  ctx.ellipse(0, palm * 0.1, palm, palm * 1.05, 0, 0, Math.PI * 2);
   ctx.fill();
+  // The wrist, narrowing into the forearm and out of the stencil.
+  ctx.beginPath();
+  ctx.moveTo(-palm * 0.82, palm * 0.5);
+  ctx.quadraticCurveTo(-palm * 0.7, size * 0.6, -palm * 0.78, size * 0.95);
+  ctx.lineTo(palm * 0.78, size * 0.95);
+  ctx.quadraticCurveTo(palm * 0.7, size * 0.6, palm * 0.82, palm * 0.5);
+  ctx.fill();
+  const spread = 0.8 + random() * 0.5;
   const fingers = [
-    { at: -0.95, up: 0.2, length: 0.34, angle: -62 },
-    { at: -0.55, up: -0.9, length: 0.46, angle: -16 },
-    { at: -0.15, up: -1.05, length: 0.52, angle: -4 },
-    { at: 0.28, up: -0.98, length: 0.48, angle: 8 },
-    { at: 0.68, up: -0.75, length: 0.38, angle: 22 },
+    // The thumb, set low on the palm and leaning out.
+    { at: -0.92, up: 0.15, length: 0.36, width: 0.11, angle: -58 },
+    { at: -0.6, up: -0.78, length: 0.44, width: 0.095, angle: -14 },
+    { at: -0.2, up: -0.95, length: 0.5, width: 0.1, angle: -4 },
+    { at: 0.22, up: -0.92, length: 0.47, width: 0.095, angle: 6 },
+    { at: 0.6, up: -0.72, length: 0.37, width: 0.085, angle: 18 },
   ];
-  ctx.lineCap = "round";
-  ctx.lineWidth = size * 0.1;
   for (const finger of fingers) {
-    const angle = ((finger.angle + (random() - 0.5) * 14) * Math.PI) / 180;
-    const length = size * finger.length * (0.92 + random() * 0.12);
-    const x = finger.at * palm;
-    const y = finger.up * palm;
+    const angle = ((finger.angle * spread + (random() - 0.5) * 10) * Math.PI) / 180;
+    const length = size * finger.length * (0.93 + random() * 0.12);
+    const half = (size * finger.width) / 2;
+    // A finger: wide at the knuckle, rounded and a little narrower at the tip.
+    ctx.save();
+    ctx.translate(finger.at * palm, finger.up * palm);
+    ctx.rotate(angle);
     ctx.beginPath();
-    ctx.moveTo(x, y + palm * 0.4);
-    ctx.lineTo(x + Math.sin(angle) * length, y - Math.cos(angle) * length);
-    ctx.stroke();
+    ctx.moveTo(-half, palm * 0.3);
+    ctx.lineTo(-half * 0.82, -length + half * 0.8);
+    ctx.arc(0, -length + half * 0.8, half * 0.82, Math.PI, 0);
+    ctx.lineTo(half, palm * 0.3);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
   }
 }
 
@@ -186,14 +222,20 @@ function hand(ctx: CanvasRenderingContext2D, mark: HandMark) {
   ctx.translate(mark.x, mark.y);
   ctx.rotate(mark.angle);
   const reach = mark.size * 1.05;
-  const cloud = ctx.createRadialGradient(0, -mark.size * 0.15, mark.size * 0.2, 0, -mark.size * 0.15, reach);
-  cloud.addColorStop(0, "rgba(0,0,0,0.95)");
-  cloud.addColorStop(0.6, "rgba(0,0,0,0.6)");
-  cloud.addColorStop(1, "rgba(0,0,0,0)");
-  ctx.fillStyle = cloud;
   ctx.globalCompositeOperation = "source-over";
-  // Painted as a mask in black, then coloured: the spray's droplets too.
-  ctx.fillRect(-reach, -reach - mark.size * 0.15, reach * 2, reach * 2);
+  // Painted as a mask in black, then coloured. Blown from the mouth in
+  // puffs, never quite the same twice: a few clouds overlapping, unevenly.
+  for (let i = 0; i < 6; i++) {
+    const cx = (random() - 0.5) * mark.size * 0.5;
+    const cy = -mark.size * 0.15 + (random() - 0.5) * mark.size * 0.5;
+    const r = reach * (0.6 + random() * 0.4);
+    const cloud = ctx.createRadialGradient(cx, cy, r * 0.1, cx, cy, r);
+    cloud.addColorStop(0, "rgba(0,0,0,0.5)");
+    cloud.addColorStop(0.55, "rgba(0,0,0,0.32)");
+    cloud.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = cloud;
+    ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+  }
   ctx.fillStyle = "#000";
   for (let i = 0; i < 260; i++) {
     const a = random() * Math.PI * 2;
