@@ -42,7 +42,7 @@ export function listen(canvas: HTMLCanvasElement, hand: Hand): () => void {
   let width = 0.8;
   let last = 0;
 
-  const toWall = (event: PointerEvent) => {
+  const toWall = (event: MouseEvent) => {
     const box = canvas.getBoundingClientRect();
     return {
       x: ((event.clientX - box.left) / box.width) * WALL_W,
@@ -78,12 +78,8 @@ export function listen(canvas: HTMLCanvasElement, hand: Hand): () => void {
     aim(event);
     const at = toWall(event);
     const tool = hand.tool();
-    if (tool === "write") {
-      // Not the press's default, which would take focus away from the
-      // input the words are typed into, the moment it is given it.
-      event.preventDefault();
-      return hand.writeAt(at);
-    }
+    // Writing waits for the click (see place).
+    if (tool === "write") return;
     if (tool === "hand") {
       return hand.made({
         kind: "hand",
@@ -130,12 +126,23 @@ export function listen(canvas: HTMLCanvasElement, hand: Hand): () => void {
     hand.made(stroke());
   }
 
+  // Where to write is taken from the click, not the press: by the click the
+  // browser has finished moving focus for the tap (on a touch screen it
+  // does that late, just before the click), so the input given focus here
+  // keeps it. Focus leaving the input first puts up what was typed there.
+  function place(event: MouseEvent) {
+    if (hand.tool() !== "write") return;
+    hand.writeAt(toWall(event));
+  }
+
   canvas.addEventListener("pointerdown", down);
+  canvas.addEventListener("click", place);
   canvas.addEventListener("pointermove", move);
   canvas.addEventListener("pointerup", up);
   canvas.addEventListener("pointercancel", up);
   return () => {
     canvas.removeEventListener("pointerdown", down);
+    canvas.removeEventListener("click", place);
     canvas.removeEventListener("pointermove", move);
     canvas.removeEventListener("pointerup", up);
     canvas.removeEventListener("pointercancel", up);
