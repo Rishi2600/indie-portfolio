@@ -109,7 +109,7 @@ export function createFuel(random: () => number = Math.random, saved?: FuelSnaps
   let choking = 0;
   let untilChoke = 0.8;
   // Where it was when it was caught again, so the catch starts from there.
-  let from = { reach: 0.2, strength: 0.3 };
+  let from = { reach: 0, strength: 0 };
   let current: Fire =
     phase === "burning" ? LIT : { ...LIT, phase, reach: 0, strength: 0, cap: OUT_DARKNESS };
 
@@ -180,10 +180,9 @@ export function createFuel(random: () => number = Math.random, saved?: FuelSnaps
     /** Caught from the embers. Only a torch that is going or gone can be. */
     relight() {
       if (phase !== "dying" && phase !== "out") return;
-      from = {
-        reach: Math.max(current.reach, 0.2),
-        strength: Math.max(current.strength, 0.3),
-      };
+      // From wherever the flame is, even nothing: starting it any brighter
+      // would brighten the whole cave in one frame.
+      from = { reach: current.reach, strength: current.strength };
       phase = "catching";
       elapsed = 0;
     },
