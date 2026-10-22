@@ -23,6 +23,7 @@ import {
   firePhase,
   FUEL_KEY,
   LIT,
+  AIM_EVENT,
   RELIGHT_EVENT,
   RELIT_KEY,
   type Fire,
@@ -459,6 +460,14 @@ export function Torch() {
       follow = 14;
       target = { x: event.clientX, y: event.clientY };
     };
+    // A touch screen holds the light at the reading line, unless something
+    // the reader is touching asks for it: painting on the wall does.
+    const onAim = (event: Event) => {
+      const { x, y } = (event as CustomEvent<Point>).detail;
+      following = "pointer";
+      follow = 14;
+      target = { x, y };
+    };
     // A focused element the browser scrolls into view keeps the light on it.
     const onScroll = () => {
       if (following === "focus") aimAtFocus();
@@ -468,6 +477,7 @@ export function Torch() {
     theme.observe(root, { attributes: true, attributeFilter: ["data-theme"] });
     const keeping = window.setInterval(keep, 5000);
     window.addEventListener(RELIGHT_EVENT, relight);
+    window.addEventListener(AIM_EVENT, onAim);
     window.addEventListener("pagehide", keep);
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("focusin", aimAtFocus);
@@ -482,6 +492,7 @@ export function Torch() {
       keep();
       window.clearInterval(keeping);
       window.removeEventListener(RELIGHT_EVENT, relight);
+      window.removeEventListener(AIM_EVENT, onAim);
       window.removeEventListener("pagehide", keep);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("focusin", aimAtFocus);

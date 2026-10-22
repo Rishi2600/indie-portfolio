@@ -9,4 +9,27 @@ export const cave = {
     /** For assistive technology and the keyboard: what pressing them does. */
     label: "Relight the torch",
   },
+
+  /** The bare stone at the back of the cave (/wall), and the way to it from every page. */
+  wall: {
+    href: "/wall",
+    label: "The wall",
+    title: "Write your history",
+    invite: "There's bare stone at the back of the cave. Leave something on it.",
+    go: "Go to the back of the cave",
+    intro:
+      "Paint with your finger, blow ochre round your hand, or write. Words go up in Brahmi, the script of Ashoka's edicts. It stays in your browser and nowhere else, and it weathers like the real thing.",
+    empty: "Bare stone.",
+    pigments: { ochre: "Ochre", white: "White clay", charcoal: "Charcoal" },
+    tools: { paint: "Paint", hand: "Hand", write: "Write" },
+    writing: "Write on the wall",
+    wash: "Wash the wall",
+    washSure: "Sure? It's gone for good",
+    take: "Take it with you",
+    kept: (count: number) =>
+      count === 0
+        ? "Kept in this browser, nowhere else."
+        : `Kept in this browser, nowhere else. ${count} ${count === 1 ? "mark" : "marks"} so far.`,
+    unkept: "This browser isn't keeping anything for this site, so the wall goes when you leave.",
+  },
 } as const;

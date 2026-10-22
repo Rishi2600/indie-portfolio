@@ -288,3 +288,8 @@ export const FUEL_KEY = "cave-fuel";
 export const RELIT_KEY = "cave-relit";
 /** Fired on window by the embers when they are pressed. */
 export const RELIGHT_EVENT = "torch:relight";
+/**
+ * Fired on window, with the viewport point as detail, by something a reader
+ * is touching that wants the light on it: the wall, while they paint.
+ */
+export const AIM_EVENT = "torch:aim";
