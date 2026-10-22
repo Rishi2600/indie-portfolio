@@ -26,10 +26,6 @@ export const cave = {
     wash: "Wash the wall",
     washSure: "Sure? It's gone for good",
     take: "Take it with you",
-    kept: (count: number) =>
-      count === 0
-        ? "Kept in this browser, nowhere else."
-        : `Kept in this browser, nowhere else. ${count} ${count === 1 ? "mark" : "marks"} so far.`,
     unkept: "This browser isn't keeping anything for this site, so the wall goes when you leave.",
   },
 } as const;

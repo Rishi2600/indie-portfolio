@@ -291,7 +291,8 @@ export function Wall() {
         </div>
       </div>
 
-      <p className={`note ${styles.status}`}>{lasting ? cave.wall.kept(count ?? 0) : cave.wall.unkept}</p>
+      {/* Only said when it matters: a browser that will not keep the wall. */}
+      {lasting ? null : <p className={`note ${styles.status}`}>{cave.wall.unkept}</p>}
     </div>
   );
 }
