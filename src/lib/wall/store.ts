@@ -118,7 +118,9 @@ export async function openWall(): Promise<WallStore> {
     async add(mark) {
       const tx = db.transaction(STORE, "readwrite");
       const store = tx.objectStore(STORE);
-      const { id: _unkept, ...fresh } = mark;
+      // IndexedDB numbers it; a mark arriving with an id would overwrite another.
+      const fresh = { ...mark };
+      delete fresh.id;
       const id = (await settle(store.add(fresh))) as number;
       // Past the most a wall keeps, the oldest marks wear right off, inside
       // the same transaction, so the wall is never over for a moment.
