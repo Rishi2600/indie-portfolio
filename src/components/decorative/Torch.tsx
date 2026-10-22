@@ -16,6 +16,19 @@ import {
   type Ember,
   type FlameState,
 } from "@/lib/torch";
+import {
+  createFuel,
+  createSmoke,
+  darknessOf,
+  firePhase,
+  FUEL_KEY,
+  LIT,
+  RELIGHT_EVENT,
+  RELIT_KEY,
+  type Fire,
+  type FuelSnapshot,
+  type Puff,
+} from "@/lib/fuel";
 import styles from "./Torch.module.css";
 
 /**
@@ -47,6 +60,9 @@ const TALL = 0.9;
 /** How strongly a painting shows when the light is full on it: worn paint. */
 const PAINTING_OPACITY = 0.78;
 
+/** How long a dead torch must be held to the embers before it catches. */
+const CATCH_HOLD = 0.7;
+
 const FINE_POINTER = "(hover: hover) and (pointer: fine)";
 const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
 const MORE_CONTRAST = "(prefers-contrast: more)";
@@ -75,9 +91,14 @@ type Point = { x: number; y: number };
  * reader's first night opens darker and eases as their eyes adjust; and now
  * and then a spark leaves the flame (lib/torch.ts has each of these).
  *
+ * And it burns down (lib/fuel.ts). After a few minutes it gutters, smokes
+ * and goes out, and the reader catches it again from the embers in the
+ * corner (Embers.tsx): by carrying it there, or by pressing them. While it
+ * burns, it is drawn exactly as it always was.
+ *
  * Readers who ask for more contrast get no darkness at all, and readers who
  * ask for less motion get a light that follows them but does not flicker,
- * throws no sparks and opens at the cave's ordinary dark.
+ * throws no sparks, never burns out and opens at the cave's ordinary dark.
  */
 export function Torch() {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -94,6 +115,16 @@ export function Torch() {
     const flame = createFlame();
     const afterglow = createAfterglow();
     const embers = createEmbers();
+    const smoke = createSmoke();
+    let saved: FuelSnapshot | undefined;
+    try {
+      saved = JSON.parse(sessionStorage.getItem(FUEL_KEY) ?? "null") ?? undefined;
+    } catch {
+      // A fresh torch, then.
+    }
+    const fuel = createFuel(Math.random, saved);
+    // How long the dead torch has been held to the embers.
+    let held = 0;
     // When this reader's eyes began adjusting, if this is their first night.
     let eyesSince: number | null = null;
 
@@ -131,7 +162,7 @@ export function Torch() {
       drawn = false;
     }
 
-    function draw(f: FlameState, now: number, sparks: readonly Ember[]) {
+    function draw(f: FlameState, now: number, sparks: readonly Ember[], fire: Fire = LIT, puffs: readonly Puff[] = []) {
       const w = canvas!.width;
       const h = canvas!.height;
       const span = reach();
@@ -141,7 +172,8 @@ export function Torch() {
 
       torchLight.x = at.x + f.dx * span;
       torchLight.y = at.y + f.dy * span;
-      torchLight.reach = span * f.reach;
+      // Never quite nothing, even out: the rock divides by it.
+      torchLight.reach = Math.max(span * f.reach, 1);
       torchLight.strength = f.strength;
       torchLight.burning = true;
 
@@ -160,14 +192,17 @@ export function Torch() {
         // Never fully transparent: a browser skips drawing what it cannot see,
         // and would then draw the worn paint for the first time mid-sweep.
         // One percent, under the cave's dark, is still nothing to the eye.
-        const shown = Math.max(0.01, reveal(near, span) * PAINTING_OPACITY).toFixed(2);
+        // A guttering torch finds less of the wall, and a dead one none of it.
+        const seen = fire.phase === "burning" ? span : span * fire.reach;
+        const shown = (seen < 1 ? 0.01 : Math.max(0.01, reveal(near, seen) * PAINTING_OPACITY)).toFixed(2);
         if (painting.style.opacity !== shown) painting.style.opacity = shown;
       });
 
       const extra = eyesSince === null ? 0 : adjusting(now - eyesSince);
       ctx.globalCompositeOperation = "source-over";
       ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = `rgba(${DARK_RGB.join(",")}, ${Math.min(0.8, darknessFor(f.strength) + extra)})`;
+      const dark = darknessOf(darknessFor(f.strength), fire);
+      ctx.fillStyle = `rgba(${DARK_RGB.join(",")}, ${Math.min(0.8, dark + extra)})`;
       ctx.fillRect(0, 0, w, h);
 
       // Where the torch has just been, still faintly lit.
@@ -197,7 +232,7 @@ export function Torch() {
 
       // The light, cut out of the dark lobe by lobe.
       ctx.globalCompositeOperation = "destination-out";
-      LOBES.forEach((lobe, i) => {
+      if (R >= 0.5) LOBES.forEach((lobe, i) => {
         const lick = f.licks[i] ?? 0;
         const turn = (f.time * Math.PI * 2) / lobe.period;
         const x = (lobe.x + Math.sin(turn + lobe.x * 7) * lobe.wander + lick * 0.4) * R;
@@ -218,15 +253,63 @@ export function Torch() {
       ctx.globalCompositeOperation = "source-over";
       // Its colour wavers between amber and a deeper orange as it burns.
       const heat = Math.max(0, Math.min(1, 0.5 + (f.licks[0] ?? 0) * 4));
-      const glow = 0.85 + (f.strength - 0.85) * 1.6;
-      const rim = ctx.createRadialGradient(0, 0, 0, 0, 0, R * 1.2);
-      rim.addColorStop(0, `rgba(255,${176 + 20 * heat},${96 + 24 * heat},${0.032 * glow})`);
-      rim.addColorStop(0.5, `rgba(255,${136 + 30 * heat},${58 + 20 * heat},${0.05 * glow})`);
-      rim.addColorStop(0.78, `rgba(${200 + 26 * heat},${84 + 24 * heat},30,${0.07 * glow})`);
-      rim.addColorStop(1, "rgba(120,40,12,0)");
-      ctx.fillStyle = rim;
-      ctx.fillRect(-R * 1.2, -R * 1.2, R * 2.4, R * 2.4);
+      if (fire.phase === "burning") {
+        const glow = 0.85 + (f.strength - 0.85) * 1.6;
+        const rim = ctx.createRadialGradient(0, 0, 0, 0, 0, R * 1.2);
+        rim.addColorStop(0, `rgba(255,${176 + 20 * heat},${96 + 24 * heat},${0.032 * glow})`);
+        rim.addColorStop(0.5, `rgba(255,${136 + 30 * heat},${58 + 20 * heat},${0.05 * glow})`);
+        rim.addColorStop(0.78, `rgba(${200 + 26 * heat},${84 + 24 * heat},30,${0.07 * glow})`);
+        rim.addColorStop(1, "rgba(120,40,12,0)");
+        ctx.fillStyle = rim;
+        ctx.fillRect(-R * 1.2, -R * 1.2, R * 2.4, R * 2.4);
+      } else if (R >= 0.5) {
+        // A torch burning down burns cooler: its light reddens as it goes.
+        const glow = Math.max(0, 0.85 + (f.strength - 0.85) * 1.6);
+        const c = fire.cool;
+        const rim = ctx.createRadialGradient(0, 0, 0, 0, 0, R * 1.2);
+        rim.addColorStop(0, `rgba(255,${176 + 20 * heat - 70 * c},${96 + 24 * heat - 60 * c},${0.032 * glow})`);
+        rim.addColorStop(0.5, `rgba(255,${136 + 30 * heat - 70 * c},${58 + 20 * heat - 40 * c},${0.05 * glow})`);
+        rim.addColorStop(0.78, `rgba(${200 + 26 * heat - 30 * c},${84 + 24 * heat - 50 * c},30,${0.07 * glow * (1 + c * 0.5)})`);
+        rim.addColorStop(1, "rgba(120,40,12,0)");
+        ctx.fillStyle = rim;
+        ctx.fillRect(-R * 1.2, -R * 1.2, R * 2.4, R * 2.4);
+      }
       ctx.restore();
+
+      // The head of a torch that has just gone out, glowing like a coal, and
+      // the little of the wall around it that the coal still lights.
+      if (fire.coal > 0.005) {
+        const x = (at.x + f.dx * span) / SCALE;
+        const y = (at.y + f.dy * span) / SCALE;
+        const near = 60 / SCALE;
+        ctx.globalCompositeOperation = "destination-out";
+        const lit = ctx.createRadialGradient(x, y, 0, x, y, near);
+        lit.addColorStop(0, `rgba(0,0,0,${0.3 * fire.coal})`);
+        lit.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = lit;
+        ctx.fillRect(x - near, y - near, near * 2, near * 2);
+        ctx.globalCompositeOperation = "source-over";
+        const r = 9 / SCALE + 2;
+        const coal = ctx.createRadialGradient(x, y, 0, x, y, r);
+        coal.addColorStop(0, `rgba(255,140,60,${0.9 * fire.coal})`);
+        coal.addColorStop(0.4, `rgba(200,60,20,${0.5 * fire.coal})`);
+        coal.addColorStop(1, "rgba(120,30,10,0)");
+        ctx.fillStyle = coal;
+        ctx.fillRect(x - r, y - r, r * 2, r * 2);
+      }
+
+      // Its smoke, grey and thin, seen only for the little light left on it.
+      ctx.globalCompositeOperation = "source-over";
+      for (const puff of puffs) {
+        const x = puff.x / SCALE;
+        const y = puff.y / SCALE;
+        const r = puff.r / SCALE + 1;
+        const haze = ctx.createRadialGradient(x, y, 0, x, y, r);
+        haze.addColorStop(0, `rgba(150,138,124,${0.13 * puff.alpha})`);
+        haze.addColorStop(1, "rgba(150,138,124,0)");
+        ctx.fillStyle = haze;
+        ctx.fillRect(x - r, y - r, r * 2, r * 2);
+      }
 
       // A spark, now and then. (restore() brought back the erasing mode the
       // afterglow left set, so paint is chosen again here.)
@@ -244,6 +327,43 @@ export function Torch() {
       }
     }
 
+    // Held to the embers, a dead or dying torch catches. The embers are
+    // wherever Embers.tsx put them; the torch only needs to be over them.
+    function catchFromEmbers(fire: Fire, dt: number) {
+      if (fire.phase !== "dying" && fire.phase !== "out") {
+        held = 0;
+        return;
+      }
+      const box = document.querySelector("[data-embers]")?.getBoundingClientRect();
+      const over =
+        box &&
+        box.width > 0 &&
+        at.x > box.left - 12 &&
+        at.x < box.right + 12 &&
+        at.y > box.top - 12 &&
+        at.y < box.bottom + 12;
+      held = over ? held + dt : 0;
+      if (held >= CATCH_HOLD) relight();
+    }
+
+    function relight() {
+      held = 0;
+      fuel.relight();
+      try {
+        localStorage.setItem(RELIT_KEY, "1");
+      } catch {
+        // The hint will show again next time; no harm.
+      }
+    }
+
+    function keep() {
+      try {
+        sessionStorage.setItem(FUEL_KEY, JSON.stringify(fuel.snapshot()));
+      } catch {
+        // A reload brings a fresh torch.
+      }
+    }
+
     function tick(now: number) {
       const dt = last ? (now - last) / 1000 : 1 / 60;
       last = now;
@@ -252,14 +372,29 @@ export function Torch() {
       at.x += (target.x - at.x) * ease;
       at.y += (target.y - at.y) * ease;
       const seconds = now / 1000;
-      afterglow.leave(at.x, at.y + scrollY, reach(), seconds);
+      const fire = reduced.matches ? LIT : fuel.step(dt);
+      firePhase.set(fire.phase);
+      // Only a light leaves an afterglow: a dying torch a smaller one, a
+      // dead torch none.
+      if (fire.phase === "burning") afterglow.leave(at.x, at.y + scrollY, reach(), seconds);
+      else if (fire.reach > 0.05) afterglow.leave(at.x, at.y + scrollY, reach() * fire.reach, seconds);
+      catchFromEmbers(fire, dt);
       if (eyesSince !== null && seconds - eyesSince > ADJUST_SECONDS) {
         eyesSince = null;
         root.removeAttribute("data-eyes");
       }
       if (!reduced.matches) {
         const f = flame.step(dt);
-        draw(f, seconds, embers.step(dt, at.x + f.dx * reach(), at.y + f.dy * reach() - reach() * 0.08));
+        if (fire.phase === "burning") {
+          draw(f, seconds, embers.step(dt, at.x + f.dx * reach(), at.y + f.dy * reach() - reach() * 0.08));
+        } else {
+          const burning = { ...f, reach: f.reach * fire.reach, strength: f.strength * fire.strength };
+          const x = at.x + f.dx * reach();
+          const y = at.y + f.dy * reach();
+          // A dead torch throws no sparks, but those already in the air finish.
+          const sparks = embers.step(fire.phase === "out" ? 0 : dt, x, y - reach() * burning.reach * 0.08);
+          draw(burning, seconds, fire.phase === "out" ? [] : sparks, fire, smoke.step(dt, x, y, fire.smoke));
+        }
       } else if (moving || !drawn || afterglow.glowing(seconds).length > 0) {
         draw(STILL, seconds, []);
       }
@@ -301,6 +436,8 @@ export function Torch() {
         frame = 0;
         torchLight.burning = false;
         afterglow.clear();
+        smoke.clear();
+        keep();
       }
     }
 
@@ -329,6 +466,9 @@ export function Torch() {
 
     const theme = new MutationObserver(update);
     theme.observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+    const keeping = window.setInterval(keep, 5000);
+    window.addEventListener(RELIGHT_EVENT, relight);
+    window.addEventListener("pagehide", keep);
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("focusin", aimAtFocus);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -339,6 +479,10 @@ export function Torch() {
 
     return () => {
       theme.disconnect();
+      keep();
+      window.clearInterval(keeping);
+      window.removeEventListener(RELIGHT_EVENT, relight);
+      window.removeEventListener("pagehide", keep);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("focusin", aimAtFocus);
       window.removeEventListener("scroll", onScroll);
