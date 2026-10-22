@@ -220,7 +220,6 @@
 
 /* What it will look like on the wall, beneath what was typed. */
 .preview {
-  font-family: var(--font-brahmi, inherit);
   color: var(--ink-soft);
 }
 

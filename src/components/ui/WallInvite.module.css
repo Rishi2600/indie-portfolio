@@ -1,0 +1,34 @@
+/*
+  The way to the wall, at the foot of each page (WallInvite.tsx): a small
+  block in the page's own registers, set off by a dashed rule, as an aside
+  in a margin would be.
+*/
+.invite {
+  display: grid;
+  gap: var(--space-2);
+  max-width: var(--measure);
+  margin-top: var(--space-8);
+  padding-top: var(--space-4);
+  border-top: var(--hair) dashed var(--ink-ghost);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-weight: 400;
+  line-height: var(--leading-title);
+  color: var(--ink);
+}
+
+.body {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.go {
+  justify-self: start;
+  margin-top: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+}

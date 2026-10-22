@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { cave } from "@/content/cave";
 import { readingOrder } from "@/content/reading";
 import { site } from "@/content/site";
 
@@ -8,10 +9,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Every page of the book, front to back: the start, the chapters, and the
   // projects that are featured (only those have a page).
-  return readingOrder.map((leaf) => ({
-    url: leaf.href === "/" ? site.url : `${site.url}${leaf.href}`,
-    lastModified,
-    changeFrequency: leaf.href.startsWith("/projects/") ? ("yearly" as const) : ("monthly" as const),
-    priority: leaf.href === "/" ? 1 : leaf.href.startsWith("/projects/") ? 0.6 : 0.8,
-  }));
+  return [
+    ...readingOrder.map((leaf) => ({
+      url: leaf.href === "/" ? site.url : `${site.url}${leaf.href}`,
+      lastModified,
+      changeFrequency: leaf.href.startsWith("/projects/") ? ("yearly" as const) : ("monthly" as const),
+      priority: leaf.href === "/" ? 1 : leaf.href.startsWith("/projects/") ? 0.6 : 0.8,
+    })),
+    // And the wall at the back, which is not a page of the book.
+    { url: `${site.url}${cave.wall.href}`, lastModified, changeFrequency: "yearly" as const, priority: 0.3 },
+  ];
 }
