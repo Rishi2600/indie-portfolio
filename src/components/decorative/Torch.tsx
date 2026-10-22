@@ -305,7 +305,7 @@ export function Torch() {
         const y = puff.y / SCALE;
         const r = puff.r / SCALE + 1;
         const haze = ctx.createRadialGradient(x, y, 0, x, y, r);
-        haze.addColorStop(0, `rgba(150,138,124,${0.13 * puff.alpha})`);
+        haze.addColorStop(0, `rgba(150,138,124,${0.09 * puff.alpha})`);
         haze.addColorStop(1, "rgba(150,138,124,0)");
         ctx.fillStyle = haze;
         ctx.fillRect(x - r, y - r, r * 2, r * 2);

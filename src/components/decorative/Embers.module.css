@@ -58,19 +58,24 @@
 }
 
 .coal {
-  fill: #2b130b;
-  stroke: #d9572a;
-  stroke-width: 1.2;
-  stroke-linejoin: round;
+  fill: url(#ember-coal);
+  stroke: #1e0d07;
+  stroke-width: 0.6;
   animation: smoulder 4.3s ease-in-out infinite alternate;
 }
 
+/* Grey ash under the coals. */
+.ash {
+  fill: #3b332d;
+}
+
+/* The cracks, where the coal is hottest. */
 .char {
   fill: none;
-  stroke: #ff9a4a;
-  stroke-width: 0.8;
+  stroke: #ffd29a;
+  stroke-width: 0.7;
   stroke-linecap: round;
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
 .bed:hover .heat,
@@ -87,7 +92,7 @@
 
 @keyframes smoulder {
   to {
-    stroke: #ff9a4a;
+    filter: brightness(0.72);
   }
 }
 

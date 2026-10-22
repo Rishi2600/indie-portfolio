@@ -227,7 +227,7 @@ export function createSmoke(random: () => number = Math.random) {
     step(dt: number, x: number, y: number, amount: number): Puff[] {
       const step = Math.min(Math.max(dt, 0), 0.1);
       until -= step;
-      if (amount > 0.02 && until <= 0 && wisps.length < 14) {
+      if (amount > 0.02 && until <= 0 && wisps.length < 32) {
         wisps.push({
           x: x + (random() - 0.5) * 6,
           y: y - 6,
@@ -235,10 +235,11 @@ export function createSmoke(random: () => number = Math.random) {
           vy: -(16 + random() * 14),
           age: 0,
           life: 2.2 + random() * 1.4,
-          r: 3 + random() * 3,
+          r: 1.5 + random() * 1.5,
           a: Math.min(amount, 1),
         });
-        until = 0.18 + random() * 0.25;
+        // Close together, so they rise as a thread rather than as clouds.
+        until = 0.07 + random() * 0.08;
       }
       wisps = wisps.filter((w) => {
         w.age += step;
@@ -250,7 +251,7 @@ export function createSmoke(random: () => number = Math.random) {
       return wisps.map((w) => ({
         x: w.x,
         y: w.y,
-        r: w.r * (1 + w.age * 2.2),
+        r: w.r * (1 + w.age * 1.4),
         alpha: w.a * Math.sin((Math.PI * w.age) / w.life),
       }));
     },

@@ -223,7 +223,7 @@ describe("smoke", () => {
     const smoke = createSmoke(seeded(3));
     for (let t = 0; t < 20; t += DT) {
       const puffs = smoke.step(DT, 500, 500, 1);
-      expect(puffs.length).toBeLessThanOrEqual(14);
+      expect(puffs.length).toBeLessThanOrEqual(32);
       for (const p of puffs) expect(p.alpha).toBeLessThanOrEqual(1);
     }
   });

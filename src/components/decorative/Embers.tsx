@@ -42,19 +42,26 @@ export function Embers() {
         aria-label={cave.embers.label}
         onClick={() => window.dispatchEvent(new Event(RELIGHT_EVENT))}
       >
-        <svg viewBox="0 0 64 32" width="64" height="32" aria-hidden="true">
+        <svg viewBox="0 0 64 32" width="84" height="42" aria-hidden="true">
           <defs>
             <radialGradient id="ember-heat">
-              <stop offset="0" stopColor="#ffb25c" />
-              <stop offset="0.5" stopColor="#e2582a" />
+              <stop offset="0" stopColor="#ff9a4a" />
+              <stop offset="0.45" stopColor="#c8471f" stopOpacity="0.6" />
               <stop offset="1" stopColor="#7a1f0c" stopOpacity="0" />
             </radialGradient>
+            <radialGradient id="ember-coal" cx="0.45" cy="0.4" r="0.7">
+              <stop offset="0" stopColor="#ffc27a" />
+              <stop offset="0.35" stopColor="#f0692c" />
+              <stop offset="0.75" stopColor="#8e2a10" />
+              <stop offset="1" stopColor="#2b130b" />
+            </radialGradient>
           </defs>
-          <ellipse className={styles.heat} cx="32" cy="22" rx="30" ry="10" fill="url(#ember-heat)" />
-          <path className={styles.coal} d="M8 26l5-7 8-1 4 5-3 4z" />
-          <path className={styles.coal} style={{ animationDelay: "-1.3s" }} d="M22 27l3-9 9-3 6 6-2 7z" />
-          <path className={styles.coal} style={{ animationDelay: "-2.6s" }} d="M38 27l2-7 8-2 7 5-3 5z" />
-          <path className={styles.char} d="M14 21l12-2M30 18l10 2M42 21l9 1" />
+          <ellipse className={styles.heat} cx="32" cy="23" rx="31" ry="11" fill="url(#ember-heat)" />
+          <path className={styles.ash} d="M6 28q6-3 13-2t15 0 14-1 10 3z" />
+          <path className={styles.coal} d="M9 26q-1-5 4-7t9 1q2 4-2 6t-11 0z" />
+          <path className={styles.coal} style={{ animationDelay: "-1.3s" }} d="M22 26q-2-7 4-10t11 1q3 5 0 8t-15 1z" />
+          <path className={styles.coal} style={{ animationDelay: "-2.6s" }} d="M38 27q-1-6 5-8t10 2q2 4-3 6t-12 0z" />
+          <path className={styles.char} d="M14 22l4 2M27 19l3 4 4-1M44 22l3 3" />
         </svg>
         <span className={styles.spark} aria-hidden="true" />
         <span className={styles.spark} aria-hidden="true" />
