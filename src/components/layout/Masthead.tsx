@@ -1,6 +1,7 @@
 import { MandalaMark } from "@/components/decorative/MandalaMark";
 import { PaperRule } from "@/components/decorative/PaperRule";
 import { Clock } from "@/components/ui/Clock";
+import { SoundToggle } from "@/components/ui/SoundToggle";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { chapters, site } from "@/content/site";
 import styles from "./Masthead.module.css";
@@ -41,7 +42,10 @@ export function Masthead() {
       <div className={styles.dateline}>
         <p className="label">{site.tagline}</p>
         <Clock />
-        <ThemeToggle />
+        <div className={styles.switches}>
+          <SoundToggle />
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

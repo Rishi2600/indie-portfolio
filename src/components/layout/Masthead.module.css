@@ -117,3 +117,10 @@
     transform: none;
   }
 }
+
+/* Sound (night only) and Day / Night, together at the end of the dateline. */
+.switches {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-5);
+}

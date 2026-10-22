@@ -10,6 +10,13 @@ export const cave = {
     label: "Relight the torch",
   },
 
+  /** The switch for the fire's sound, beside Day / Night, at night only. */
+  sound: {
+    label: "Sound",
+    /** For assistive technology: what it switches. */
+    name: "The fire's sound",
+  },
+
   /** The bare stone at the back of the cave (/wall), and the way to it from every page. */
   wall: {
     href: "/wall",

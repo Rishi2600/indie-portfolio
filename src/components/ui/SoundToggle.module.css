@@ -1,0 +1,57 @@
+/*
+  The fire's sound, set like Day / Night beside it: faint when off, inked
+  when on, with a small mark that fills like a lit coal. Night only, and
+  above the cave's darkness like the toggle, so it can always be found.
+*/
+.switch {
+  display: none;
+}
+
+:global(:root[data-theme="night"]) .switch {
+  position: relative;
+  z-index: 3;
+  display: inline-flex;
+}
+
+/* Inside the dateline's capitals, which it inherits from .label. */
+.sound {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  margin: -0.5rem -0.2rem;
+  padding: 0.5rem 0.2rem;
+  border: 0;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: var(--ink-faint);
+  cursor: pointer;
+  transition: color var(--dur-1) var(--ease);
+}
+
+.sound:hover {
+  color: var(--rubric);
+}
+
+.sound[aria-pressed="true"] {
+  color: var(--ink);
+}
+
+.mark {
+  width: 0.55em;
+  height: 0.55em;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 var(--hair) currentColor;
+}
+
+.sound[aria-pressed="true"] .mark {
+  background: var(--rubric);
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sound {
+    transition: none;
+  }
+}
