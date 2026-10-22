@@ -155,6 +155,10 @@
 
   /* Stone, warmed by the flame. */
   --paper: #2a2118;
+  /* Its hollows and ledges, as the day's paper has its sunk and deep tones. */
+  --paper-sunk: #241c14;
+  --paper-edge: #33291e;
+  --paper-deep: #3d3124;
 
   /* Chalk, in its softer grades. */
   --ink: #f3e7cf;
