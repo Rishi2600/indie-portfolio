@@ -1,0 +1,147 @@
+/*
+  The embers in the corner of the cave. Night only, and only while the torch
+  is going or gone (Embers.tsx). Above the darkness (Torch, z-index 2), as
+  the toggle is: they are a light of their own.
+*/
+.embers {
+  display: none;
+}
+
+:global(:root[data-theme="night"]) .embers:not([hidden]) {
+  position: fixed;
+  left: var(--space-5);
+  bottom: var(--space-5);
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  animation: kindle var(--dur-3) var(--ease) both;
+}
+
+/* They come up slowly while the torch gutters, so the reader has seen them
+   before they need them. */
+.embers[data-phase="dying"] {
+  animation-duration: 6s;
+}
+
+@keyframes kindle {
+  from {
+    opacity: 0;
+  }
+}
+
+.bed {
+  position: relative;
+  display: block;
+  margin: 0;
+  padding: var(--space-2);
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.bed:focus-visible {
+  outline: var(--hair) solid var(--rubric);
+  outline-offset: 2px;
+}
+
+.bed svg {
+  display: block;
+  overflow: visible;
+}
+
+/* The heat under the coals, and the glow it throws on the stone. */
+.heat {
+  opacity: 0.55;
+  transform-origin: 50% 70%;
+  animation: breathe 3.7s ease-in-out infinite alternate;
+}
+
+.coal {
+  fill: #2b130b;
+  stroke: #d9572a;
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+  animation: smoulder 4.3s ease-in-out infinite alternate;
+}
+
+.char {
+  fill: none;
+  stroke: #ff9a4a;
+  stroke-width: 0.8;
+  stroke-linecap: round;
+  opacity: 0.7;
+}
+
+.bed:hover .heat,
+.bed:focus-visible .heat {
+  opacity: 0.85;
+}
+
+@keyframes breathe {
+  to {
+    opacity: 0.8;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes smoulder {
+  to {
+    stroke: #ff9a4a;
+  }
+}
+
+/* Now and then a spark lifts off the bed. Most of each cycle is waiting. */
+.spark {
+  position: absolute;
+  left: 46%;
+  top: 40%;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #ffd9a0;
+  opacity: 0;
+  animation: lift 5.3s linear infinite;
+}
+
+.spark + .spark {
+  left: 62%;
+  animation-duration: 7.9s;
+  animation-delay: -3s;
+}
+
+@keyframes lift {
+  0%,
+  82% {
+    opacity: 0;
+    translate: 0 0;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    translate: 6px -34px;
+  }
+}
+
+.hint {
+  max-width: 14rem;
+  margin: 0 0 var(--space-2);
+  color: var(--ink-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heat,
+  .coal,
+  .spark,
+  :global(:root[data-theme="night"]) .embers:not([hidden]) {
+    animation: none;
+  }
+}
+
+@media (prefers-contrast: more), (forced-colors: active), print {
+  .embers {
+    display: none !important;
+  }
+}

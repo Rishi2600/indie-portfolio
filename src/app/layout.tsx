@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Birds } from "@/components/decorative/Birds";
+import { Embers } from "@/components/decorative/Embers";
 import { PaperGrain } from "@/components/decorative/PaperGrain";
 import { Rock } from "@/components/decorative/Rock";
 import { Torch } from "@/components/decorative/Torch";
@@ -81,6 +82,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <div className="shell">
           {children}
           <Torch />
+          <Embers />
         </div>
       </body>
     </html>
