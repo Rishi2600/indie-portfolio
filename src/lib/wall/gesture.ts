@@ -78,7 +78,12 @@ export function listen(canvas: HTMLCanvasElement, hand: Hand): () => void {
     aim(event);
     const at = toWall(event);
     const tool = hand.tool();
-    if (tool === "write") return hand.writeAt(at);
+    if (tool === "write") {
+      // Not the press's default, which would take focus away from the
+      // input the words are typed into, the moment it is given it.
+      event.preventDefault();
+      return hand.writeAt(at);
+    }
     if (tool === "hand") {
       return hand.made({
         kind: "hand",

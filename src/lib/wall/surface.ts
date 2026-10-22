@@ -92,7 +92,7 @@ export function createSurface(wall: HTMLCanvasElement, hand: HTMLCanvasElement, 
       marks = all;
       paintAll();
     },
-    /** A mark just made and kept: wet on the hand until it dries. */
+    /** A mark just made: wet on the hand until it dries. */
     add(mark: Mark) {
       marks = [...marks, mark];
       wet = [...wet, mark];

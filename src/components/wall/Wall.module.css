@@ -88,3 +88,148 @@
 :global(:root[data-theme="day"]) .stone::after {
   bottom: -7px;
 }
+
+.stone[data-tool="paint"],
+.stone[data-tool="hand"] {
+  cursor: crosshair;
+}
+
+.stone[data-tool="write"] {
+  cursor: text;
+}
+
+/* Where the next word goes. */
+.caret {
+  position: absolute;
+  width: 2px;
+  background: var(--rubric);
+  pointer-events: none;
+  animation: blink 1.1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* -- The tools: set like the Day / Night toggle ----------------------- */
+
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-4) var(--space-6);
+  margin-top: var(--space-5);
+}
+
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+}
+
+.option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  margin: -0.5rem -0.2rem;
+  padding: 0.5rem 0.2rem;
+  border: 0;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: var(--ink-faint);
+  cursor: pointer;
+  transition: color var(--dur-1) var(--ease);
+}
+
+.option:hover {
+  color: var(--rubric);
+}
+
+.option[aria-pressed="true"] {
+  color: var(--ink);
+}
+
+.option:disabled {
+  color: var(--ink-ghost);
+  cursor: default;
+}
+
+.option[data-sure] {
+  color: var(--rubric);
+}
+
+/* A dab of each pigment, as the light shows it. */
+.swatch {
+  width: 0.7em;
+  height: 0.7em;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 var(--hair) var(--ink-ghost);
+}
+
+.swatch[data-pigment="ochre"] {
+  background: #9c3a28;
+}
+
+.swatch[data-pigment="white"] {
+  background: #b8ab90;
+}
+
+.swatch[data-pigment="charcoal"] {
+  background: #22201c;
+}
+
+:global(:root[data-theme="night"]) .swatch[data-pigment="ochre"] {
+  background: #c4502c;
+}
+
+:global(:root[data-theme="night"]) .swatch[data-pigment="white"] {
+  background: #e8dcc2;
+}
+
+:global(:root[data-theme="night"]) .swatch[data-pigment="charcoal"] {
+  background: #120d0a;
+}
+
+.writing {
+  display: grid;
+  gap: var(--space-2);
+  flex-basis: 100%;
+}
+
+.writing input {
+  width: 100%;
+  max-width: var(--measure);
+  padding: var(--space-2) 0;
+  border: 0;
+  border-bottom: var(--hair) solid var(--ink-ghost);
+  border-radius: 0;
+  background: none;
+  font-family: var(--font-display);
+  font-size: var(--step-0);
+  color: var(--ink);
+}
+
+.writing input:focus-visible {
+  outline: none;
+  border-bottom-color: var(--rubric);
+}
+
+/* What it will look like on the wall, beneath what was typed. */
+.preview {
+  font-family: var(--font-brahmi, inherit);
+  color: var(--ink-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caret {
+    animation: none;
+  }
+
+  .option {
+    transition: none;
+  }
+}
