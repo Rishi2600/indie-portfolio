@@ -6,6 +6,7 @@ import {
   BURN_MIN,
   CATCH_SECONDS,
   createFuel,
+  createSmoke,
   darknessOf,
   DYING_SECONDS,
   LIT,
@@ -203,5 +204,27 @@ describe("across a reload", () => {
   it("never keeps more than a fresh torch's worth", () => {
     const fuel = createFuel(seeded(1), { phase: "burning", left: 1e9 });
     expect(fuel.snapshot().left).toBeLessThanOrEqual(BURN_MAX);
+  });
+});
+
+describe("smoke", () => {
+  it("rises from the torch and thins out to nothing", () => {
+    const smoke = createSmoke(seeded(2));
+    let frames: ReturnType<ReturnType<typeof createSmoke>["step"]>[] = [];
+    for (let t = 0; t < 3; t += DT) frames.push(smoke.step(DT, 500, 500, 1));
+    expect(frames.at(-1)!.length).toBeGreaterThan(0);
+    for (const frame of frames) for (const puff of frame) expect(puff.y).toBeLessThanOrEqual(500);
+    frames = [];
+    for (let t = 0; t < 5; t += DT) frames.push(smoke.step(DT, 500, 500, 0));
+    expect(frames.at(-1)).toHaveLength(0);
+  });
+
+  it("is never thick", () => {
+    const smoke = createSmoke(seeded(3));
+    for (let t = 0; t < 20; t += DT) {
+      const puffs = smoke.step(DT, 500, 500, 1);
+      expect(puffs.length).toBeLessThanOrEqual(14);
+      for (const p of puffs) expect(p.alpha).toBeLessThanOrEqual(1);
+    }
   });
 });

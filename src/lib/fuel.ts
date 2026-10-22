@@ -208,3 +208,82 @@ export function createFuel(random: () => number = Math.random, saved?: FuelSnaps
 export function darknessOf(darkness: number, fire: Fire): number {
   return Math.min(darkness, fire.cap);
 }
+
+/* -- Smoke -----------------------------------------------------------------
+
+   A guttering torch smokes, and a dead one gives off a last thread of it from
+   the coal. Puffs rise, widen and thin out; they stay where they were made
+   when the torch is carried on, as smoke does. In viewport pixels. */
+
+export type Puff = { x: number; y: number; r: number; alpha: number };
+
+export function createSmoke(random: () => number = Math.random) {
+  type Wisp = { x: number; y: number; vx: number; vy: number; age: number; life: number; r: number; a: number };
+  let wisps: Wisp[] = [];
+  let until = 0;
+
+  return {
+    /** Advances dt seconds with the torch's head at (x, y), smoking by `amount`. */
+    step(dt: number, x: number, y: number, amount: number): Puff[] {
+      const step = Math.min(Math.max(dt, 0), 0.1);
+      until -= step;
+      if (amount > 0.02 && until <= 0 && wisps.length < 14) {
+        wisps.push({
+          x: x + (random() - 0.5) * 6,
+          y: y - 6,
+          vx: (random() - 0.5) * 10,
+          vy: -(16 + random() * 14),
+          age: 0,
+          life: 2.2 + random() * 1.4,
+          r: 3 + random() * 3,
+          a: Math.min(amount, 1),
+        });
+        until = 0.18 + random() * 0.25;
+      }
+      wisps = wisps.filter((w) => {
+        w.age += step;
+        w.vy *= Math.exp(-step * 0.4);
+        w.x += (w.vx + Math.sin(w.age * 2.3 + w.r) * 6) * step;
+        w.y += w.vy * step;
+        return w.age < w.life;
+      });
+      return wisps.map((w) => ({
+        x: w.x,
+        y: w.y,
+        r: w.r * (1 + w.age * 2.2),
+        alpha: w.a * Math.sin((Math.PI * w.age) / w.life),
+      }));
+    },
+    clear() {
+      wisps = [];
+    },
+  };
+}
+
+/* -- The phase, for the embers ---------------------------------------------
+
+   Torch steps the fuel every frame; the embers in the corner (Embers.tsx)
+   only need to know when the torch starts to go, goes out or is caught. */
+
+let shown: FirePhase = "burning";
+const listeners = new Set<() => void>();
+
+export const firePhase = {
+  get: (): FirePhase => shown,
+  set(phase: FirePhase) {
+    if (phase === shown) return;
+    shown = phase;
+    listeners.forEach((listener) => listener());
+  },
+  subscribe(listener: () => void) {
+    listeners.add(listener);
+    return () => listeners.delete(listener);
+  },
+};
+
+/** Where the torch's fuel is kept across a reload, for this tab only. */
+export const FUEL_KEY = "cave-fuel";
+/** Set once a reader has caught the torch from the embers for themselves. */
+export const RELIT_KEY = "cave-relit";
+/** Fired on window by the embers when they are pressed. */
+export const RELIGHT_EVENT = "torch:relight";
